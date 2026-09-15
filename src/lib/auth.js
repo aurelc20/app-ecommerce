@@ -105,7 +105,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       try {
         await dbConnect();
 
-        console.log("[Google signIn] Upsert user:", email);
+        // console.log("[Google signIn] Upsert user:", email);
 
         const dbUser = await User.findOneAndUpdate(
           { email },
@@ -133,10 +133,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return false;
         }
 
-        console.log(
-          "[Google signIn] User u ruajt në DB:",
-          dbUser._id.toString(),
-        ); //
+        // console.log(
+        //   "[Google signIn] User u ruajt në DB:",
+        //   dbUser._id.toString(),
+        // ); //
 
         // Normalizo fushat e Auth.js me fushat custom të aplikacionit
         user.id = dbUser._id.toString();
