@@ -5,6 +5,7 @@ import { getReviewStats, getProductReviews } from "@/actions/reviewActions";
 import Image from "next/image";
 import Link from "next/link";
 import ProductGallery from "@/components/ProductGallery";
+import { categoryLabel } from "@/lib/categories";
 
 import AddToWishlistButton from "@/components/AddToWishlistButton";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -68,7 +69,7 @@ export default async function ProductPage({ params }) {
               href={`/shop?category=${product.category}`}
               className="hover:text-purple-600"
             >
-              {product.category}
+              {categoryLabel(product.category)}
             </Link>
             <span>/</span>
             <span className="text-gray-900">{product.name}</span>
@@ -145,7 +146,7 @@ export default async function ProductPage({ params }) {
                   href={`/shop?category=${product.category}`}
                   className="text-sm text-purple-600 hover:text-purple-700"
                 >
-                  {product.category}
+                  {categoryLabel(product.category)}
                 </Link>
               </div>
               {product.brand && (

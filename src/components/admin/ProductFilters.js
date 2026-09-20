@@ -2,6 +2,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { categoryLabel } from "@/lib/categories";
 
 export default function ProductFilters({ categories, currentFilters }) {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function ProductFilters({ categories, currentFilters }) {
           <option value="">Të gjitha kategoritë</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
-              {cat}
+              {categoryLabel(cat)}
             </option>
           ))}
         </select>

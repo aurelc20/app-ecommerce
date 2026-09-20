@@ -6,6 +6,7 @@ import Product from "@/models/Product";
 import Link from "next/link";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import ProductFilters from "@/components/admin/ProductFilters";
+import { categoryLabel } from "@/lib/categories";
 
 export default async function ProductsPage({ searchParams }) {
   const session = await auth();
@@ -146,7 +147,7 @@ export default async function ProductsPage({ searchParams }) {
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span className="px-2 py-1 bg-gray-100 rounded text-gray-700">
-                      {product.category}
+                      {categoryLabel(product.category)}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm font-medium">

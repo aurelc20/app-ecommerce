@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import AddToWishlistButton from "@/components/AddToWishlistButton";
+import { categoryLabel } from "@/lib/categories";
 
 export default function ProductGrid({ products }) {
   if (!products || products.length === 0) {
@@ -96,7 +97,7 @@ function ProductCard({ product }) {
       <div className="p-4">
         {/* Category */}
         <p className="text-xs text-purple-600 font-medium mb-1">
-          {product.category}
+          {categoryLabel(product.category)}
         </p>
 
         {/* Name */}

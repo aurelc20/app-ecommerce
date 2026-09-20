@@ -1,6 +1,7 @@
 // src/models/Product.js
 import mongoose from "mongoose";
 import registerModel from "@/lib/registerModel";
+import { CATEGORY_VALUES } from "@/lib/categories";
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -55,7 +56,7 @@ const ProductSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, "Kategoria është e detyrueshme"],
-      enum: ["Chairs", "Tables", "Armchairs", "Sets", "Other"],
+      enum: CATEGORY_VALUES,
     },
     brand: {
       type: String,

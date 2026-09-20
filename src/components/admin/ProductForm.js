@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createProduct, updateProduct } from "@/actions/admin/productActions";
 import ImageUploader from "@/components/admin/ImageUploader";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { PRODUCT_CATEGORIES } from "@/lib/categories";
 
 export default function ProductForm({ mode = "create", product = null }) {
   const router = useRouter();
@@ -325,11 +326,11 @@ export default function ProductForm({ mode = "create", product = null }) {
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
                 >
                   <option value="">Zgjidh kategorinë</option>
-                  <option value="Chairs">Karrige (Chairs)</option>
-                  <option value="Tables">Tavolina (Tables)</option>
-                  <option value="Armchairs">Kolltukë (Armchairs)</option>
-                  <option value="Sets">Sete (Sets)</option>
-                  <option value="Other">Tjera (Other)</option>
+                  {PRODUCT_CATEGORIES.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 

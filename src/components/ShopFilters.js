@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { categoryLabel } from "@/lib/categories";
 
 export default function ShopFilters({
   categories,
@@ -98,7 +99,9 @@ export default function ShopFilters({
                 onChange={() => handleFilterChange("category", category)}
                 className="rounded text-purple-600 focus:ring-purple-500"
               />
-              <span className="text-sm text-gray-700">{category}</span>
+              <span className="text-sm text-gray-700">
+                {categoryLabel(category)}
+              </span>
             </label>
           ))}
         </div>
