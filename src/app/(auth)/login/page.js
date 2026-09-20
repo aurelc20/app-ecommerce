@@ -7,6 +7,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
 
+// NextAuth kthen kodin e vet te brendshem; pa kete harte perdoruesi lexon
+// literalisht "CredentialsSignin". Nje mesazh i vetem mbulon fjalekalimin e
+// gabuar dhe email-in e paverifikuar, pa i dalluar, ndaj nuk zbulon nese
+// llogaria ekziston.
+const AUTH_ERRORS = {
+  CredentialsSignin:
+    "Email-i ose fjalëkalimi është gabim. Nëse sapo je regjistruar, verifiko më parë email-in.",
+};
+
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,7 +66,7 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError(result.error);
+        setError(AUTH_ERRORS[result.error] || "Kyçja dështoi. Provo sërish.");
       } else {
         // Ruaj email-in në cookie nëse "remember" është i zgjedhur
         if (formData.remember) {
@@ -105,6 +114,12 @@ export default function LoginPage() {
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded text-sm">
                 {error}
+                <Link
+                  href="/resend-verification"
+                  className="mt-2 block font-medium underline hover:no-underline"
+                >
+                  Ridërgo email-in e verifikimit
+                </Link>
               </div>
             )}
 

@@ -33,6 +33,7 @@ const resetPasswordSchema = z.object({
 // Sa zgjat nje link reset-i, dhe sa shpesh mund te kerkohet nje i ri.
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 ore, si te teksti i email-it
 const RESET_COOLDOWN_MS = 2 * 60 * 1000; // 2 minuta
+const VERIFICATION_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 ore, si te registerUser
 
 export async function registerUser(formData) {
   try {
@@ -413,5 +414,76 @@ export async function resetPassword(values) {
   } catch (error) {
     console.error("Password reset error:", error);
     return { success: false, error: "Ndodhi një gabim. Provo sërish." };
+  }
+}
+
+// I njejti mesazh per cdo rast: email i paregjistruar, llogari e verifikuar
+// tashme, ose i ndaluar nga cooldown-i. Ndryshe forma zbulon se cilat adresa
+// ekzistojne dhe cilat jane verifikuar.
+const GENERIC_VERIFICATION_RESPONSE = {
+  success: true,
+  message:
+    "Nëse ky email ka nevojë për verifikim, do të marrësh një link brenda pak minutash.",
+};
+
+export async function resendVerificationEmail(values) {
+  const parsed = forgotPasswordSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Email-i nuk është valid",
+    };
+  }
+
+  const email = parsed.data.email.toLowerCase().trim();
+
+  try {
+    await dbConnect();
+
+    const user = await User.findOne({ email });
+
+    // Nuk ekziston, ose e ka verifikuar tashme: nje link i dyte s'ka kuptim.
+    if (!user || user.emailVerified) {
+      return GENERIC_VERIFICATION_RESPONSE;
+    }
+
+    // Cooldown i nxjerre nga skadimi, si te requestPasswordReset.
+    const expires = user.emailVerificationTokenExpires;
+    const createdAt = expires
+      ? expires.getTime() - VERIFICATION_TOKEN_TTL_MS
+      : 0;
+
+    if (createdAt && Date.now() - createdAt < RESET_COOLDOWN_MS) {
+      return GENERIC_VERIFICATION_RESPONSE;
+    }
+
+    const { rawToken, tokenHash } = createEmailToken();
+
+    user.emailVerificationTokenHash = tokenHash;
+    user.emailVerificationTokenExpires = new Date(
+      Date.now() + VERIFICATION_TOKEN_TTL_MS,
+    );
+    await user.save();
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "[dev] Link verifikimi:",
+        `${process.env.APP_URL}/verify-email?token=${encodeURIComponent(rawToken)}`,
+      );
+    }
+
+    await sendVerificationEmail({
+      to: user.email,
+      name: user.name,
+      token: rawToken,
+    });
+
+    return GENERIC_VERIFICATION_RESPONSE;
+  } catch (error) {
+    // Logohet, por perdoruesi merr te njejtin mesazh - nje deshtim dergimi
+    // do te tregonte se adresa ekziston.
+    console.error("Resend verification error:", error);
+    return GENERIC_VERIFICATION_RESPONSE;
   }
 }

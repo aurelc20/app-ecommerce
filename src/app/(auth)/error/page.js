@@ -96,6 +96,17 @@ export default async function AuthErrorPage({ searchParams }) {
 
           {/* Actions */}
           <div className="flex flex-col gap-3">
+            {/* Vetem kur problemi eshte vete token-i; per timeout ose
+                server-error nje link i ri nuk ndihmon. */}
+            {(reason === "invalid-token" || reason === "missing-token") && (
+              <Link
+                href="/resend-verification"
+                className="w-full inline-flex items-center justify-center px-4 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+              >
+                Kërko një link të ri
+              </Link>
+            )}
+
             <Link
               href="/login"
               className="w-full inline-flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition"
