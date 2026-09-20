@@ -29,7 +29,7 @@ export async function sendOrderConfirmationEmail(order, user) {
 // Email për admin kur ka porosi të re
 export async function sendAdminOrderNotification(order, user) {
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || "admin@perle.com";
+    const adminEmail = process.env.ADMIN_EMAIL || "admin@furnitureshop.com";
 
     const { data, error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || "Furniture Shop <onboarding@resend.dev>",

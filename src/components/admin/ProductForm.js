@@ -19,6 +19,11 @@ export default function ProductForm({ mode = "create", product = null }) {
   // klikimi duket sikur nuk ben asgje.
   const errorRef = useRef(null);
 
+  // Slug-u ndjek emrin derisa perdoruesi ta shkruaje vete. Ne modalitetin
+  // edit ai ekziston tashme dhe nuk duhet mbishkruar, sepse do te prishte
+  // URL-ne e produktit.
+  const [slugTouched, setSlugTouched] = useState(mode === "edit");
+
   const [formData, setFormData] = useState({
     name: product?.name || "",
     slug: product?.slug || "",
@@ -36,13 +41,6 @@ export default function ProductForm({ mode = "create", product = null }) {
     images: product?.images || [],
   });
 
-  // Auto-generate slug nga emri
-  useEffect(() => {
-    if (mode === "create" && formData.name && !formData.slug) {
-      const generatedSlug = generateSlug(formData.name);
-      setFormData((prev) => ({ ...prev, slug: generatedSlug }));
-    }
-  }, [formData.name, mode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -129,9 +127,18 @@ export default function ProductForm({ mode = "create", product = null }) {
     setFormData({ ...formData, images });
   };
 
+  const handleNameChange = (e) => {
+    const name = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      name,
+      slug: slugTouched ? prev.slug : generateSlug(name),
+    }));
+  };
+
   const handleSlugChange = (e) => {
-    const slug = generateSlug(e.target.value);
-    setFormData({ ...formData, slug });
+    setSlugTouched(true);
+    setFormData((prev) => ({ ...prev, slug: generateSlug(e.target.value) }));
   };
 
   return (
@@ -172,9 +179,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={handleNameChange}
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
                   placeholder="P.sh: Karrige druri Oslo"
                 />
@@ -291,7 +296,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                 htmlFor="isOnSale"
                 className="text-sm font-medium text-gray-700"
               >
-                Aktivizo zbritjen (shfaq badge "Sale")
+                Aktivizo zbritjen (shfaq badge &quot;Sale&quot;)
               </label>
             </div>
           </div>

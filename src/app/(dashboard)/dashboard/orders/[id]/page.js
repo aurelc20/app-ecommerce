@@ -208,7 +208,7 @@ export default async function UserOrderDetailsPage({ params }) {
                 Ke pyetje për porositë?
               </p>
               <a
-                href="mailto:info@perle.com"
+                href="mailto:info@furnitureshop.com"
                 className="text-purple-600 hover:text-purple-700 font-medium text-sm"
               >
                 Na kontakto →

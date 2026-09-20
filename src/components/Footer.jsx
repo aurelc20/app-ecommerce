@@ -10,7 +10,7 @@ export default function Footer() {
             <h3 className="mb-4 text-xl font-bold">Furniture Shop</h3>
 
             <p className="text-gray-400">
-              Bizhuteri ekskluzive për çdo rast special.
+              Paisje shtëpie dhe zyre ekskluzive dhe elegante.
             </p>
           </div>
 
@@ -66,9 +66,9 @@ export default function Footer() {
             <h4 className="mb-4 font-semibold">Na Kontaktoni</h4>
 
             <ul className="space-y-2 text-gray-400">
-              <li>Email: info@perle.com</li>
+              <li>Email: info@furnitureshop.com</li>
               <li>Tel: +355 69 XXX XXXX</li>
-              <li>Durrës, Shqipëri</li>
+              <li>Tiranë, Shqipëri</li>
             </ul>
           </div>
         </div>

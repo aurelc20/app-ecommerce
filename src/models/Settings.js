@@ -11,7 +11,7 @@ const SettingsSchema = new mongoose.Schema(
     },
     storeEmail: {
       type: String,
-      default: "info@perle.com",
+      default: "info@furnitureshop.com",
     },
     storePhone: {
       type: String,
@@ -19,11 +19,11 @@ const SettingsSchema = new mongoose.Schema(
     },
     storeAddress: {
       type: String,
-      default: "Durrës, Shqipëri",
+      default: "Tiranë, Shqipëri",
     },
     storeDescription: {
       type: String,
-      default: "Bizhuteri ekskluzive dhe elegante",
+      default: "Paisje shtëpie dhe zyre ekskluzive dhe elegante",
     },
     logo: {
       type: String,

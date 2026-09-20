@@ -12,6 +12,8 @@ import mongoose from "mongoose";
 const OLD_BRAND = "Perlë";
 const NEW_BRAND = "Furniture Shop";
 const NEW_STORE_NAME = "Furniture Shop";
+const OLD_EMAIL = "info@perle.com";
+const NEW_EMAIL = "info@furnitureshop.com";
 
 const shouldApply = process.argv.includes("--apply");
 
@@ -39,11 +41,19 @@ async function main() {
         .collection("settings")
         .updateOne({ _id: settings._id }, { $set: { storeName: NEW_STORE_NAME } });
     }
+  }
 
-    // storeEmail nuk preket: është adresë reale kontakti
-    if (settings.storeEmail) {
-      console.log(`  (storeEmail mbetet "${settings.storeEmail}" — ndryshoje nga /admin/settings)`);
+  // storeEmail ndiqet vecmas: mund te jete i vjeter edhe kur storeName eshte i ri
+  if (settings && settings.storeEmail === OLD_EMAIL) {
+    console.log(`Settings: storeEmail "${OLD_EMAIL}" -> "${NEW_EMAIL}"`);
+
+    if (shouldApply) {
+      await db
+        .collection("settings")
+        .updateOne({ _id: settings._id }, { $set: { storeEmail: NEW_EMAIL } });
     }
+  } else if (settings) {
+    console.log(`Settings: storeEmail eshte "${settings.storeEmail}" — nuk preket.`);
   }
 
   console.log("");

@@ -32,7 +32,7 @@ export async function getPublicSettings() {
       maintenanceMode: settings.maintenanceMode ?? false,
       maintenanceMessage: settings.maintenanceMessage ?? "",
       storeName: settings.storeName ?? "Furniture Shop",
-      storeEmail: settings.storeEmail ?? "info@perle.com",
+      storeEmail: settings.storeEmail ?? "info@furnitureshop.com",
       storePhone: settings.storePhone ?? "",
       socialLinks: settings.socialLinks ?? {},
     };

@@ -157,7 +157,7 @@ export function orderConfirmationTemplate({ order, user }) {
             <tr>
               <td style="padding: 24px 32px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                 <p style="margin: 0 0 8px; color: #6b7280; font-size: 13px;">
-                  Ke pyetje? Na kontakto në <a href="mailto:info@perle.com" style="color: #9333ea;">info@perle.com</a>
+                  Ke pyetje? Na kontakto në <a href="mailto:info@furnitureshop.com" style="color: #9333ea;">info@furnitureshop.com</a>
                 </p>
                 <p style="margin: 0; color: #9ca3af; font-size: 12px;">
                   © 2026 Furniture Shop. Durrës, Shqipëri.
