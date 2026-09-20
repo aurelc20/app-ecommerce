@@ -12,7 +12,7 @@ export default async function MaintenancePage() {
 
         {/* Title */}
         <h1 className="text-3xl font-bold mb-4">
-          {settings?.storeName || "Perlë Jewellery Design"}
+          {settings?.storeName || "Furniture Shop"}
         </h1>
 
         {/* Message */}

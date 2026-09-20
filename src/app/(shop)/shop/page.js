@@ -8,7 +8,7 @@ import ShopSkeleton from "@/components/ShopSkeleton";
 import ShopSortDropdown from "@/components/ShopSortDropdown";
 
 export const metadata = {
-  title: "Shop - Perlë Jewellery Design",
+  title: "Dyqani | Furniture Shop",
   description: "Zbuloni koleksionin tonë të bizhuterive ekskluzive",
 };
 

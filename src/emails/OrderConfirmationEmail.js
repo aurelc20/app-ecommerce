@@ -48,7 +48,7 @@ export function orderConfirmationTemplate({ order, user }) {
             <!-- Header -->
             <tr>
               <td style="background: linear-gradient(135deg, #9333ea, #ec4899); padding: 40px 32px; text-align: center;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Perlë Jewellery</h1>
+                <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Furniture Shop</h1>
                 <p style="color: #f3e8ff; margin: 8px 0 0; font-size: 14px;">Faleminderit për porositë tuaj!</p>
               </td>
             </tr>
@@ -160,7 +160,7 @@ export function orderConfirmationTemplate({ order, user }) {
                   Ke pyetje? Na kontakto në <a href="mailto:info@perle.com" style="color: #9333ea;">info@perle.com</a>
                 </p>
                 <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-                  © 2026 Perlë Jewellery Design. Durrës, Shqipëri.
+                  © 2026 Furniture Shop. Durrës, Shqipëri.
                 </p>
               </td>
             </tr>

@@ -31,7 +31,7 @@ export async function getPublicSettings() {
       },
       maintenanceMode: settings.maintenanceMode ?? false,
       maintenanceMessage: settings.maintenanceMessage ?? "",
-      storeName: settings.storeName ?? "Perlë Jewellery Design",
+      storeName: settings.storeName ?? "Furniture Shop",
       storeEmail: settings.storeEmail ?? "info@perle.com",
       storePhone: settings.storePhone ?? "",
       socialLinks: settings.socialLinks ?? {},

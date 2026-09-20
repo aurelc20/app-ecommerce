@@ -1,16 +1,21 @@
-// scripts/cleanup-orphan-avatars.mjs
+// scripts/cleanup-orphan-images.mjs
 //
-// Gjen avatarët në Cloudinary që nuk i referon asnjë përdorues dhe i fshin.
+// Gjen imazhet në Cloudinary që nuk i referon askush — as një avatar
+// përdoruesi, as një imazh produkti — dhe i fshin.
 // Sillet si dry-run si parazgjedhje.
 //
-//   node --env-file=.env.local scripts/cleanup-orphan-avatars.mjs
-//   node --env-file=.env.local scripts/cleanup-orphan-avatars.mjs --delete
+//   node --env-file=.env.local scripts/cleanup-orphan-images.mjs
+//   node --env-file=.env.local scripts/cleanup-orphan-images.mjs --delete
 //
 import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
 
-// Dosja aktuale plus ajo e vjetër, që tranzicioni të mbulohet i plotë.
-const FOLDERS = ["ecommerce/avatars", "perle-jewellery/avatars"];
+// Dosjet aktuale plus ajo e vjetër, që tranzicioni të mbulohet i plotë.
+const FOLDERS = [
+  "ecommerce/avatars",
+  "ecommerce/products",
+  "perle-jewellery/avatars",
+];
 
 const shouldDelete = process.argv.includes("--delete");
 
@@ -59,29 +64,42 @@ async function main() {
   });
 
   await mongoose.connect(process.env.MONGODB_URI);
-  const users = mongoose.connection.db.collection("users");
+  const db = mongoose.connection.db;
+  const users = db.collection("users");
+  const products = db.collection("products");
 
-  const docs = await users
-    .find({}, { projection: { email: 1, avatar: 1, avatarPublicId: 1 } })
-    .toArray();
-
-  // 1. Cilët public_id janë në përdorim
   const inUse = new Set();
   const toBackfill = [];
 
-  for (const u of docs) {
+  // 1. Avatarët
+  const userDocs = await users
+    .find({}, { projection: { email: 1, avatar: 1, avatarPublicId: 1 } })
+    .toArray();
+
+  for (const u of userDocs) {
     const fromUrl = publicIdFromUrl(u.avatar);
     const publicId = u.avatarPublicId ?? fromUrl;
 
     if (publicId) inUse.add(publicId);
 
-    // Avatar Cloudinary por pa fushën e ruajtur -> mbushe
     if (!u.avatarPublicId && fromUrl) {
       toBackfill.push({ _id: u._id, email: u.email, publicId: fromUrl });
     }
   }
 
-  // 2. Backfill i avatarPublicId
+  // 2. Imazhet e produkteve
+  const productDocs = await products
+    .find({}, { projection: { name: 1, images: 1 } })
+    .toArray();
+
+  for (const p of productDocs) {
+    for (const img of p.images || []) {
+      const publicId = img.publicId || publicIdFromUrl(img.url);
+      if (publicId) inUse.add(publicId);
+    }
+  }
+
+  // 3. Backfill i avatarPublicId
   if (toBackfill.length > 0) {
     console.log(`Backfill i avatarPublicId për ${toBackfill.length} përdorues:`);
     for (const b of toBackfill) {
@@ -97,7 +115,7 @@ async function main() {
     console.log("");
   }
 
-  // 3. Gjej jetimët
+  // 4. Gjej jetimët
   const orphans = [];
   let total = 0;
   let bytes = 0;
@@ -126,7 +144,9 @@ async function main() {
   }
 
   for (const o of orphans) {
-    console.log(`  ${o.public_id}  ${(o.bytes / 1024).toFixed(0)} KB  ${o.created_at}`);
+    console.log(
+      `  ${o.public_id}  ${(o.bytes / 1024).toFixed(0)} KB  ${o.created_at}`,
+    );
   }
 
   if (!shouldDelete) {

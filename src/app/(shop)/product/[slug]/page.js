@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${product.name} | Perlë Jewellery`,
+    title: `${product.name} | Furniture Shop`,
     description: product.description,
     openGraph: {
       title: product.name,

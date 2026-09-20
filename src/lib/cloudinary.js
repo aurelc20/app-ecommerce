@@ -12,6 +12,9 @@ export default cloudinary;
 // Dosja ku ruhen avatarët në Cloudinary
 export const AVATAR_FOLDER = "ecommerce/avatars";
 
+// Dosja ku ruhen imazhet e produkteve
+export const PRODUCT_FOLDER = "ecommerce/products";
+
 // Nxjerr public_id nga një URL Cloudinary, ose null nëse URL-ja nuk është e
 // tillë (p.sh. avatarët e Google te lh3.googleusercontent.com).
 // Përdoret si rrugë rezervë për përdoruesit e vjetër që kanë avatar por jo

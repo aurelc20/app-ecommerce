@@ -8,7 +8,7 @@ import { orderStatusUpdateTemplate } from "@/emails/OrderStatusUpdateEmail";
 export async function sendOrderConfirmationEmail(order, user) {
   try {
     const { data, error } = await resend.emails.send({
-      from: `Perlë Jewellery <${process.env.EMAIL_FROM || "acangonji20@gmail.com"}>`,
+      from: `Furniture Shop <${process.env.EMAIL_FROM || "acangonji20@gmail.com"}>`,
       to: user.email,
       subject: `Porosia #${order._id.toString().slice(-8).toUpperCase()} u konfirmua! 🎉`,
       html: orderConfirmationTemplate({ order, user }),
@@ -32,7 +32,7 @@ export async function sendAdminOrderNotification(order, user) {
     const adminEmail = process.env.ADMIN_EMAIL || "admin@perle.com";
 
     const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "Perlë Jewellery <onboarding@resend.dev>",
+      from: process.env.EMAIL_FROM || "Furniture Shop <onboarding@resend.dev>",
       to: adminEmail,
       subject: `🔔 Porosi e re #${order._id.toString().slice(-8).toUpperCase()}`,
       html: `
@@ -76,7 +76,7 @@ export async function sendOrderStatusEmail(order, user, newStatus) {
     };
 
     const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "Perlë Jewellery <onboarding@resend.dev>",
+      from: process.env.EMAIL_FROM || "Furniture Shop <onboarding@resend.dev>",
       to: user.email,
       subject: `Porosia #${order._id.toString().slice(-8).toUpperCase()} - ${statusLabels[newStatus]}`,
       html: orderStatusUpdateTemplate({ order, user, newStatus }),

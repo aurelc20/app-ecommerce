@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <h3 className="mb-4 text-xl font-bold">Perlë Jewellery</h3>
+            <h3 className="mb-4 text-xl font-bold">Furniture Shop</h3>
 
             <p className="text-gray-400">
               Bizhuteri ekskluzive për çdo rast special.

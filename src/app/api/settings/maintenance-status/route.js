@@ -22,7 +22,7 @@ export async function GET() {
       maintenanceMessage:
         settings.maintenanceMessage ||
         "Faqja është aktualisht në mirëmbajtje. Kthehuni së shpejti!",
-      storeName: settings.storeName || "Perlë Jewellery Design",
+      storeName: settings.storeName || "Furniture Shop",
       storeEmail: settings.storeEmail || "",
       storePhone: settings.storePhone || "",
     });

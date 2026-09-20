@@ -41,6 +41,10 @@ const ProductSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        publicId: {
+          type: String,
+          default: null,
+        },
         alt: String,
         isPrimary: {
           type: Boolean,
@@ -51,11 +55,11 @@ const ProductSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, "Kategoria është e detyrueshme"],
-      enum: ["Necklaces", "Earrings", "Bracelets", "Rings", "Sets", "Other"],
+      enum: ["Chairs", "Tables", "Armchairs", "Sets", "Other"],
     },
     brand: {
       type: String,
-      default: "Perlë",
+      default: "Furniture Shop",
     },
     stock: {
       type: Number,

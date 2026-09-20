@@ -6,53 +6,82 @@ import Image from "next/image";
 
 export default function ImageUploader({ images = [], onChange }) {
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleUpload = async (e) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     setUploading(true);
+    setError("");
+
+    const uploadedImages = [];
+    const failures = [];
 
     try {
-      const uploadedImages = [];
-
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
-        // Validate file type
         if (!file.type.startsWith("image/")) {
-          alert("Skedari duhet të jetë imazh");
+          failures.push(`${file.name}: nuk është imazh`);
           continue;
         }
 
-        // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-          alert("Imazhi duhet të jetë më i vogël se 5MB");
+          failures.push(`${file.name}: më i madh se 5MB`);
           continue;
         }
 
-        // Convert to base64
-        const base64 = await fileToBase64(file);
+        // Ngarkimi shkon direkt në Cloudinary përmes /api/upload. Në dokument
+        // ruhet vetëm URL-ja dhe public_id-ja, jo vetë imazhi.
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", file);
+        uploadFormData.append("kind", "product");
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadFormData,
+        });
+        const result = await res.json();
+
+        if (!result.success) {
+          failures.push(`${file.name}: ${result.error || "upload dështoi"}`);
+          continue;
+        }
 
         uploadedImages.push({
-          url: base64,
+          url: result.url,
+          publicId: result.publicId,
           alt: file.name,
           isPrimary: images.length === 0 && uploadedImages.length === 0,
         });
       }
 
-      const newImages = [...images, ...uploadedImages];
-      onChange(newImages);
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Ndodhi një gabim gjatë uploadimit");
+      if (uploadedImages.length > 0) {
+        onChange([...images, ...uploadedImages]);
+      }
+
+      if (failures.length > 0) {
+        setError(failures.join(" • "));
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      setError(err.message || "Ndodhi një gabim gjatë uploadimit");
     } finally {
       setUploading(false);
+      // Lejo rizgjedhjen e të njëjtit skedar pas një dështimi
+      e.target.value = "";
     }
   };
 
   const handleRemove = (index) => {
     const newImages = images.filter((_, i) => i !== index);
+
+    // Nëse u hoq imazhi kryesor, bëje të parin kryesor
+    if (newImages.length > 0 && !newImages.some((img) => img.isPrimary)) {
+      newImages[0] = { ...newImages[0], isPrimary: true };
+    }
+
     onChange(newImages);
   };
 
@@ -73,6 +102,12 @@ export default function ImageUploader({ images = [], onChange }) {
 
   return (
     <div className="space-y-4">
+      {error && (
+        <div className="p-3 rounded-lg bg-red-50 text-red-800 text-sm">
+          {error}
+        </div>
+      )}
+
       {/* Upload Area */}
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-500 transition">
         <input
@@ -111,8 +146,8 @@ export default function ImageUploader({ images = [], onChange }) {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {images.map((image, index) => (
             <div
-              key={index}
-              className={`relative aspect-square rounded-lg overflow-hidden border-2 ${
+              key={image.publicId || image.url || index}
+              className={`group relative aspect-square rounded-lg overflow-hidden border-2 ${
                 image.isPrimary ? "border-purple-600" : "border-gray-200"
               }`}
             >
@@ -120,6 +155,7 @@ export default function ImageUploader({ images = [], onChange }) {
                 src={image.url}
                 alt={image.alt || `Product image ${index + 1}`}
                 fill
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover"
               />
 
@@ -131,7 +167,7 @@ export default function ImageUploader({ images = [], onChange }) {
               )}
 
               {/* Actions */}
-              <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition flex items-center justify-center gap-2 opacity-0 hover:opacity-100">
+              <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/0 opacity-0 transition group-hover:bg-black/50 group-hover:opacity-100">
                 <button
                   type="button"
                   onClick={() => handleSetPrimary(index)}
@@ -171,7 +207,7 @@ export default function ImageUploader({ images = [], onChange }) {
               </div>
 
               {/* Reorder Arrows */}
-              <div className="absolute bottom-1 right-1 flex gap-1 opacity-0 hover:opacity-100">
+              <div className="absolute bottom-1 right-1 flex gap-1 opacity-0 transition group-hover:opacity-100">
                 {index > 0 && (
                   <button
                     type="button"
@@ -227,14 +263,4 @@ export default function ImageUploader({ images = [], onChange }) {
       </p>
     </div>
   );
-}
-
-// Helper function to convert file to base64
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
 }

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import dbConnect from "@/lib/db";
 import Product from "@/models/Product";
 import { revalidatePath } from "next/cache";
+import cloudinary, { publicIdFromUrl } from "@/lib/cloudinary";
 
 // Kontrollo nëse user është admin
 async function checkAdmin() {
@@ -16,6 +17,28 @@ async function checkAdmin() {
   }
 
   return session;
+}
+
+// Fshin asetet ne Cloudinary. Thirret GJITHMONE pas nje shkrimi te suksesshem
+// ne DB: nese fshirja deshton mbetet nje aset jetim (i riparueshem), ndersa
+// renditja e kundert do te linte produktin duke treguar nga imazhe te fshira.
+async function destroyImages(images = []) {
+  const publicIds = images
+    .map((img) => img.publicId || publicIdFromUrl(img.url))
+    .filter(Boolean);
+
+  for (const publicId of publicIds) {
+    try {
+      const res = await cloudinary.uploader.destroy(publicId);
+
+      // destroy() nuk hedh gabim kur aseti mungon - kthen "not found".
+      if (res.result !== "ok") {
+        console.warn("Imazhi nuk u fshi ne Cloudinary:", publicId, res.result);
+      }
+    } catch (error) {
+      console.error("Gabim gjate fshirjes ne Cloudinary:", publicId, error);
+    }
+  }
 }
 
 // Krijo produkt të ri
@@ -34,7 +57,7 @@ export async function createProduct(formData) {
         ? parseFloat(formData.get("salePrice"))
         : undefined,
       category: formData.get("category"),
-      brand: formData.get("brand") || "Perlë",
+      brand: formData.get("brand") || "Furniture Shop",
       stock: parseInt(formData.get("stock")),
       sku: formData.get("sku"),
       isFeatured: formData.get("isFeatured") === "on",
@@ -74,6 +97,9 @@ export async function updateProduct(productId, formData) {
 
   try {
     await dbConnect();
+
+    // Imazhet aktuale, per te ditur cilat hiqen nga ky perditesim.
+    const before = await Product.findById(productId).select("images").lean();
 
     const price = parseFloat(formData.get("price"));
     const salePrice = formData.get("salePrice")
@@ -118,6 +144,17 @@ export async function updateProduct(productId, formData) {
       return { success: false, error: "Produkti nuk u gjet" };
     }
 
+    // Imazhet qe ishin me pare dhe nuk jane me ne vargun e ri
+    const keep = new Set(
+      updateData.images.map((img) => img.publicId).filter(Boolean),
+    );
+    const removed = (before?.images || []).filter((img) => {
+      const publicId = img.publicId || publicIdFromUrl(img.url);
+      return publicId && !keep.has(publicId);
+    });
+
+    await destroyImages(removed);
+
     revalidatePath("/admin/products");
     revalidatePath("/shop");
 
@@ -142,7 +179,11 @@ export async function deleteProduct(productId) {
   try {
     await dbConnect();
 
+    const product = await Product.findById(productId).select("images").lean();
+
     await Product.findByIdAndDelete(productId);
+
+    await destroyImages(product?.images || []);
 
     revalidatePath("/admin/products");
     revalidatePath("/shop");

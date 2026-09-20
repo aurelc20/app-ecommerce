@@ -1,7 +1,7 @@
 // src/components/admin/ProductForm.js
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createProduct, updateProduct } from "@/actions/admin/productActions";
 import ImageUploader from "@/components/admin/ImageUploader";
@@ -13,6 +13,11 @@ export default function ProductForm({ mode = "create", product = null }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Kutia e gabimit ndodhet ne krye te formes, ndersa butoni i submit-it
+  // eshte poshte ne sidebar. Pa kete, gabimi mbetet jashte ekranit dhe
+  // klikimi duket sikur nuk ben asgje.
+  const errorRef = useRef(null);
+
   const [formData, setFormData] = useState({
     name: product?.name || "",
     slug: product?.slug || "",
@@ -20,7 +25,7 @@ export default function ProductForm({ mode = "create", product = null }) {
     price: product?.price?.toString() || "",
     salePrice: product?.salePrice?.toString() || "",
     category: product?.category || "",
-    brand: product?.brand || "Perlë",
+    brand: product?.brand || "Furniture Shop",
     stock: product?.stock?.toString() || "0",
     sku: product?.sku || "",
     isFeatured: product?.isFeatured || false,
@@ -45,13 +50,14 @@ export default function ProductForm({ mode = "create", product = null }) {
     setLoading(true);
 
     // Validate
-    if (
-      !formData.name ||
-      !formData.description ||
-      !formData.price ||
-      !formData.category
-    ) {
-      setError("Të gjitha fushat me * janë të detyrueshme");
+    const missing = [];
+    if (!formData.name) missing.push("Emri");
+    if (!formData.description) missing.push("Përshkrimi");
+    if (!formData.price) missing.push("Çmimi");
+    if (!formData.category) missing.push("Kategoria");
+
+    if (missing.length > 0) {
+      setError(`Plotëso këto fusha: ${missing.join(", ")}`);
       setLoading(false);
       return;
     }
@@ -88,24 +94,35 @@ export default function ProductForm({ mode = "create", product = null }) {
     form.append("tags", formData.tags);
     form.append("images", JSON.stringify(formData.images));
 
-    let result;
-    if (mode === "create") {
-      result = await createProduct(form);
-    } else {
-      result = await updateProduct(product._id, form);
-    }
+    try {
+      const result =
+        mode === "create"
+          ? await createProduct(form)
+          : await updateProduct(product._id, form);
 
-    if (result.success) {
-      setSuccess(result.message);
-      setTimeout(() => {
-        router.push("/admin/products");
-      }, 1000);
-    } else {
-      setError(result.error || "Ndodhi një gabim");
+      if (result.success) {
+        setSuccess(result.message);
+        setTimeout(() => {
+          router.push("/admin/products");
+        }, 1000);
+      } else {
+        setError(result.error || "Ndodhi një gabim");
+      }
+    } catch (err) {
+      // Pa kete, nje server action qe hedh gabim (p.sh. ID e vjeter pas nje
+      // rinisjeje) do ta linte loading true dhe butonin te bllokuar pergjithmone.
+      console.error("Product submit error:", err);
+      setError("Serveri nuk u përgjigj. Rifresko faqen dhe provo sërish.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [error]);
 
   const handleImageUpload = (images) => {
     setFormData({ ...formData, images });
@@ -122,7 +139,10 @@ export default function ProductForm({ mode = "create", product = null }) {
       className="bg-white rounded-xl shadow-sm border p-6"
     >
       {error && (
-        <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg">
+        <div
+          ref={errorRef}
+          className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg"
+        >
           {error}
         </div>
       )}
@@ -155,7 +175,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
-                  placeholder="P.sh: Varëse Diamanti"
+                  placeholder="P.sh: Karrige druri Oslo"
                 />
               </div>
 
@@ -171,7 +191,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     value={formData.slug}
                     onChange={handleSlugChange}
                     className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 font-mono text-sm placeholder:text-black/50 text-black/70"
-                    placeholder="varëse-diamanti"
+                    placeholder="karrige-druri-oslo"
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
@@ -204,7 +224,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     setFormData({ ...formData, sku: e.target.value })
                   }
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
-                  placeholder="P.sh: NKL-001"
+                  placeholder="P.sh: KRR-001"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Kodi unik për identifikimin e produktit
@@ -232,7 +252,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     setFormData({ ...formData, price: e.target.value })
                   }
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
-                  placeholder="99.99"
+                  placeholder="249.99"
                 />
               </div>
 
@@ -250,7 +270,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     setFormData({ ...formData, salePrice: e.target.value })
                   }
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
-                  placeholder="79.99"
+                  placeholder="199.99"
                 />
               </div>
             </div>
@@ -305,10 +325,9 @@ export default function ProductForm({ mode = "create", product = null }) {
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
                 >
                   <option value="">Zgjidh kategorinë</option>
-                  <option value="Necklaces">Varëse (Necklaces)</option>
-                  <option value="Earrings">Vathë (Earrings)</option>
-                  <option value="Bracelets">Byzylykë (Bracelets)</option>
-                  <option value="Rings">Unaza (Rings)</option>
+                  <option value="Chairs">Karrige (Chairs)</option>
+                  <option value="Tables">Tavolina (Tables)</option>
+                  <option value="Armchairs">Kolltukë (Armchairs)</option>
                   <option value="Sets">Sete (Sets)</option>
                   <option value="Other">Tjera (Other)</option>
                 </select>
@@ -326,7 +345,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     setFormData({ ...formData, brand: e.target.value })
                   }
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
-                  placeholder="Perlë"
+                  placeholder="Furniture Shop"
                 />
               </div>
 
@@ -342,7 +361,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                     setFormData({ ...formData, tags: e.target.value })
                   }
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
-                  placeholder="diamant, ar, elegant"
+                  placeholder="dru, modern, shtëpi"
                 />
                 <p className="text-xs text-gray-500 mt-1">Ndaj me presje (,)</p>
               </div>
@@ -443,10 +462,19 @@ export default function ProductForm({ mode = "create", product = null }) {
 
 // Helper function për të gjeneruar slug
 function generateSlug(text) {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "") // Hiq karakteret speciale
-    .replace(/[\s_-]+/g, "-") // Zëvendëso hapësirat me -
-    .replace(/^-+|-+$/g, ""); // Hiq - nga fillimi dhe fundi
+  return (
+    text
+      .toLowerCase()
+      .trim()
+      // \w eshte vetem ASCII, ndaj ë dhe ç do te fshiheshin krejt.
+      // Transliterimi behet para se te hiqen karakteret speciale.
+      .replace(/ë/g, "e")
+      .replace(/ç/g, "c")
+      // Ndan diakritiket e tjere (é, ü, ñ) nga shkronja baze dhe i heq
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^\w\s-]/g, "") // Hiq karakteret speciale
+      .replace(/[\s_-]+/g, "-") // Zëvendëso hapësirat me -
+      .replace(/^-+|-+$/g, "") // Hiq - nga fillimi dhe fundi
+  );
 }

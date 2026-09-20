@@ -7,7 +7,7 @@ const SettingsSchema = new mongoose.Schema(
     // Këto janë settings globale - do të ketë vetëm 1 dokument
     storeName: {
       type: String,
-      default: "Perlë Jewellery Design",
+      default: "Furniture Shop",
     },
     storeEmail: {
       type: String,

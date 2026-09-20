@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Admin Dashboard - Perlë",
+  title: "Admin Dashboard - Furniture Shop",
   description: "Admin panel për menaxhimin e e-commerce",
 };
 
@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-lg fixed h-full overflow-y-auto">
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-purple-600">Perlë Admin</h1>
+          <h1 className="text-2xl font-bold text-purple-600">Furniture Shop Admin</h1>
           <p className="text-sm text-gray-600 mt-1">Paneli i Kontrollit</p>
         </div>
 
