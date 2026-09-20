@@ -11,7 +11,7 @@ export default async function ProfilePage() {
     redirect("/login");
   }
 
-  const user = await getUserById(session.user.id);
+  const user = await getUserById();
 
   return (
     <div>

@@ -14,8 +14,8 @@ export default async function OrdersPage({ searchParams }) {
   const newPage = parseInt(page) || 1;
   const newStatus = status || "";
 
-  const { orders, totalPages } = await getUserOrders(session.user.id, {
-    newPage,
+  const { orders, totalPages } = await getUserOrders({
+    page: newPage,
     limit: 10,
     status: newStatus || undefined,
   });

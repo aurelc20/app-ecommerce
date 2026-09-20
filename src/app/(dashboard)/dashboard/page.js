@@ -2,9 +2,15 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getUserById } from "@/actions/authActions";
-import { getUserOrders } from "@/actions/orderActions";
+import { getUserOrders, getUserOrderStats } from "@/actions/orderActions";
 import Link from "next/link";
-import { BadgeDollarSign, Clock, Heart, ShoppingBasket } from "lucide-react";
+import {
+  BadgeDollarSign,
+  CircleX,
+  Clock,
+  Heart,
+  ShoppingBasket,
+} from "lucide-react";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -13,16 +19,12 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const user = await getUserById(session.user.id);
-  const { orders } = await getUserOrders(session.user.id, { limit: 5 });
-
-  // Llogarit statistikat
-  const totalOrders = orders?.length || 0;
-  const totalSpent =
-    orders?.reduce((sum, order) => sum + order.totalPrice, 0) || 0;
-  const pendingOrders =
-    orders?.filter((o) => o.status === "pending" || o.status === "processing")
-      .length || 0;
+  const [user, { orders }, { totalOrders, totalSpent, pendingOrders }] =
+    await Promise.all([
+      getUserById(),
+      getUserOrders({ limit: 5 }),
+      getUserOrderStats(),
+    ]);
 
   return (
     <div>
@@ -63,7 +65,7 @@ export default async function DashboardPage() {
             <div>
               <p className="text-sm text-gray-600 mb-1">Total Shpenzuar</p>
               <p className="text-3xl font-bold text-gray-900">
-                ${totalSpent.toFixed(2)}
+                ${(totalSpent ?? 0).toFixed(2)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -183,7 +185,7 @@ export default async function DashboardPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm font-semibold text-gray-900">
-                      ${order.totalPrice.toFixed(2)}
+                      ${(order.totalPrice ?? 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <Link
@@ -199,20 +201,8 @@ export default async function DashboardPage() {
             </table>
           </div>
         ) : (
-          <div className="p-12 text-center">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
+          <div className="p-12 text-center ">
+            <CircleX className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">
               Nuk ka porosi
             </h3>

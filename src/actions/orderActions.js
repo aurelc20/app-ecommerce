@@ -1,6 +1,7 @@
 // src/actions/orderActions.js
 "use server";
 
+import mongoose from "mongoose";
 import dbConnect from "@/lib/db";
 import Order from "@/models/Order";
 
@@ -13,11 +14,18 @@ import {
 } from "./emailActions";
 import { getSettings } from "@/actions/admin/settingsActions";
 
-export async function getUserOrders(
-  userId,
-  { page = 1, limit = 10, status } = {},
-) {
+// Identiteti merret gjithmonë nga sesioni — server actions janë endpoint-e
+// publike (POST), prandaj userId nuk mund të merret si parametër i besuar.
+async function requireUserId() {
+  const session = await auth();
+  return session?.user?.id || null;
+}
+
+export async function getUserOrders({ page = 1, limit = 10, status } = {}) {
   try {
+    const userId = await requireUserId();
+    if (!userId) return { orders: [], totalPages: 0, currentPage: 0, total: 0 };
+
     await dbConnect();
 
     const query = { user: userId };
@@ -49,8 +57,46 @@ export async function getUserOrders(
   }
 }
 
-export async function getOrderById(orderId, userId) {
+// Statistikat e vërteta të porosive — të pavarura nga faqosja e listës.
+export async function getUserOrderStats() {
+  const empty = { totalOrders: 0, totalSpent: 0, pendingOrders: 0 };
+
   try {
+    const userId = await requireUserId();
+    if (!userId) return empty;
+
+    await dbConnect();
+
+    const user = new mongoose.Types.ObjectId(String(userId));
+
+    const [totalOrders, spent, pendingOrders] = await Promise.all([
+      Order.countDocuments({ user }),
+      Order.aggregate([
+        { $match: { user, status: { $ne: "cancelled" } } },
+        { $group: { _id: null, total: { $sum: "$totalPrice" } } },
+      ]),
+      Order.countDocuments({
+        user,
+        status: { $in: ["pending", "processing"] },
+      }),
+    ]);
+
+    return {
+      totalOrders,
+      totalSpent: spent[0]?.total || 0,
+      pendingOrders,
+    };
+  } catch (error) {
+    console.error("Error fetching user order stats:", error);
+    return empty;
+  }
+}
+
+export async function getOrderById(orderId) {
+  try {
+    const userId = await requireUserId();
+    if (!userId) return null;
+
     await dbConnect();
 
     const order = await Order.findOne({
@@ -69,7 +115,6 @@ export async function getOrderById(orderId, userId) {
   }
 }
 
-//ne fill perdor kete
 export async function createOrder_start(orderData) {
   try {
     const session = await auth();
@@ -131,7 +176,6 @@ export async function createOrder_start(orderData) {
 
     // ✅ Dërgo email-et (fire-and-forget, pa prit)
     const user = await User.findById(session.user.id).lean();
-    console.log(user);
 
     // Mos prit përgjigjen, thjesht dërgo
     sendOrderConfirmationEmail(
@@ -273,8 +317,11 @@ export async function createOrder(orderData) {
 
 
 
-export async function cancelOrder(orderId, userId) {
+export async function cancelOrder(orderId) {
   try {
+    const userId = await requireUserId();
+    if (!userId) return { success: false, error: "Nuk je i kyçur" };
+
     await dbConnect();
 
     const order = await Order.findOne({ _id: orderId, user: userId });

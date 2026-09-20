@@ -14,7 +14,7 @@ export default async function UserOrderDetailsPage({ params }) {
     redirect("/login");
   }
 
-  const order = await getOrderById(id, session.user.id);
+  const order = await getOrderById(id);
 
   if (!order) {
     notFound();

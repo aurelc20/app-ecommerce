@@ -7,6 +7,7 @@ import User from "@/models/User";
 import { z } from "zod";
 import { createEmailToken } from "@/lib/email-tokens";
 import { sendVerificationEmail } from "@/lib/resend";
+import { auth } from "@/lib/auth";
 
 // Schema për registration
 const registerSchema = z.object({
@@ -89,8 +90,18 @@ export async function registerUser(formData) {
   }
 }
 
-export async function getUserById(userId) {
+// Identiteti merret gjithmonë nga sesioni — server actions janë endpoint-e
+// publike (POST), prandaj userId nuk mund të merret si parametër i besuar.
+async function requireUserId() {
+  const session = await auth();
+  return session?.user?.id || null;
+}
+
+export async function getUserById() {
   try {
+    const userId = await requireUserId();
+    if (!userId) return null;
+
     await dbConnect();
     const user = await User.findById(userId).select("-password").lean();
 
@@ -103,8 +114,11 @@ export async function getUserById(userId) {
   }
 }
 
-export async function updateUserProfile(userId, updateData) {
+export async function updateUserProfile(updateData) {
   try {
+    const userId = await requireUserId();
+    if (!userId) return { success: false, error: "Nuk je i kyçur" };
+
     await dbConnect();
 
     const allowedFields = ["name", "avatar", "addresses"];
@@ -117,7 +131,7 @@ export async function updateUserProfile(userId, updateData) {
     });
 
     const user = await User.findByIdAndUpdate(userId, filteredData, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     })
       .select("-password")
@@ -138,14 +152,24 @@ export async function updateUserProfile(userId, updateData) {
   }
 }
 
-export async function changePassword(userId, currentPassword, newPassword) {
+export async function changePassword(currentPassword, newPassword) {
   try {
+    const userId = await requireUserId();
+    if (!userId) return { success: false, error: "Nuk je i kyçur" };
+
     await dbConnect();
 
     const user = await User.findById(userId).select("+password");
 
     if (!user) {
       return { success: false, error: "User-i nuk u gjet" };
+    }
+
+    if (!user.password) {
+      return {
+        success: false,
+        error: "Kjo llogari është krijuar me Google dhe nuk ka fjalëkalim",
+      };
     }
 
     // Verify current password
@@ -174,9 +198,11 @@ export async function changePassword(userId, currentPassword, newPassword) {
   }
 }
 
-// Shto këtë funksion në src/actions/authActions.js
-export async function updateUserAvatar(userId, avatarUrl) {
+export async function updateUserAvatar(avatarUrl) {
   try {
+    const userId = await requireUserId();
+    if (!userId) return { success: false, error: "Nuk je i kyçur" };
+
     await dbConnect();
 
     const user = await User.findByIdAndUpdate(

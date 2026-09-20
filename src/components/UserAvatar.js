@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function UserAvatar({ src, name }) {
+export default function UserAvatar({ src, name, className = "h-8 w-8" }) {
   const [imageError, setImageError] = useState(false);
 
   const initial = name?.charAt(0).toUpperCase() || "U";
@@ -10,7 +10,7 @@ export default function UserAvatar({ src, name }) {
   if (!src || imageError) {
     return (
       <div
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-600 text-white"
+        className={`flex shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white ${className}`}
         aria-label={name || "Profili"}
       >
         {initial}
@@ -24,7 +24,7 @@ export default function UserAvatar({ src, name }) {
       alt={name || "Profili"}
       referrerPolicy="no-referrer"
       onError={() => setImageError(true)}
-      className="h-8 w-8 rounded-full object-cover"
+      className={`shrink-0 rounded-full object-cover ${className}`}
     />
   );
 }

@@ -41,7 +41,6 @@ const authConfig = {
       }
 
       if (trigger === "update" && session) {
-        console.log("JWT update trigger, session payload:", session);
         token.name = session.name ?? token.name;
         token.email = session.email ?? token.email;
         token.avatar = session.avatar ?? token.avatar; // ← SHTO

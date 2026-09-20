@@ -4,18 +4,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cancelOrder } from "@/actions/orderActions";
-import { useSession } from "next-auth/react";
 
 export default function CancelOrderButton({ orderId }) {
   const router = useRouter();
-  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleCancel = async () => {
     setLoading(true);
 
-    const result = await cancelOrder(orderId, session.user.id);
+    const result = await cancelOrder(orderId);
 
     if (result.success) {
       router.refresh();

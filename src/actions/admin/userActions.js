@@ -32,7 +32,7 @@ export async function updateUserRole(userId, newRole) {
     const user = await User.findByIdAndUpdate(
       userId,
       { role: newRole },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!user) {

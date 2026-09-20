@@ -1,9 +1,18 @@
 "use client";
 
+import {
+  LayoutDashboard,
+  LogOut,
+  Package,
+  ShieldUser,
+  ShoppingBasket,
+  User,
+} from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import React from "react";
 import UserAvatar from "./UserAvatar";
-import { ShoppingBasket } from "lucide-react";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -11,29 +20,37 @@ export default function Navbar() {
   const avatar = user?.avatar || user?.image || null;
 
   return (
-    <nav className="sticky top-0 z-50 h-16 bg-white text-black shadow-md">
-      <div className="container mx-auto flex h-full items-center justify-between px-4">
+    <nav className="sticky top-0 z-50 h-16 bg-white text-black shadow-sm">
+      <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <Link href="/" className="text-2xl font-bold text-indigo-600">
-          Ecommerce
+          Ecommerce Store
         </Link>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <Link href="/shop" className="transition hover:text-indigo-600">
-            Shop
+        <div className="hidden md:flex items-center gap-2">
+          <Link
+            href="/shop"
+            className="hover:text-indigo-600 transition duration-200"
+          >
+            Produktet
           </Link>
-          <Link href="/about" className="transition hover:text-indigo-600">
+          <Link
+            href="/about"
+            className="hover:text-indigo-600 transition duration-200"
+          >
             Rreth Nesh
           </Link>
-          <Link href="/contact" className="transition hover:text-indigo-600">
+          <Link
+            href="/contact"
+            className="hover:text-indigo-600 transition duration-200"
+          >
             Kontakt
           </Link>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <Link
             href="/cart"
-            aria-label="Shporta"
-            className="relative transition hover:text-indigo-600"
+            className="relative flex items-center gap-2 hover:text-indigo-600 transition duration-200"
           >
             <ShoppingBasket />
           </Link>
@@ -42,65 +59,64 @@ export default function Navbar() {
             <div className="group relative">
               <button
                 type="button"
-                aria-label="Hap menunë e përdoruesit"
-                className="flex items-center gap-2 transition hover:text-purple-600"
+                className="flex items-center gap-2 hover:text-indigo-600 transition duration-200 cursor-pointer"
               >
                 <UserAvatar src={avatar} name={user.name} />
-                <span className="hidden md:block">
-                  {user.name || user.email}
-                </span>
+                {/* <span>{user.name || user.email}</span> */}
               </button>
-
               <div
-                className="
-                  invisible pointer-events-none absolute right-0 top-full w-48
-                  pt-2 opacity-0 transition
-                  group-hover:visible group-hover:pointer-events-auto group-hover:opacity-100
-                  group-focus-within:visible group-focus-within:pointer-events-auto
-                  group-focus-within:opacity-100
-                "
+                className="invisible pointer-events-none absolute right-0 top-full w-52 pt-2 opacity-0 transition duration-100 group-hover:visible group-hover:pointer-events-auto group-hover:opacity-100
+              group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:opacity-100"
               >
-                <div className="rounded-md bg-white py-1 text-black shadow-lg ring-1 ring-black/5">
+                <div className="bg-white text-black shadow-lg right-1 ring-black/5 rounded-sm">
+                  <div className="flex flex-col px-4 py-3 text-sm">
+                    <span>{user.name.split(" ")[0]}</span>
+                    <span>{user.email}</span>
+                  </div>
                   <Link
                     href="/dashboard"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-4 py-3 text-sm text-gray-900 transition duration-200 hover:bg-gray-100"
                   >
-                    Dashboard
+                    <LayoutDashboard className="w-5 h-5 text-gray-900" />
+                    <span>Dashboard</span>
                   </Link>
                   <Link
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    href="/dashboard/profile"
+                    className="flex items-center gap-2 px-4 py-3 text-sm text-gray-900 transition duration-200 hover:bg-gray-100"
                   >
-                    Profili
+                    <User className="w-5 h-5 text-gray-900" />
+                    <span>Profili</span>
                   </Link>
                   <Link
                     href="/dashboard/orders"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-4 py-3 text-sm text-gray-900 transition duration-200 hover:bg-gray-100"
                   >
-                    Porositë
+                    <Package className="w-5 h-5 text-gray-900" />
+                    <span>Porositë</span>
                   </Link>
-
-                  {(user.role === "admin" || user.role === "seller") && (
+                  {user?.role === "admin" && (
                     <Link
                       href="/admin"
-                      className="block border-t px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="flex items-center gap-2 px-4 py-3 text-sm text-gray-900 transition duration-200 hover:bg-gray-100"
                     >
-                      Admin
+                      <ShieldUser className="w-5 h-5 text-gray-900" />
+                      <span>Admin</span>
                     </Link>
                   )}
 
                   <button
                     type="button"
                     onClick={() => signOut({ redirectTo: "/" })}
-                    className="w-full border-t px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100 cursor-pointer"
+                    className="w-full flex items-center gap-2 border-t border-gray-200 px-4 py-3 text-sm text-gray-900  hover:bg-gray-100 transition duration-200 cursor-pointer"
                   >
-                    Dil
+                    <LogOut className="w-5 h-5 " />
+                    <span>Dil</span>
                   </button>
                 </div>
               </div>
             </div>
           ) : (
-            <Link href="/login" className="transition hover:text-indigo-600">
+            <Link href="/login" className="hover:text-indigo-600">
               Hyr
             </Link>
           )}

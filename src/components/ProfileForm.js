@@ -10,6 +10,7 @@ import {
   updateUserAvatar,
 } from "@/actions/authActions";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 export default function ProfileForm({ user }) {
   const { update } = useSession();
@@ -66,19 +67,13 @@ export default function ProfileForm({ user }) {
         throw new Error(uploadResult.error || "Upload dështoi");
       }
 
-      const result = await updateUserAvatar(user._id, uploadResult.url);
+      const result = await updateUserAvatar(uploadResult.url);
 
       if (result.success) {
         setAvatarPreview(result.avatar);
-        console.log("Calling update with:", {
-          avatar: result.avatar,
-          image: result.avatar,
-        });
-
         // Rifresko JWT token-in me avatar-in e ri
         await update({ avatar: result.avatar, image: result.avatar });
         router.refresh(); // ← RIFRESKON SERVER COMPONENTS (sidebar, etj.)
-        console.log("Update called successfully");
 
         setMessage({ type: "success", text: "Avatar u përditësua me sukses!" });
       } else {
@@ -98,7 +93,7 @@ export default function ProfileForm({ user }) {
     setLoading(true);
     setMessage({ type: "", text: "" });
 
-    const result = await updateUserProfile(user._id, {
+    const result = await updateUserProfile({
       name: formData.name,
     });
 
@@ -123,7 +118,6 @@ export default function ProfileForm({ user }) {
     }
 
     const result = await changePassword(
-      user._id,
       formData.currentPassword,
       formData.newPassword,
     );
@@ -180,25 +174,7 @@ export default function ProfileForm({ user }) {
 
             {avatarUploading && (
               <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-white animate-spin"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  />
-                </svg>
+                <LoaderCircle className="w-6 h-6 text-white animate-spin" />
               </div>
             )}
           </div>
