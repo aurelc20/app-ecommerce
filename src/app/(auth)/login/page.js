@@ -25,6 +25,11 @@ export default function LoginPage() {
   useEffect(() => {
     const rememberedEmail = Cookies.get("remember_email");
     if (rememberedEmail) {
+      // js-cookie prek document, ndaj leximi duhet te ndodhe pas hidratimit.
+      // Nje inicializues i voneshem te useState do ta lexonte gjate render-it,
+      // ku serveri do te jepte fushe bosh dhe klienti email - mosperputhje
+      // hidratimi. Efekti eshte vendi i duhur ketu.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData((prev) => ({
         ...prev,
         email: rememberedEmail,

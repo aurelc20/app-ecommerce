@@ -7,6 +7,7 @@ import Order from "@/models/Order";
 import UserRoleSelect from "@/components/admin/UserRoleSelect";
 import ToggleUserStatusButton from "@/components/admin/ToggleUserStatusButton";
 import UserFilters from "@/components/admin/UserFilters";
+import Image from "next/image";
 
 export default async function UsersPage({ searchParams }) {
   const session = await auth();
@@ -180,9 +181,11 @@ export default async function UsersPage({ searchParams }) {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {user.avatar ? (
-                          <img
+                          <Image
                             src={user.avatar}
                             alt={user.name}
+                            width={40}
+                            height={40}
                             className="w-10 h-10 rounded-full"
                           />
                         ) : (

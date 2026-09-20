@@ -4,6 +4,7 @@
 import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 import CartItem from "@/components/CartItem";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getPublicSettings } from "@/actions/settingsActions";
 
@@ -110,10 +111,12 @@ export default function CartPage() {
                   <div key={item.productId} className="flex gap-4">
                     <div className="relative w-16 h-16 shrink-0 bg-gray-100 rounded">
                       {item.image && (
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
-                          className="w-full h-full rounded object-cover"
+                          fill
+                          sizes="64px"
+                          className="rounded object-cover"
                         />
                       )}
                       <span className="absolute -top-2 -right-2 bg-gray-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">

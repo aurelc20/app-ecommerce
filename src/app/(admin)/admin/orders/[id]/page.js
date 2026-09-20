@@ -4,6 +4,7 @@ import { redirect, notFound } from "next/navigation";
 import { getOrderById } from "@/actions/admin/orderActions";
 import OrderStatusSelect from "@/components/admin/OrderStatusSelect";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function OrderDetailsPage({ params }) {
   const { id } = await params;
@@ -64,9 +65,11 @@ export default async function OrderDetailsPage({ params }) {
                   className="flex items-center gap-4 pb-4 border-b last:border-0"
                 >
                   {item.image && (
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.name}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 rounded-lg object-cover"
                     />
                   )}

@@ -114,7 +114,7 @@ export default async function WishlistPage() {
             Wishlist është bosh
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Shto produkte të preferuara për t'i parë këtu
+            Shto produkte të preferuara për t&apos;i parë këtu
           </p>
           <div className="mt-6">
             <Link

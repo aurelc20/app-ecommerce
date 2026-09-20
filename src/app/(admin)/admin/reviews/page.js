@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import dbConnect from "@/lib/db";
 import Review from "@/models/Review";
 import DeleteReviewButton from "@/components/admin/DeleteReviewButton";
+import Image from "next/image";
 
 export default async function AdminReviewsPage({ searchParams }) {
   const session = await auth();
@@ -113,9 +114,11 @@ export default async function AdminReviewsPage({ searchParams }) {
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
                 {review.user?.avatar ? (
-                  <img
+                  <Image
                     src={review.user.avatar}
                     alt={review.user.name}
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full"
                   />
                 ) : (

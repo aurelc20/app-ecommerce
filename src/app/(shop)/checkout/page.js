@@ -229,7 +229,7 @@ export default function CheckoutPage() {
               </button>
 
               <p className="text-xs text-gray-500 text-center mt-3">
-                Duke klikuar "Konfirmo Porosinë", pranon{" "}
+                Duke klikuar &quot;Konfirmo Porosinë&quot;, pranon{" "}
                 <a href="/terms" className="text-purple-600 hover:underline">
                   Termat dhe Kushtet
                 </a>

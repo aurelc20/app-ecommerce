@@ -7,6 +7,7 @@ import Link from "next/link";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import ProductFilters from "@/components/admin/ProductFilters";
 import { categoryLabel } from "@/lib/categories";
+import Image from "next/image";
 
 export default async function ProductsPage({ searchParams }) {
   const session = await auth();
@@ -124,9 +125,11 @@ export default async function ProductsPage({ searchParams }) {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       {product.images?.[0] && (
-                        <img
+                        <Image
                           src={product.images[0].url}
                           alt={product.name}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 rounded-lg object-cover"
                         />
                       )}

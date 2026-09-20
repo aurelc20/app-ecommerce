@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
-export default function UserAvatar({ src, name, className = "h-8 w-8" }) {
+// `size` eshte burimi i vetem i dimensionit: ushqen width/height te
+// next/image dhe njekohesisht madhesine e rrethit fallback, keshtu qe ato
+// nuk mund te shkeputen nga njera-tjetra. `className` mbetet per stilime
+// shtese, p.sh. madhesine e shkronjes se inicialit.
+export default function UserAvatar({ src, name, size = 32, className = "" }) {
   const [imageError, setImageError] = useState(false);
 
   const initial = name?.charAt(0).toUpperCase() || "U";
@@ -10,6 +15,7 @@ export default function UserAvatar({ src, name, className = "h-8 w-8" }) {
   if (!src || imageError) {
     return (
       <div
+        style={{ width: size, height: size }}
         className={`flex shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white ${className}`}
         aria-label={name || "Profili"}
       >
@@ -19,10 +25,11 @@ export default function UserAvatar({ src, name, className = "h-8 w-8" }) {
   }
 
   return (
-    <img
+    <Image
       src={src}
       alt={name || "Profili"}
-      referrerPolicy="no-referrer"
+      width={size}
+      height={size}
       onError={() => setImageError(true)}
       className={`shrink-0 rounded-full object-cover ${className}`}
     />

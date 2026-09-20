@@ -85,7 +85,8 @@ export default async function DashboardLayout({ children }) {
             <UserAvatar
               src={avatar}
               name={displayName}
-              className="h-11 w-11 text-lg"
+              size={44}
+              className="text-lg"
             />
 
             <div className="min-w-0">
@@ -125,7 +126,7 @@ export default async function DashboardLayout({ children }) {
           </Link>
 
           <div className="flex items-center gap-2">
-            <UserAvatar src={avatar} name={displayName} className="h-9 w-9" />
+            <UserAvatar src={avatar} name={displayName} size={36} />
           </div>
         </div>
 

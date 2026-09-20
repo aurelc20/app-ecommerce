@@ -164,6 +164,9 @@ export default function ProfileForm({ user }) {
         <div className="flex items-center gap-6">
           <div className="relative">
             {avatarPreview ? (
+              // Parapamja lokale eshte blob: URL nga URL.createObjectURL,
+              // qe next/image nuk e mbeshtet si src.
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={avatarPreview}
                 alt={user?.name || "Avatar"}
