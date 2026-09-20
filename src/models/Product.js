@@ -1,5 +1,6 @@
 // src/models/Product.js
 import mongoose from "mongoose";
+import registerModel from "@/lib/registerModel";
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -145,5 +146,4 @@ ProductSchema.pre("save", async function () {
   // Nuk thirret next() kur përdor async
 });
 
-export default mongoose.models.Product ||
-  mongoose.model("Product", ProductSchema);
+export default registerModel("Product", ProductSchema);

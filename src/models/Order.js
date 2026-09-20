@@ -1,5 +1,6 @@
 // src/models/Order.js
 import mongoose from "mongoose";
+import registerModel from "@/lib/registerModel";
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -121,4 +122,4 @@ OrderSchema.index({ user: 1, createdAt: -1 });
 OrderSchema.index({ status: 1 });
 OrderSchema.index({ isPaid: 1 });
 
-export default mongoose.models.Order || mongoose.model("Order", OrderSchema);
+export default registerModel("Order", OrderSchema);

@@ -67,7 +67,10 @@ export default function ProfileForm({ user }) {
         throw new Error(uploadResult.error || "Upload dështoi");
       }
 
-      const result = await updateUserAvatar(uploadResult.url);
+      const result = await updateUserAvatar(
+        uploadResult.url,
+        uploadResult.publicId,
+      );
 
       if (result.success) {
         setAvatarPreview(result.avatar);

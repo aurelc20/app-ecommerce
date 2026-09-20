@@ -1,5 +1,6 @@
 // src/models/User.js
 import mongoose from "mongoose";
+import registerModel from "@/lib/registerModel";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -32,6 +33,11 @@ const UserSchema = new mongoose.Schema(
     },
 
     avatar: {
+      type: String,
+      default: null,
+    },
+
+    avatarPublicId: {
       type: String,
       default: null,
     },
@@ -109,4 +115,4 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default registerModel("User", UserSchema);

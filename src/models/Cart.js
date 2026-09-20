@@ -1,5 +1,6 @@
 // src/models/Cart.js
 import mongoose from "mongoose";
+import registerModel from "@/lib/registerModel";
 
 const CartSchema = new mongoose.Schema(
   {
@@ -34,4 +35,4 @@ const CartSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.models.Cart || mongoose.model("Cart", CartSchema);
+export default registerModel("Cart", CartSchema);

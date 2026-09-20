@@ -1,5 +1,6 @@
 // src/models/Settings.js
 import mongoose from "mongoose";
+import registerModel from "@/lib/registerModel";
 
 const SettingsSchema = new mongoose.Schema(
   {
@@ -96,5 +97,4 @@ const SettingsSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.models.Settings ||
-  mongoose.model("Settings", SettingsSchema);
+export default registerModel("Settings", SettingsSchema);

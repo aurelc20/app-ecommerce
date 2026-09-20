@@ -8,6 +8,7 @@ import { z } from "zod";
 import { createEmailToken } from "@/lib/email-tokens";
 import { sendVerificationEmail } from "@/lib/resend";
 import { auth } from "@/lib/auth";
+import cloudinary, { publicIdFromUrl } from "@/lib/cloudinary";
 
 // Schema për registration
 const registerSchema = z.object({
@@ -63,11 +64,15 @@ export async function registerUser(formData) {
       emailVerificationTokenExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
-    const verificationUrl =
-      `${process.env.APP_URL}/verify-email?token=` +
-      encodeURIComponent(rawToken);
+    // Vetem ne zhvillim: shtyp linkun qe te mos presesh email-in.
+    // Ne prodhim ky log do te nxirrte nje token verifikimi te vlefshem.
+    if (process.env.NODE_ENV === "development") {
+      const verificationUrl =
+        `${process.env.APP_URL}/verify-email?token=` +
+        encodeURIComponent(rawToken);
 
-    console.log(verificationUrl);
+      console.log("[dev] Link verifikimi:", verificationUrl);
+    }
 
     await sendVerificationEmail({
       to: user.email,
@@ -121,7 +126,9 @@ export async function updateUserProfile(updateData) {
 
     await dbConnect();
 
-    const allowedFields = ["name", "avatar", "addresses"];
+    // "avatar" jo ketu: ndryshohet vetem permes updateUserAvatar(),
+    // qe kujdeset edhe per fshirjen e asetit te vjeter ne Cloudinary.
+    const allowedFields = ["name", "addresses"];
     const filteredData = {};
 
     Object.keys(updateData).forEach((key) => {
@@ -198,21 +205,59 @@ export async function changePassword(currentPassword, newPassword) {
   }
 }
 
-export async function updateUserAvatar(avatarUrl) {
+export async function updateUserAvatar(avatarUrl, avatarPublicId = null) {
   try {
     const userId = await requireUserId();
     if (!userId) return { success: false, error: "Nuk je i kyçur" };
 
     await dbConnect();
 
+    // Gjendja para perditesimit, qe te dime cilin aset te fshijme.
+    const before = await User.findById(userId)
+      .select("avatar avatarPublicId")
+      .lean();
+
+    if (!before) {
+      return { success: false, error: "Përdoruesi nuk u gjet" };
+    }
+
+    // Perdoruesit e vjeter s'kane avatarPublicId; nxirre nga URL-ja.
+    // Kthen null per avataret e Google, qe nuk duhen prekur.
+    const oldPublicId = before.avatarPublicId ?? publicIdFromUrl(before.avatar);
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { avatar: avatarUrl },
+      { avatar: avatarUrl, avatarPublicId },
       { returnDocument: "after" },
     );
 
     if (!user) {
       return { success: false, error: "Përdoruesi nuk u gjet" };
+    }
+
+    // Fshirja vetem pasi DB-ja u perditesua me sukses. Nese deshton,
+    // mbetet nje aset jetim - i riparueshem. Renditja e kundert do te linte
+    // avatarin duke treguar nga nje aset qe nuk ekziston me.
+    if (oldPublicId && oldPublicId !== avatarPublicId) {
+      try {
+        const res = await cloudinary.uploader.destroy(oldPublicId);
+
+        // destroy() nuk hedh gabim kur aseti mungon - kthen "not found".
+        // Pa kete kontroll, deshtimi kalon krejt ne heshtje.
+        if (res.result !== "ok") {
+          console.warn(
+            "Avatari i vjeter nuk u fshi ne Cloudinary:",
+            oldPublicId,
+            res.result,
+          );
+        }
+      } catch (destroyError) {
+        console.error(
+          "Nuk u fshi avatari i vjeter ne Cloudinary:",
+          oldPublicId,
+          destroyError,
+        );
+      }
     }
 
     return {

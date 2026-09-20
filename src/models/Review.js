@@ -1,5 +1,6 @@
 // src/models/Review.js
 import mongoose from "mongoose";
+import registerModel from "@/lib/registerModel";
 
 const ReviewSchema = new mongoose.Schema(
   {
@@ -117,4 +118,4 @@ ReviewSchema.post("remove", async function () {
   }
 });
 
-export default mongoose.models.Review || mongoose.model("Review", ReviewSchema);
+export default registerModel("Review", ReviewSchema);

@@ -1,13 +1,7 @@
 // src/app/api/upload/route.js
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import cloudinary, { AVATAR_FOLDER } from "@/lib/cloudinary";
 
 export async function POST(request) {
   try {
@@ -35,13 +29,19 @@ export async function POST(request) {
     const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
 
     const result = await cloudinary.uploader.upload(base64, {
-      folder: "perle-jewellery/avatars",
+      folder: AVATAR_FOLDER,
       transformation: [
         { width: 400, height: 400, crop: "fill", gravity: "face" },
       ],
     });
 
-    return NextResponse.json({ success: true, url: result.secure_url });
+    // public_id-ja kthehet që thirrësi ta ruajë dhe të mund ta fshijë
+    // këtë aset kur avatari të zëvendësohet.
+    return NextResponse.json({
+      success: true,
+      url: result.secure_url,
+      publicId: result.public_id,
+    });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
