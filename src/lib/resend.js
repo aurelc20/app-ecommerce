@@ -11,18 +11,10 @@ if (!process.env.EMAIL_FROM) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendEmail_1({ to, subject, html }) {
-  return resend.emails.send({
-    from: process.env.EMAIL_FROM,
-    to,
-    subject,
-    html,
-  });
-}
 
 async function sendEmail({ to, subject, html }) {
   try {
-    const { data, error } = resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: `${process.env.APP_NAME} <${process.env.EMAIL_FROM}>`,
       to,
       subject,

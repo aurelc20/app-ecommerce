@@ -6,7 +6,11 @@ import dbConnect from "@/lib/db";
 import User from "@/models/User";
 import { z } from "zod";
 import { createEmailToken } from "@/lib/email-tokens";
-import { sendVerificationEmail } from "@/lib/resend";
+import {
+  sendVerificationEmail,
+  sendPasswordResetEmail,
+} from "@/lib/resend";
+import crypto from "crypto";
 import { auth } from "@/lib/auth";
 import cloudinary, { publicIdFromUrl } from "@/lib/cloudinary";
 
@@ -16,6 +20,19 @@ const registerSchema = z.object({
   email: z.email("Email-i nuk është valid"),
   password: z.string().min(6, "Fjalëkalimi duhet të jetë së paku 6 karaktere"),
 });
+
+const forgotPasswordSchema = z.object({
+  email: z.email("Email-i nuk është valid"),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Token-i mungon"),
+  password: z.string().min(6, "Fjalëkalimi duhet të jetë së paku 6 karaktere"),
+});
+
+// Sa zgjat nje link reset-i, dhe sa shpesh mund te kerkohet nje i ri.
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 ore, si te teksti i email-it
+const RESET_COOLDOWN_MS = 2 * 60 * 1000; // 2 minuta
 
 export async function registerUser(formData) {
   try {
@@ -74,11 +91,18 @@ export async function registerUser(formData) {
       console.log("[dev] Link verifikimi:", verificationUrl);
     }
 
-    await sendVerificationEmail({
-      to: user.email,
-      name: user.name,
-      token: rawToken,
-    });
+    try {
+      await sendVerificationEmail({
+        to: user.email,
+        name: user.name,
+        token: rawToken,
+      });
+    } catch (mailError) {
+      // Llogaria tashme ekziston. Nese e kthejme si deshtim regjistrimi,
+      // perdoruesi riprovon dhe merr "email-i eshte tashme i regjistruar" -
+      // rruge pa krye. Linku [dev] mbetet ne log.
+      console.error("Nuk u dergua email-i i verifikimit:", mailError);
+    }
 
     return {
       success: true,
@@ -268,5 +292,126 @@ export async function updateUserAvatar(avatarUrl, avatarPublicId = null) {
   } catch (error) {
     console.error("Update avatar error:", error);
     return { success: false, error: "Diçka shkoi keq" };
+  }
+}
+
+// I njejti pergjigje per cdo rast, qe forma te mos perdoret per te zbuluar
+// se cilat adresa jane te regjistruara.
+const GENERIC_RESET_RESPONSE = {
+  success: true,
+  message:
+    "Nëse ky email është i regjistruar, do të marrësh një link brenda pak minutash.",
+};
+
+export async function requestPasswordReset(values) {
+  const parsed = forgotPasswordSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Email-i nuk është valid",
+    };
+  }
+
+  const email = parsed.data.email.toLowerCase().trim();
+
+  try {
+    await dbConnect();
+
+    const user = await User.findOne({ email });
+
+    // Email i paregjistruar: dil pa bere asgje, por me te njejtin mesazh.
+    if (!user) {
+      return GENERIC_RESET_RESPONSE;
+    }
+
+    // Cooldown: nese token-i aktual u krijua para me pak se 2 minutash,
+    // mos dergo nje email te dyte dhe mos e zevendeso token-in ekzistues.
+    const expires = user.passwordResetTokenExpires;
+    const createdAt = expires ? expires.getTime() - RESET_TOKEN_TTL_MS : 0;
+
+    if (createdAt && Date.now() - createdAt < RESET_COOLDOWN_MS) {
+      return GENERIC_RESET_RESPONSE;
+    }
+
+    const { rawToken, tokenHash } = createEmailToken();
+
+    user.passwordResetTokenHash = tokenHash;
+    user.passwordResetTokenExpires = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+    await user.save();
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "[dev] Link rivendosjeje:",
+        `${process.env.APP_URL}/reset-password?token=${encodeURIComponent(rawToken)}`,
+      );
+    }
+
+    await sendPasswordResetEmail({
+      to: user.email,
+      name: user.name,
+      token: rawToken,
+    });
+
+    return GENERIC_RESET_RESPONSE;
+  } catch (error) {
+    // Gabimi logohet, por perdoruesi merr te njejtin mesazh - ndryshe
+    // nje deshtim dergimi do te tregonte se adresa ekziston.
+    console.error("Password reset request error:", error);
+    return GENERIC_RESET_RESPONSE;
+  }
+}
+
+export async function resetPassword(values) {
+  const parsed = resetPasswordSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Të dhënat nuk janë valide",
+    };
+  }
+
+  try {
+    await dbConnect();
+
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(parsed.data.token)
+      .digest("hex");
+
+    // passwordResetTokenHash eshte select: false, ndaj kerkohet shprehimisht.
+    const user = await User.findOne({
+      passwordResetTokenHash: tokenHash,
+      passwordResetTokenExpires: { $gt: new Date() },
+    }).select("+passwordResetTokenHash");
+
+    if (!user) {
+      return {
+        success: false,
+        error: "Ky link është i pavlefshëm ose ka skaduar. Kërko një të ri.",
+      };
+    }
+
+    user.password = await bcrypt.hash(parsed.data.password, 12);
+    user.passwordResetTokenHash = null;
+    user.passwordResetTokenExpires = null;
+
+    // Klikimi i linkut provon kontrollin mbi inbox-in, qe eshte pikerisht
+    // ajo cka verifikon nje email. Pa kete, authorize() do ta bllokonte
+    // kycjen edhe pas nje reset-i te suksesshem.
+    if (!user.emailVerified) {
+      user.emailVerified = new Date();
+    }
+
+    await user.save();
+
+    return {
+      success: true,
+      message: "Fjalëkalimi u rivendos. Tani mund të kyçesh.",
+    };
+  } catch (error) {
+    console.error("Password reset error:", error);
+    return { success: false, error: "Ndodhi një gabim. Provo sërish." };
   }
 }
