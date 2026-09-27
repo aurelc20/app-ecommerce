@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ShopPagination({
   currentPage,
@@ -32,10 +33,10 @@ export default function ShopPagination({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-4 mt-6 flex items-center justify-between">
-      <p className="text-sm text-gray-600">
-        Faqja <span className="font-medium">{currentPage}</span> nga{" "}
-        <span className="font-medium">{totalPages}</span>
+    <div className="mt-6 flex items-center justify-between rounded-2xl border border-sand bg-paper p-4">
+      <p className="text-sm text-ink-soft">
+        Faqja <span className="font-medium text-ink">{currentPage}</span> nga{" "}
+        <span className="font-medium text-ink">{totalPages}</span>
       </p>
 
       <div className="flex items-center gap-2">
@@ -43,16 +44,18 @@ export default function ShopPagination({
         {currentPage > 1 ? (
           <Link
             href={createPageURL(currentPage - 1)}
-            className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 transition"
+            className="flex items-center gap-1.5 rounded-lg border border-sand px-4 py-2 text-sm text-ink transition hover:border-wood/40 hover:bg-sand/60"
           >
-            ← Prapa
+            <ChevronLeft className="h-4 w-4" />
+            Prapa
           </Link>
         ) : (
           <button
             disabled
-            className="px-4 py-2 border rounded-lg text-sm bg-gray-100 text-gray-400 cursor-not-allowed"
+            className="flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-sand px-4 py-2 text-sm text-ink-soft/50"
           >
-            ← Prapa
+            <ChevronLeft className="h-4 w-4" />
+            Prapa
           </button>
         )}
 
@@ -62,11 +65,11 @@ export default function ShopPagination({
             <>
               <Link
                 href={createPageURL(1)}
-                className="w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-50 transition"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-sand text-ink transition hover:border-wood/40 hover:bg-sand/60"
               >
                 1
               </Link>
-              {startPage > 2 && <span className="text-gray-400">...</span>}
+              {startPage > 2 && <span className="text-ink-soft">...</span>}
             </>
           )}
 
@@ -74,10 +77,10 @@ export default function ShopPagination({
             <Link
               key={page}
               href={createPageURL(page)}
-              className={`w-10 h-10 flex items-center justify-center border rounded-lg transition ${
+              className={`flex h-10 w-10 items-center justify-center rounded-lg border transition ${
                 page === currentPage
-                  ? "bg-purple-600 text-white border-purple-600"
-                  : "hover:bg-gray-50"
+                  ? "border-wood bg-wood text-white"
+                  : "border-sand text-ink hover:border-wood/40 hover:bg-sand/60"
               }`}
             >
               {page}
@@ -87,11 +90,11 @@ export default function ShopPagination({
           {endPage < totalPages && (
             <>
               {endPage < totalPages - 1 && (
-                <span className="text-gray-400">...</span>
+                <span className="text-ink-soft">...</span>
               )}
               <Link
                 href={createPageURL(totalPages)}
-                className="w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-50 transition"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-sand text-ink transition hover:border-wood/40 hover:bg-sand/60"
               >
                 {totalPages}
               </Link>
@@ -103,16 +106,18 @@ export default function ShopPagination({
         {currentPage < totalPages ? (
           <Link
             href={createPageURL(currentPage + 1)}
-            className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 transition"
+            className="flex items-center gap-1.5 rounded-lg border border-sand px-4 py-2 text-sm text-ink transition hover:border-wood/40 hover:bg-sand/60"
           >
-            Para →
+            Para
+            <ChevronRight className="h-4 w-4" />
           </Link>
         ) : (
           <button
             disabled
-            className="px-4 py-2 border rounded-lg text-sm bg-gray-100 text-gray-400 cursor-not-allowed"
+            className="flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-sand px-4 py-2 text-sm text-ink-soft/50"
           >
-            Para →
+            Para
+            <ChevronRight className="h-4 w-4" />
           </button>
         )}
       </div>

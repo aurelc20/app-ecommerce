@@ -24,12 +24,12 @@ export default function ProfileForm({ user }) {
     confirmPassword: "",
   });
 
-  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
-  const [avatarUploading, setAvatarUploading] = useState(false);
-  const fileInputRef = useRef(null);
+  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null); //
+  const [avatarUploading, setAvatarUploading] = useState(false); //
+  const fileInputRef = useRef(null); //
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [message, setMessage] = useState({ type: "", text: "" }); //
 
   const handleAvatarSelect = async (e) => {
     const file = e.target.files?.[0];

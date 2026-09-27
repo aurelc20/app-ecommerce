@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { createOrder } from "@/actions/orderActions";
 import { getPublicSettings } from "@/actions/settingsActions";
 import { useSession } from "next-auth/react";
+import { AlertTriangle, Loader2, ShoppingBag } from "lucide-react";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
 import OrderSummary from "@/components/checkout/OrderSummary";
 import PaymentMethod from "@/components/checkout/PaymentMethod";
@@ -133,25 +134,28 @@ export default function CheckoutPage() {
 
   if (settingsLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-purple-600 border-t-transparent rounded-full" />
+      <div className="flex min-h-screen items-center justify-center bg-cream">
+        <Loader2 className="h-8 w-8 animate-spin text-wood" />
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-cream">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sand/70 text-wood">
+            <ShoppingBag className="h-8 w-8" strokeWidth={1.75} />
+          </div>
+          <h1 className="mt-4 font-display text-2xl font-semibold text-ink">
             Shporta është bosh
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="mt-2 text-ink-soft">
             Shto produkte për të vazhduar me checkout
           </p>
           <button
             onClick={() => router.push("/shop")}
-            className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+            className="mt-6 rounded-full bg-wood px-6 py-3 font-medium text-white transition hover:bg-wood-dark"
           >
             Shiko produktet
           </button>
@@ -161,18 +165,21 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-cream py-12">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="font-display text-3xl font-semibold text-ink">
+            Checkout
+          </h1>
+          <p className="mt-2 text-ink-soft">
             Plotëso të dhënat për të dërguar porositë
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg font-medium">
-            ⚠️ {error}
+          <div className="mb-6 flex items-center gap-2 rounded-xl bg-red-50 p-4 font-medium text-red-600">
+            <AlertTriangle className="h-5 w-5 shrink-0" />
+            {error}
           </div>
         )}
 
@@ -190,47 +197,29 @@ export default function CheckoutPage() {
               paymentMethodsConfig={settings.paymentMethods}
             />
 
-            <div className="bg-white rounded-xl shadow-sm border p-6">
+            <div className="rounded-2xl border border-sand bg-paper p-6">
               <button
                 onClick={handlePlaceOrder}
                 disabled={loading || settings.maintenanceMode}
-                className="w-full bg-purple-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-4 text-lg font-semibold text-white transition hover:bg-wood-dark disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? (
                   <>
-                    <svg
-                      className="animate-spin h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                      />
-                    </svg>
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     Duke procesuar...
                   </>
                 ) : (
                   <>
                     {paymentMethod === "cod"
-                      ? "🛍️ Konfirmo Porosinë (COD)"
-                      : "🏦 Konfirmo Porosinë"}
+                      ? "Konfirmo Porosinë (COD)"
+                      : "Konfirmo Porosinë"}
                   </>
                 )}
               </button>
 
-              <p className="text-xs text-gray-500 text-center mt-3">
+              <p className="mt-3 text-center text-xs text-ink-soft">
                 Duke klikuar &quot;Konfirmo Porosinë&quot;, pranon{" "}
-                <a href="/terms" className="text-purple-600 hover:underline">
+                <a href="/terms" className="text-wood hover:underline">
                   Termat dhe Kushtet
                 </a>
               </p>

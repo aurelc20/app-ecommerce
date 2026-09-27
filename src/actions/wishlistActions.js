@@ -2,6 +2,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/db";
 import User from "@/models/User";
 import Product from "@/models/Product";
@@ -36,6 +37,9 @@ export async function addToWishlist(productId) {
     user.wishlist.push(productId);
     await user.save();
 
+    revalidatePath("/dashboard/wishlist");
+    revalidatePath("/dashboard");
+
     return {
       success: true,
       message: "U shtua në wishlist",
@@ -65,6 +69,9 @@ export async function removeFromWishlist(productId) {
 
     user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
     await user.save();
+
+    revalidatePath("/dashboard/wishlist");
+    revalidatePath("/dashboard");
 
     return {
       success: true,

@@ -9,8 +9,8 @@ export default function ProductGallery({ images }) {
 
   if (!images || images.length === 0) {
     return (
-      <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-        <div className="w-full h-full flex items-center justify-center text-gray-400">
+      <div className="relative aspect-square overflow-hidden rounded-2xl bg-sand/60">
+        <div className="flex h-full w-full items-center justify-center text-ink-soft">
           No Image Available
         </div>
       </div>
@@ -20,7 +20,7 @@ export default function ProductGallery({ images }) {
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+      <div className="relative aspect-square overflow-hidden rounded-2xl border border-sand bg-sand/60">
         <Image
           src={images[selectedImage].url}
           alt={images[selectedImage].alt || "Product image"}
@@ -38,10 +38,10 @@ export default function ProductGallery({ images }) {
             <button
               key={index}
               onClick={() => setSelectedImage(index)}
-              className={`relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition ${
+              className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-sand/60 transition ${
                 selectedImage === index
-                  ? "border-purple-600"
-                  : "border-transparent hover:border-gray-300"
+                  ? "border-wood"
+                  : "border-transparent hover:border-sand"
               }`}
             >
               <Image

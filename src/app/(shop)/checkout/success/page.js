@@ -3,62 +3,53 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { ArrowRight, Check, CheckCircle2 } from "lucide-react";
+
+const NEXT_STEPS = [
+  "Do të marrësh një email konfirmimi",
+  "Do të të kontaktojmë për të konfirmuar dërgesën",
+  "Paguaj kur të marrësh produktin (COD)",
+];
 
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full text-center">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
+      <div className="w-full max-w-md text-center">
         {/* Success Icon */}
-        <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-          <svg
-            className="w-10 h-10 text-green-600"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clipRule="evenodd"
-            />
-          </svg>
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-50 text-green-600">
+          <CheckCircle2 className="h-10 w-10" />
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="mb-4 font-display text-3xl font-semibold text-ink">
           Faleminderit për porositë!
         </h1>
 
         {/* Order Number */}
         {orderId && (
-          <p className="text-gray-600 mb-6">
+          <p className="mb-6 text-ink-soft">
             Numri i porosisë:{" "}
-            <span className="font-mono font-bold text-purple-600">
+            <span className="font-mono font-bold text-wood">
               #{orderId.slice(-8).toUpperCase()}
             </span>
           </p>
         )}
 
         {/* Message */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <h2 className="font-semibold text-gray-900 mb-3">
+        <div className="mb-6 rounded-2xl border border-sand bg-paper p-6 text-left">
+          <h2 className="mb-3 font-display font-semibold text-ink">
             Hapat e ardhshëm:
           </h2>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li className="flex items-start gap-2">
-              <span className="text-green-600">✓</span>
-              <span>Do të marrësh një email konfirmimi</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-green-600">✓</span>
-              <span>Do të të kontaktojmë për të konfirmuar dërgesën</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-green-600">✓</span>
-              <span>Paguaj kur të marrësh produktin (COD)</span>
-            </li>
+          <ul className="space-y-2 text-sm text-ink-soft">
+            {NEXT_STEPS.map((step) => (
+              <li key={step} className="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-wood" />
+                <span>{step}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -66,13 +57,14 @@ export default function CheckoutSuccessPage() {
         <div className="flex flex-col gap-3">
           <Link
             href="/dashboard/orders"
-            className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-wood px-6 py-3 font-medium text-white transition hover:bg-wood-dark"
           >
             Shiko Porositë e Mia
+            <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href="/shop"
-            className="text-purple-600 hover:text-purple-700 font-medium"
+            className="font-medium text-wood hover:text-wood-dark"
           >
             Vazhdo me shopping →
           </Link>

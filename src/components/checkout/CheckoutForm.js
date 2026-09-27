@@ -3,6 +3,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 
+const inputClass = (hasError) =>
+  `w-full rounded-lg border bg-cream px-4 py-3 text-ink outline-none transition focus:border-wood focus:ring-2 focus:ring-wood/20 ${
+    hasError ? "border-red-500" : "border-sand"
+  }`;
+
 export default function CheckoutForm({ onFormChange, user }) {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -62,13 +67,15 @@ export default function CheckoutForm({ onFormChange, user }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6">
-      <h2 className="text-xl font-bold mb-6">Të Dhënat e Dërgesës</h2>
+    <div className="rounded-2xl border border-sand bg-paper p-6">
+      <h2 className="mb-6 font-display text-xl font-semibold text-ink">
+        Të Dhënat e Dërgesës
+      </h2>
 
       <div className="space-y-4">
         {/* Full Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Emri i plotë *
           </label>
           <input
@@ -77,19 +84,17 @@ export default function CheckoutForm({ onFormChange, user }) {
             value={formData.fullName}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-              getError("fullName") ? "border-red-500" : ""
-            }`}
+            className={inputClass(getError("fullName"))}
             placeholder="Emri Mbiemri"
           />
           {getError("fullName") && (
-            <p className="text-xs text-red-600 mt-1">{getError("fullName")}</p>
+            <p className="mt-1 text-xs text-red-600">{getError("fullName")}</p>
           )}
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Email-i *
           </label>
           <input
@@ -98,19 +103,17 @@ export default function CheckoutForm({ onFormChange, user }) {
             value={formData.email}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-              getError("email") ? "border-red-500" : ""
-            }`}
+            className={inputClass(getError("email"))}
             placeholder="email@example.com"
           />
           {getError("email") && (
-            <p className="text-xs text-red-600 mt-1">{getError("email")}</p>
+            <p className="mt-1 text-xs text-red-600">{getError("email")}</p>
           )}
         </div>
 
         {/* Phone */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Telefoni *
           </label>
           <input
@@ -119,15 +122,13 @@ export default function CheckoutForm({ onFormChange, user }) {
             value={formData.phone}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-              getError("phone") ? "border-red-500" : ""
-            }`}
+            className={inputClass(getError("phone"))}
             placeholder="+355691234567"
           />
           {getError("phone") ? (
-            <p className="text-xs text-red-600 mt-1">{getError("phone")}</p>
+            <p className="mt-1 text-xs text-red-600">{getError("phone")}</p>
           ) : (
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="mt-1 text-xs text-ink-soft">
               Formati: +35569XXXXXXX ose 069XXXXXXX
             </p>
           )}
@@ -135,7 +136,7 @@ export default function CheckoutForm({ onFormChange, user }) {
 
         {/* Address */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Adresa (Rruga, Nr.) *
           </label>
           <textarea
@@ -144,20 +145,18 @@ export default function CheckoutForm({ onFormChange, user }) {
             onChange={handleChange}
             onBlur={handleBlur}
             rows={2}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-              getError("address") ? "border-red-500" : ""
-            }`}
+            className={inputClass(getError("address"))}
             placeholder="Rruga ..., Nr. ..."
           />
           {getError("address") && (
-            <p className="text-xs text-red-600 mt-1">{getError("address")}</p>
+            <p className="mt-1 text-xs text-red-600">{getError("address")}</p>
           )}
         </div>
 
         {/* City & Postal Code */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Qyteti *
             </label>
             <input
@@ -166,18 +165,16 @@ export default function CheckoutForm({ onFormChange, user }) {
               value={formData.city}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                getError("city") ? "border-red-500" : ""
-              }`}
+              className={inputClass(getError("city"))}
               placeholder="Durrës"
             />
             {getError("city") && (
-              <p className="text-xs text-red-600 mt-1">{getError("city")}</p>
+              <p className="mt-1 text-xs text-red-600">{getError("city")}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Kodi Postar *
             </label>
             <input
@@ -186,13 +183,11 @@ export default function CheckoutForm({ onFormChange, user }) {
               value={formData.postalCode}
               onChange={handleChange}
               onBlur={handleBlur}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                getError("postalCode") ? "border-red-500" : ""
-              }`}
+              className={inputClass(getError("postalCode"))}
               placeholder="2001"
             />
             {getError("postalCode") && (
-              <p className="text-xs text-red-600 mt-1">
+              <p className="mt-1 text-xs text-red-600">
                 {getError("postalCode")}
               </p>
             )}
@@ -201,14 +196,14 @@ export default function CheckoutForm({ onFormChange, user }) {
 
         {/* Country */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Shteti
           </label>
           <select
             name="country"
             value={formData.country}
             onChange={handleChange}
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className={inputClass(false)}
           >
             <option value="AL">Shqipëri 🇦🇱</option>
             <option value="XK">Kosovë 🇽🇰</option>
@@ -220,7 +215,7 @@ export default function CheckoutForm({ onFormChange, user }) {
 
         {/* Order Notes */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Shënime për porositë (opsionale)
           </label>
           <textarea
@@ -228,7 +223,7 @@ export default function CheckoutForm({ onFormChange, user }) {
             value={formData.notes}
             onChange={handleChange}
             rows={3}
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className={inputClass(false)}
             placeholder="Instruksione të veçanta për dërgesën..."
           />
         </div>

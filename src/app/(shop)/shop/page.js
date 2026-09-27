@@ -10,7 +10,7 @@ import { categoryLabel } from "@/lib/categories";
 
 export const metadata = {
   title: "Dyqani | Furniture Shop",
-  description: "Zbuloni koleksionin tonë të bizhuterive ekskluzive",
+  description: "Zbuloni koleksionin tonë të mobiljeve ekskluzive",
 };
 
 export default async function ShopPage({ searchParams }) {
@@ -53,13 +53,18 @@ export default async function ShopPage({ searchParams }) {
   const stats = await getProductStats();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       {/* Header */}
-      <div className="bg-linear-to-r from-purple-600 to-pink-600 text-white py-12">
+      <div className="border-b border-sand bg-paper/60 py-14">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-center mb-4">Shop</h1>
-          <p className="text-center text-purple-100">
-            Zbuloni koleksionin tonë të bizhuterive elegante
+          <p className="text-center text-sm font-semibold tracking-[0.2em] text-wood uppercase">
+            Koleksioni
+          </p>
+          <h1 className="mt-2 text-center font-display text-4xl font-semibold text-ink sm:text-5xl">
+            Produktet
+          </h1>
+          <p className="mt-3 text-center text-ink-soft">
+            Zbuloni koleksionin tonë të mobiljeve elegante
           </p>
         </div>
       </div>
@@ -70,7 +75,7 @@ export default async function ShopPage({ searchParams }) {
           <aside className="lg:w-64 shrink-0">
             <Suspense
               fallback={
-                <div className="h-96 bg-gray-200 rounded-lg animate-pulse" />
+                <div className="h-96 rounded-2xl bg-sand/50 animate-pulse" />
               }
             >
               <ShopFilters
@@ -85,18 +90,17 @@ export default async function ShopPage({ searchParams }) {
           {/* Main Content */}
           <main className="flex-1">
             {/* Results Info */}
-            <div className="bg-white rounded-lg shadow-sm border p-4 mb-6 flex items-center justify-between">
-              <p className="text-gray-600">
-                <span className="font-bold text-gray-900">{total}</span>{" "}
-                produkte
+            <div className="mb-6 flex items-center justify-between rounded-2xl border border-sand bg-paper p-4">
+              <p className="text-ink-soft">
+                <span className="font-bold text-ink">{total}</span> produkte
                 {filters.search && (
                   <span> për &quot;{filters.search}&quot;</span>
                 )}
               </p>
 
               <div className="flex items-center gap-2">
-                <label htmlFor="sortBy" className="text-sm text-gray-600">
-                  Sorto:
+                <label htmlFor="sortBy" className="text-sm text-ink-soft">
+                  Rendit:
                 </label>
                 <ShopSortDropdown defaultValue={filters.sortBy} />
               </div>
@@ -110,43 +114,40 @@ export default async function ShopPage({ searchParams }) {
               filters.search) && (
               <div className="flex flex-wrap gap-2 mb-6">
                 {filters.search && (
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                  <span className="flex items-center gap-2 rounded-full bg-sand px-3 py-1 text-sm text-ink">
                     Search: {filters.search}
-                    <a href="?search=" className="hover:text-purple-600">
+                    <a href="?search=" className="hover:text-wood">
                       ✕
                     </a>
                   </span>
                 )}
                 {filters.category && (
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                  <span className="flex items-center gap-2 rounded-full bg-sand px-3 py-1 text-sm text-ink">
                     {categoryLabel(filters.category)}
-                    <a href="?category=" className="hover:text-purple-600">
+                    <a href="?category=" className="hover:text-wood">
                       ✕
                     </a>
                   </span>
                 )}
                 {filters.brand && (
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                  <span className="flex items-center gap-2 rounded-full bg-sand px-3 py-1 text-sm text-ink">
                     {filters.brand}
-                    <a href="?brand=" className="hover:text-purple-600">
+                    <a href="?brand=" className="hover:text-wood">
                       ✕
                     </a>
                   </span>
                 )}
                 {(filters.minPrice || filters.maxPrice) && (
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                  <span className="flex items-center gap-2 rounded-full bg-sand px-3 py-1 text-sm text-ink">
                     ${filters.minPrice || 0} - ${filters.maxPrice || "∞"}
-                    <a
-                      href="?minPrice=&maxPrice="
-                      className="hover:text-purple-600"
-                    >
+                    <a href="?minPrice=&maxPrice=" className="hover:text-wood">
                       ✕
                     </a>
                   </span>
                 )}
                 <a
                   href="/shop"
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-300"
+                  className="rounded-full bg-ink/10 px-3 py-1 text-sm text-ink hover:bg-ink/20"
                 >
                   Clear all
                 </a>
@@ -159,7 +160,7 @@ export default async function ShopPage({ searchParams }) {
             </Suspense>
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {totalPages > 0 && (
               <ShopPagination
                 currentPage={currentPage}
                 totalPages={totalPages}

@@ -1,11 +1,15 @@
 // src/components/CartItem.js
 "use client";
 
+import { useState } from "react";
 import { useCartStore } from "@/store/cartStore";
 import Image from "next/image";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function CartItem({ item }) {
   const { updateQuantity, removeItem } = useCartStore();
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
 
   const handleIncrement = () => {
     if (item.quantity < item.stock) {
@@ -17,52 +21,49 @@ export default function CartItem({ item }) {
     updateQuantity(item.productId, item.quantity - 1);
   };
 
-  const handleRemove = () => {
-    if (confirm("Je i sigurt që dëshiron ta heqësh këtë produkt?")) {
-      removeItem(item.productId);
-    }
-  };
-
   return (
-    <div className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+    <div className="flex gap-4 rounded-xl border border-sand bg-paper p-4">
       {/* Image */}
-      <div className="relative w-20 h-20 shrink-0 bg-gray-100 rounded">
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-sand/60">
         {item.image && (
           <Image
             src={item.image}
             alt={item.name}
             fill
-            className="object-cover rounded"
+            sizes="80px"
+            className="object-cover"
           />
         )}
       </div>
 
       {/* Info */}
-      <div className="flex-1 min-w-0">
-        <h3 className="font-medium text-gray-900 truncate">{item.name}</h3>
-        <p className="text-sm text-gray-600 mt-1">${item.price.toFixed(2)}</p>
+      <div className="min-w-0 flex-1">
+        <h3 className="truncate font-medium text-ink">{item.name}</h3>
+        <p className="mt-1 text-sm text-ink-soft">${item.price.toFixed(2)}</p>
 
         {/* Quantity Controls */}
-        <div className="flex items-center gap-2 mt-2">
+        <div className="mt-2 flex items-center gap-2">
           <button
             onClick={handleDecrement}
-            className="w-8 h-8 flex items-center justify-center border rounded hover:bg-gray-100 transition"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-sand text-ink transition hover:bg-sand/60"
           >
-            -
+            <Minus className="h-4 w-4" />
           </button>
-          <span className="w-8 text-center font-medium">{item.quantity}</span>
+          <span className="w-8 text-center font-medium text-ink">
+            {item.quantity}
+          </span>
           <button
             onClick={handleIncrement}
             disabled={item.quantity >= item.stock}
-            className="w-8 h-8 flex items-center justify-center border rounded hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-sand text-ink transition hover:bg-sand/60 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            +
+            <Plus className="h-4 w-4" />
           </button>
         </div>
 
         {/* Stock Warning */}
         {item.quantity >= item.stock && (
-          <p className="text-xs text-red-600 mt-1">
+          <p className="mt-1 text-xs text-red-600">
             Maksimumi i arritur ({item.stock} në stock)
           </p>
         )}
@@ -70,23 +71,25 @@ export default function CartItem({ item }) {
 
       {/* Remove Button */}
       <button
-        onClick={handleRemove}
-        className="text-red-600 hover:text-red-700 p-2"
+        onClick={() => setIsRemoveModalOpen(true)}
+        className="h-fit rounded-lg p-2 text-red-600 transition hover:bg-red-50 hover:text-red-700"
+        title="Hiq nga shporta"
       >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-          />
-        </svg>
+        <Trash2 className="h-5 w-5" />
       </button>
+
+      <ConfirmModal
+        isOpen={isRemoveModalOpen}
+        title="Hiq produktin?"
+        description={`Je i sigurt që dëshiron ta heqësh "${item.name}" nga shporta?`}
+        confirmLabel="Hiqe"
+        cancelLabel="Anulo"
+        onConfirm={() => {
+          removeItem(item.productId);
+          setIsRemoveModalOpen(false);
+        }}
+        onCancel={() => setIsRemoveModalOpen(false)}
+      />
     </div>
   );
 }

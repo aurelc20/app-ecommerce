@@ -81,6 +81,13 @@ export async function addReview(formData) {
 
     const isVerifiedPurchase = !!order;
 
+    if (!isVerifiedPurchase) {
+      return {
+        success: false,
+        error: "Duhet ta kesh blerë këtë produkt për të lënë një review",
+      };
+    }
+
     // Kontrollo nëse user ka lënë tashmë review
     const existingReview = await Review.findOne({
       product: productId,
@@ -116,6 +123,98 @@ export async function addReview(formData) {
         error: "Keni lënë tashmë një review për këtë produkt",
       };
     }
+    return { success: false, error: error.message };
+  }
+}
+
+// Kontrollo nëse user-i aktual ka të drejtë të lërë review për një produkt:
+// kthen null nëse s'është i kyçur, false nëse s'e ka blerë, true nëse mundet
+export async function hasPurchasedProduct(productId) {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return null;
+    }
+
+    await dbConnect();
+
+    const order = await Order.findOne({
+      user: session.user.id,
+      "items.product": productId,
+      status: { $in: ["delivered", "shipped", "out_for_delivery"] },
+    });
+
+    return !!order;
+  } catch (error) {
+    console.error("Error checking purchase:", error);
+    return null;
+  }
+}
+
+// Merr review-n e user-it aktual për një produkt (nëse ekziston)
+export async function getUserReview(productId) {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return null;
+    }
+
+    await dbConnect();
+
+    const review = await Review.findOne({
+      product: productId,
+      user: session.user.id,
+    }).lean();
+
+    if (!review) return null;
+
+    return JSON.parse(JSON.stringify(review));
+  } catch (error) {
+    console.error("Error fetching user review:", error);
+    return null;
+  }
+}
+
+// Përditëso review ekzistuese (vetëm pronari i saj)
+export async function updateReview(reviewId, formData) {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const { rating, title, comment } = formData;
+
+    if (!rating || !title || !comment) {
+      return { success: false, error: "Të gjitha fushat janë të detyrueshme" };
+    }
+
+    await dbConnect();
+
+    const review = await Review.findOne({
+      _id: reviewId,
+      user: session.user.id,
+    });
+
+    if (!review) {
+      return { success: false, error: "Review nuk u gjet ose nuk ke akses" };
+    }
+
+    review.rating = rating;
+    review.title = title;
+    review.comment = comment;
+    await review.save();
+
+    return {
+      success: true,
+      message: "Review u përditësua me sukses!",
+      review: JSON.parse(JSON.stringify(review)),
+    };
+  } catch (error) {
+    console.error("Error updating review:", error);
     return { success: false, error: error.message };
   }
 }

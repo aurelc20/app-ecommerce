@@ -36,16 +36,22 @@ export const useCartStore = create(
           );
 
           if (existingItem) {
-            // Update quantity
+            // Update quantity, capped at available stock
             return {
               items: state.items.map((item) =>
                 item.productId === product._id
-                  ? { ...item, quantity: item.quantity + quantity }
+                  ? {
+                      ...item,
+                      quantity: Math.min(
+                        item.quantity + quantity,
+                        product.stock,
+                      ),
+                    }
                   : item,
               ),
             };
           } else {
-            // Add new item
+            // Add new item, capped at available stock
             return {
               items: [
                 ...state.items,
@@ -54,7 +60,7 @@ export const useCartStore = create(
                   name: product.name,
                   price: product.salePrice || product.price,
                   image: product.images?.[0]?.url,
-                  quantity,
+                  quantity: Math.min(quantity, product.stock),
                   stock: product.stock,
                 },
               ],

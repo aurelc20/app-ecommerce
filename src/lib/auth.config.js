@@ -37,7 +37,11 @@ const authConfig = {
         token.role = user.role;
         token.avatar = user.avatar || user.image || null;
         token.image = user.image || user.avatar || null;
-        token.emailVerified = user.emailVerified;
+        // Date instances can't cross the Server->Client Component boundary
+        // (SessionProvider), so store it as a plain ISO string.
+        token.emailVerified = user.emailVerified
+          ? new Date(user.emailVerified).toISOString()
+          : null;
       }
 
       if (trigger === "update" && session) {

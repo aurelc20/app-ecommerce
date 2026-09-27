@@ -7,12 +7,14 @@ export default function RatingDistribution({ stats }) {
   return (
     <div className="space-y-2">
       {/* Average */}
-      <div className="text-center mb-6">
-        <div className="text-5xl font-bold text-gray-900 mb-2">
+      <div className="mb-6 text-center">
+        <div className="mb-2 font-display text-5xl font-semibold text-ink">
           {stats.average.toFixed(1)}
         </div>
-        <StarRating rating={stats.average} />
-        <p className="text-sm text-gray-600 mt-2">{stats.total} reviews</p>
+        <div className="flex justify-center">
+          <StarRating rating={stats.average} />
+        </div>
+        <p className="mt-2 text-sm text-ink-soft">{stats.total} reviews</p>
       </div>
 
       {/* Distribution Bars */}
@@ -22,14 +24,14 @@ export default function RatingDistribution({ stats }) {
 
         return (
           <div key={stars} className="flex items-center gap-2">
-            <span className="text-sm text-gray-600 w-8">{stars} ⭐</span>
-            <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <span className="w-8 text-sm text-ink-soft">{stars} ⭐</span>
+            <div className="h-2 flex-1 overflow-hidden rounded-full bg-sand">
               <div
-                className="h-full bg-yellow-400 rounded-full"
+                className="h-full rounded-full bg-yellow-400"
                 style={{ width: `${percentage}%` }}
               />
             </div>
-            <span className="text-sm text-gray-600 w-8 text-right">
+            <span className="w-8 text-right text-sm text-ink-soft">
               {count}
             </span>
           </div>

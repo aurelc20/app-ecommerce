@@ -7,9 +7,12 @@ import CartItem from "@/components/CartItem";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getPublicSettings } from "@/actions/settingsActions";
+import { ArrowRight, Loader2, ShoppingCart, Trash2 } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function CartPage() {
   const { items, getTotalPrice, clearCart } = useCartStore();
+  const [isClearModalOpen, setIsClearModalOpen] = useState(false);
 
   // ✅ Settings dinamike nga DB
   const [settings, setSettings] = useState({
@@ -35,40 +38,31 @@ export default function CartPage() {
 
   if (settingsLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-purple-600 border-t-transparent rounded-full" />
+      <div className="flex min-h-screen items-center justify-center bg-cream">
+        <Loader2 className="h-8 w-8 animate-spin text-wood" />
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-cream">
         <div className="text-center">
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <h1 className="mt-4 text-2xl font-bold text-gray-900">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sand/70 text-wood">
+            <ShoppingCart className="h-8 w-8" strokeWidth={1.75} />
+          </div>
+          <h1 className="mt-4 font-display text-2xl font-semibold text-ink">
             Shporta është bosh
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-ink-soft">
             Shto produkte për të filluar shopping-un
           </p>
           <Link
             href="/shop"
-            className="mt-6 inline-block bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-wood px-6 py-3 font-medium text-white transition hover:bg-wood-dark"
           >
             Shiko produktet
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </div>
@@ -76,58 +70,59 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-cream py-12">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Shporta Ime</h1>
+        <h1 className="mb-8 font-display text-3xl font-semibold text-ink">
+          Shporta Ime
+        </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Items */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="space-y-4 lg:col-span-2">
             {items.map((item) => (
               <CartItem key={item.productId} item={item} />
             ))}
 
             {/* Clear Cart */}
             <button
-              onClick={() => {
-                if (confirm("Je i sigurt që dëshiron ta zbrazësh shportën?")) {
-                  clearCart();
-                }
-              }}
-              className="text-red-600 hover:text-red-700 text-sm font-medium"
+              onClick={() => setIsClearModalOpen(true)}
+              className="flex cursor-pointer items-center gap-1.5 text-sm font-medium text-red-600 hover:text-red-700"
             >
+              <Trash2 className="h-4 w-4" />
               Zbraz shportën
             </button>
           </div>
 
           {/* Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm border p-6 sticky top-24">
-              <h2 className="text-xl font-bold mb-6">Përmbledhja e Porosisë</h2>
+            <div className="sticky top-24 rounded-2xl border border-sand bg-paper p-6">
+              <h2 className="mb-6 font-display text-xl font-semibold text-ink">
+                Përmbledhja e Porosisë
+              </h2>
 
               {/* Items */}
-              <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
+              <div className="mb-6 max-h-96 space-y-4 overflow-y-auto pt-2">
                 {items.map((item) => (
                   <div key={item.productId} className="flex gap-4">
-                    <div className="relative w-16 h-16 shrink-0 bg-gray-100 rounded">
+                    <div className="relative h-16 w-16 shrink-0 rounded-lg bg-sand/60">
                       {item.image && (
                         <Image
                           src={item.image}
                           alt={item.name}
                           fill
                           sizes="64px"
-                          className="rounded object-cover"
+                          className="object-cover"
                         />
                       )}
-                      <span className="absolute -top-2 -right-2 bg-gray-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                      <span className="absolute -right-2 -top-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-wood text-xs text-white">
                         {item.quantity}
                       </span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-gray-900 text-sm truncate">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="truncate text-sm font-medium text-ink">
                         {item.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="mt-1 text-sm text-ink-soft">
                         ${item.price.toFixed(2)} × {item.quantity}
                       </p>
                     </div>
@@ -136,17 +131,17 @@ export default function CartPage() {
               </div>
 
               {/* Pricing */}
-              <div className="border-t pt-4 space-y-3">
-                <div className="flex justify-between text-gray-600">
+              <div className="space-y-3 border-t border-sand pt-4">
+                <div className="flex justify-between text-ink-soft">
                   <span>Subtotal:</span>
                   <span>${getTotalPrice().toFixed(2)}</span>
                 </div>
 
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Transporti:</span>
                   <span
                     className={
-                      shippingPrice === 0 ? "text-green-600 font-medium" : ""
+                      shippingPrice === 0 ? "font-medium text-green-700" : ""
                     }
                   >
                     {shippingPrice === 0
@@ -155,31 +150,29 @@ export default function CartPage() {
                   </span>
                 </div>
 
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Tatimi ({(settings.taxRate * 100).toFixed(0)}%):</span>
                   <span>${taxPrice.toFixed(2)}</span>
                 </div>
 
-                <div className="border-t pt-3 flex justify-between text-lg font-bold">
-                  <span>Total:</span>
-                  <span className="text-purple-600">
-                    ${totalPrice.toFixed(2)}
-                  </span>
+                <div className="flex justify-between border-t border-sand pt-3 text-lg font-semibold">
+                  <span className="text-ink">Total:</span>
+                  <span className="text-wood">${totalPrice.toFixed(2)}</span>
                 </div>
               </div>
 
               {/* Free Shipping Progress */}
               {getTotalPrice() < settings.freeShippingThreshold && (
                 <div className="mt-4">
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="h-2 w-full rounded-full bg-sand">
                     <div
-                      className="bg-purple-600 h-2 rounded-full transition-all"
+                      className="h-2 rounded-full bg-wood transition-all"
                       style={{
                         width: `${(getTotalPrice() / settings.freeShippingThreshold) * 100}%`,
                       }}
                     />
                   </div>
-                  <p className="text-xs text-gray-600 mt-2 text-center">
+                  <p className="mt-2 text-center text-xs text-ink-soft">
                     Mbeten $
                     {(settings.freeShippingThreshold - getTotalPrice()).toFixed(
                       2,
@@ -192,15 +185,16 @@ export default function CartPage() {
               {/* Checkout Button */}
               <Link
                 href="/checkout"
-                className="mt-6 w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition text-center block"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-medium text-white transition hover:bg-wood-dark"
               >
                 Procedo në Checkout
+                <ArrowRight className="h-4 w-4" />
               </Link>
 
               {/* Continue Shopping */}
               <Link
                 href="/shop"
-                className="mt-3 w-full text-purple-600 hover:text-purple-700 font-medium text-sm text-center block"
+                className="mt-3 block w-full text-center text-sm font-medium text-wood hover:text-wood-dark"
               >
                 Vazhdo me shopping
               </Link>
@@ -208,6 +202,19 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isClearModalOpen}
+        title="Zbraz shportën?"
+        description="Je i sigurt që dëshiron ta zbrazësh shportën? Ky veprim nuk mund të kthehet mbrapsht."
+        confirmLabel="Zbraze"
+        cancelLabel="Anulo"
+        onConfirm={() => {
+          clearCart();
+          setIsClearModalOpen(false);
+        }}
+        onCancel={() => setIsClearModalOpen(false)}
+      />
     </div>
   );
 }

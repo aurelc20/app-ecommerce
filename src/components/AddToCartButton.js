@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check, TriangleAlert, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 
 export default function AddToCartButton({
@@ -14,13 +15,24 @@ export default function AddToCartButton({
 
   const handleAddToCart = () => {
     if (product.stock <= 0) {
-      setMessage("❌ Nuk ka në stock");
+      setMessage("out-of-stock");
+      setTimeout(() => setMessage(""), 2000);
+      return;
+    }
+
+    const existingItem = useCartStore
+      .getState()
+      .items.find((item) => item.productId === product._id);
+    const currentQuantity = existingItem?.quantity || 0;
+
+    if (currentQuantity >= product.stock) {
+      setMessage("max-stock");
       setTimeout(() => setMessage(""), 2000);
       return;
     }
 
     addItem(product, 1);
-    setMessage("✅ U shtua në shportë!");
+    setMessage("success");
     setTimeout(() => setMessage(""), 2000);
     setTimeout(() => toggleCart(), 300);
   };
@@ -30,10 +42,10 @@ export default function AddToCartButton({
       <button
         onClick={handleAddToCart}
         disabled={disabled}
-        className={`w-full py-3 rounded-lg font-semibold transition ${
+        className={`w-full rounded-full py-3 font-semibold transition ${
           disabled
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-purple-600 hover:bg-purple-700 text-white"
+            ? "cursor-not-allowed bg-sand text-ink-soft"
+            : "bg-wood text-white hover:bg-wood-dark"
         }`}
       >
         Shto në Shportë
@@ -41,11 +53,28 @@ export default function AddToCartButton({
 
       {message && (
         <p
-          className={`mt-2 text-sm text-center ${
-            message.includes("✅") ? "text-green-600" : "text-red-600"
+          className={`mt-2 flex items-center justify-center gap-1.5 text-sm ${
+            message === "success" ? "text-green-700" : "text-red-600"
           }`}
         >
-          {message}
+          {message === "success" && (
+            <>
+              <Check className="h-4 w-4" />
+              U shtua në shportë!
+            </>
+          )}
+          {message === "out-of-stock" && (
+            <>
+              <X className="h-4 w-4" />
+              Nuk ka në stock
+            </>
+          )}
+          {message === "max-stock" && (
+            <>
+              <TriangleAlert className="h-4 w-4" />
+              Ke arritur sasinë maksimale në stock ({product.stock})
+            </>
+          )}
         </p>
       )}
     </div>

@@ -4,11 +4,16 @@
 import { useState } from "react";
 import StarRating from "@/components/StarRating";
 
-export default function ReviewForm({ onSubmit, onCancel }) {
+export default function ReviewForm({
+  onSubmit,
+  onCancel,
+  initialData = null,
+  isEditing = false,
+}) {
   const [formData, setFormData] = useState({
-    rating: 0,
-    title: "",
-    comment: "",
+    rating: initialData?.rating || 0,
+    title: initialData?.title || "",
+    comment: initialData?.comment || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -39,18 +44,23 @@ export default function ReviewForm({ onSubmit, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border rounded-lg p-6">
-      <h3 className="text-xl font-bold mb-4">Shkruaj Review Tënde</h3>
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-2xl border border-sand bg-paper p-6"
+    >
+      <h3 className="mb-4 font-display text-xl font-semibold text-ink">
+        {isEditing ? "Redakto Review-n Tënde" : "Shkruaj Review Tënde"}
+      </h3>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 text-red-600 rounded text-sm">
+        <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
           {error}
         </div>
       )}
 
       {/* Rating */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="mb-2 block text-sm font-medium text-ink">
           Rating
         </label>
         <div className="flex items-center gap-2">
@@ -59,7 +69,7 @@ export default function ReviewForm({ onSubmit, onCancel }) {
             interactive
             onRatingChange={(rating) => setFormData({ ...formData, rating })}
           />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-ink-soft">
             {formData.rating > 0 ? `${formData.rating} / 5` : "Zgjidh rating"}
           </span>
         </div>
@@ -67,7 +77,7 @@ export default function ReviewForm({ onSubmit, onCancel }) {
 
       {/* Title */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="mb-2 block text-sm font-medium text-ink">
           Titulli
         </label>
         <input
@@ -75,17 +85,17 @@ export default function ReviewForm({ onSubmit, onCancel }) {
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Përshkruaj përvojën tënde në një fjali"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="w-full rounded-lg border border-sand bg-cream px-4 py-2 text-ink outline-none focus:border-wood focus:ring-2 focus:ring-wood/20"
           maxLength={100}
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="mt-1 text-xs text-ink-soft">
           {formData.title.length} / 100 karaktere
         </p>
       </div>
 
       {/* Comment */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="mb-2 block text-sm font-medium text-ink">
           Komenti
         </label>
         <textarea
@@ -94,10 +104,10 @@ export default function ReviewForm({ onSubmit, onCancel }) {
             setFormData({ ...formData, comment: e.target.value })
           }
           placeholder="Çfarë të pëlqeu ose nuk të pëlqeu te ky produkt?"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 min-h-30"
+          className="min-h-30 w-full rounded-lg border border-sand bg-cream px-4 py-2 text-ink outline-none focus:border-wood focus:ring-2 focus:ring-wood/20"
           maxLength={1000}
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="mt-1 text-xs text-ink-soft">
           {formData.comment.length} / 1000 karaktere
         </p>
       </div>
@@ -107,14 +117,18 @@ export default function ReviewForm({ onSubmit, onCancel }) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+          className="flex-1 rounded-full bg-wood py-2 font-semibold text-white transition hover:bg-wood-dark disabled:opacity-50"
         >
-          {loading ? "Duke dërguar..." : "Dërgo Review"}
+          {loading
+            ? "Duke dërguar..."
+            : isEditing
+              ? "Përditëso Review"
+              : "Dërgo Review"}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="px-6 py-2 border rounded-lg hover:bg-gray-50 transition"
+          className="rounded-full border border-sand px-6 py-2 text-ink transition hover:bg-sand/60"
         >
           Anulo
         </button>

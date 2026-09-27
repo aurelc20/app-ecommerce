@@ -1,9 +1,14 @@
 // src/app/(shop)/product/[slug]/page.js
 import { notFound } from "next/navigation";
 import { getProductBySlug, getRelatedProducts } from "@/actions/productActions";
-import { getReviewStats, getProductReviews } from "@/actions/reviewActions";
-import Image from "next/image";
+import {
+  getReviewStats,
+  getProductReviews,
+  getUserReview,
+  hasPurchasedProduct,
+} from "@/actions/reviewActions";
 import Link from "next/link";
+import { Check, X } from "lucide-react";
 import ProductGallery from "@/components/ProductGallery";
 import { categoryLabel } from "@/lib/categories";
 
@@ -12,6 +17,14 @@ import ReviewsSection from "@/components/ReviewsSection";
 
 import AddToCartButton from "@/components/AddToCartButton";
 import StarRating from "@/components/StarRating";
+import ProductGrid from "@/components/ProductGrid";
+
+const FEATURES = [
+  "Material i cilësisë së lartë",
+  "Dizajn unik dhe elegant",
+  "I përshtatshëm për çdo rast",
+  "Garanci 1 vit",
+];
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -42,44 +55,44 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
-  const [relatedProducts, reviewStats, { reviews }] = await Promise.all([
-    getRelatedProducts(product._id, product.category),
-    getReviewStats(product._id),
-    getProductReviews(product._id, { limit: 5 }),
-  ]);
-
-  const primaryImage =
-    product.images?.find((img) => img.isPrimary) || product.images?.[0];
+  const [relatedProducts, reviewStats, { reviews }, userReview, hasPurchased] =
+    await Promise.all([
+      getRelatedProducts(product._id, product.category),
+      getReviewStats(product._id),
+      getProductReviews(product._id, { limit: 5 }),
+      getUserReview(product._id),
+      hasPurchasedProduct(product._id),
+    ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
+      <div className="border-b border-sand bg-paper/60">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-purple-600">
-              Home
+          <div className="flex items-center gap-2 text-sm text-ink-soft">
+            <Link href="/" className="hover:text-wood">
+              Kryefaqja
             </Link>
             <span>/</span>
-            <Link href="/shop" className="hover:text-purple-600">
-              Shop
+            <Link href="/shop" className="hover:text-wood">
+              Produktet
             </Link>
             <span>/</span>
             <Link
               href={`/shop?category=${product.category}`}
-              className="hover:text-purple-600"
+              className="hover:text-wood"
             >
               {categoryLabel(product.category)}
             </Link>
             <span>/</span>
-            <span className="text-gray-900">{product.name}</span>
+            <span className="text-ink">{product.name}</span>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         {/* Product Info */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Gallery */}
           <ProductGallery images={product.images} />
 
@@ -87,7 +100,7 @@ export default async function ProductPage({ params }) {
           <div>
             {/* Title & Rating */}
             <div className="mb-4">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="mb-2 font-display text-3xl font-semibold text-ink">
                 {product.name}
               </h1>
 
@@ -95,19 +108,26 @@ export default async function ProductPage({ params }) {
                 {product.ratings?.count > 0 ? (
                   <div className="flex items-center gap-2">
                     <StarRating rating={product.ratings.average} />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-ink-soft">
                       {product.ratings.average.toFixed(1)} (
                       {product.ratings.count} reviews)
                     </span>
                   </div>
                 ) : (
-                  <span className="text-sm text-gray-500">Pa reviews ende</span>
+                  <span className="text-sm text-ink-soft">Pa reviews ende</span>
                 )}
 
                 <span
-                  className={`text-sm ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}
+                  className={`flex items-center gap-1 text-sm ${
+                    product.stock > 0 ? "text-green-700" : "text-red-600"
+                  }`}
                 >
-                  {product.stock > 0 ? "✓ Në stock" : "✗ Nuk ka në stock"}
+                  {product.stock > 0 ? (
+                    <Check className="h-4 w-4" />
+                  ) : (
+                    <X className="h-4 w-4" />
+                  )}
+                  {product.stock > 0 ? "Në stock" : "Nuk ka në stock"}
                 </span>
               </div>
             </div>
@@ -116,129 +136,75 @@ export default async function ProductPage({ params }) {
             <div className="mb-6">
               {product.salePrice ? (
                 <div className="flex items-center gap-3">
-                  <span className="text-4xl font-bold text-red-600">
+                  <span className="text-4xl font-semibold text-red-600">
                     ${product.salePrice}
                   </span>
-                  <span className="text-xl text-gray-400 line-through">
+                  <span className="text-xl text-ink-soft/70 line-through">
                     ${product.price}
                   </span>
-                  <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
+                  <span className="rounded-full bg-red-500 px-2.5 py-1 text-sm font-medium text-white">
                     -{product.discountPercentage}%
                   </span>
                 </div>
               ) : (
-                <span className="text-4xl font-bold text-gray-900">
+                <span className="text-4xl font-semibold text-ink">
                   ${product.price}
                 </span>
               )}
             </div>
 
             {/* Description */}
-            <div className="prose prose-sm max-w-none mb-6">
-              <p className="text-gray-700">{product.description}</p>
+            <div className="prose prose-sm mb-6 max-w-none">
+              <p className="text-ink-soft">{product.description}</p>
             </div>
 
             {/* Meta Info */}
-            <div className="border-t border-b py-4 mb-6 space-y-2">
+            <div className="mb-6 space-y-2 border-y border-sand py-4">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Kategoria:</span>
+                <span className="text-sm text-ink-soft">Kategoria:</span>
                 <Link
                   href={`/shop?category=${product.category}`}
-                  className="text-sm text-purple-600 hover:text-purple-700"
+                  className="text-sm text-wood hover:text-wood-dark"
                 >
                   {categoryLabel(product.category)}
                 </Link>
               </div>
               {product.brand && (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Brand:</span>
-                  <span className="text-sm text-gray-900">{product.brand}</span>
+                  <span className="text-sm text-ink-soft">Brand:</span>
+                  <span className="text-sm text-ink">{product.brand}</span>
                 </div>
               )}
               {product.sku && (
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">SKU:</span>
-                  <span className="text-sm text-gray-900">{product.sku}</span>
+                  <span className="text-sm text-ink-soft">SKU:</span>
+                  <span className="text-sm text-ink">{product.sku}</span>
                 </div>
               )}
             </div>
 
             {/* Actions */}
-            <div className="flex gap-4 mb-6">
+            <div className="mb-6 flex items-center gap-4">
               <AddToCartButton
-                // productId={product._id}
-                product={product} // ← kalo të gjithë produktin
+                product={product}
                 disabled={product.stock <= 0}
                 className="flex-1"
               />
-              <AddToWishlistButton
-                productId={product._id}
-                className="px-4 py-3 border rounded-lg hover:bg-gray-50"
-              />
+              <AddToWishlistButton productId={product._id} />
             </div>
 
             {/* Features */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 mb-3">
+            <div className="rounded-2xl border border-sand bg-paper p-4">
+              <h3 className="mb-3 font-display font-medium text-ink">
                 Karakteristikat
               </h3>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Material i cilësisë së lartë
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Dizajn unik dhe elegant
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  I përshtatshëm për çdo rast
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Garanci 1 vit
-                </li>
+              <ul className="space-y-2 text-sm text-ink-soft">
+                {FEATURES.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2">
+                    <Check className="h-5 w-5 shrink-0 text-wood" />
+                    {feature}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -246,47 +212,21 @@ export default async function ProductPage({ params }) {
 
         {/* Reviews Section */}
         <ReviewsSection
+          productSlug={product.slug}
           productId={product._id}
           reviewStats={reviewStats}
           initialReviews={reviews}
+          initialUserReview={userReview}
+          hasPurchased={hasPurchased}
         />
 
         {/* Related Products */}
         {relatedProducts && relatedProducts.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="mb-6 font-display text-2xl font-semibold text-ink">
               Produkte të Ngjashme
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((product) => (
-                <Link
-                  key={product._id}
-                  href={`/product/${product.slug || product._id}`}
-                  className="group"
-                >
-                  <div className="bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-lg transition">
-                    <div className="relative aspect-square bg-gray-100">
-                      {product.images?.[0] && (
-                        <Image
-                          src={product.images[0].url}
-                          alt={product.images[0].alt || product.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition"
-                        />
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
-                        {product.name}
-                      </h3>
-                      <p className="text-lg font-bold text-purple-600">
-                        ${product.price}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <ProductGrid products={relatedProducts} />
           </section>
         )}
       </div>

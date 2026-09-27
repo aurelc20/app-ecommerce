@@ -16,7 +16,7 @@ export default function UserAvatar({ src, name, size = 32, className = "" }) {
     return (
       <div
         style={{ width: size, height: size }}
-        className={`flex shrink-0 items-center justify-center rounded-full bg-purple-600 font-bold text-white ${className}`}
+        className={`flex shrink-0 items-center justify-center rounded-full bg-wood font-bold text-white ${className}`}
         aria-label={name || "Profili"}
       >
         {initial}
