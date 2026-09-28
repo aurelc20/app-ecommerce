@@ -30,8 +30,8 @@ export default function AddToWishlistButton({ productId }) {
       disabled={loading || added}
       className={`rounded-full p-2 shadow-sm transition disabled:cursor-not-allowed ${
         added
-          ? "bg-red-50 text-red-600"
-          : "bg-paper text-ink-soft hover:bg-red-50 hover:text-red-600"
+          ? "bg-wood/10 text-wood"
+          : "bg-paper text-ink-soft hover:bg-wood/10 hover:text-wood"
       }`}
       title={added ? "Në wishlist" : "Shto në wishlist"}
     >

@@ -9,7 +9,9 @@ import {
   CircleX,
   Clock,
   Heart,
+  ShoppingBag,
   ShoppingBasket,
+  User2,
 } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -30,85 +32,85 @@ export default async function DashboardPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Mirësevini, {user?.name}! 👋
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Mirësevini, {user?.name}!
         </h1>
-        <p className="text-gray-600 mt-2">
+        <p className="mt-2 text-ink-soft">
           Këtu është përmbledhja e llogarisë tuaj
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {/* Total Orders */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="rounded-2xl border border-sand bg-paper p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Total Porosi</p>
-              <p className="text-3xl font-bold text-gray-900">{totalOrders}</p>
+              <p className="mb-1 text-sm text-ink-soft">Total Porosi</p>
+              <p className="text-3xl font-semibold text-ink">{totalOrders}</p>
             </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-              <ShoppingBasket className="w-5 h-5 text-indigo-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sand/70 text-wood">
+              <ShoppingBasket className="h-5 w-5" />
             </div>
           </div>
           <Link
             href="/dashboard/orders"
-            className="text-sm text-purple-600 hover:text-purple-700 mt-4 inline-block"
+            className="mt-4 inline-block text-sm text-wood hover:text-wood-dark"
           >
             Shiko të gjitha →
           </Link>
         </div>
 
         {/* Total Spent */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="rounded-2xl border border-sand bg-paper p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Total Shpenzuar</p>
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="mb-1 text-sm text-ink-soft">Total Shpenzuar</p>
+              <p className="text-3xl font-semibold text-ink">
                 ${(totalSpent ?? 0).toFixed(2)}
               </p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <BadgeDollarSign className="w-5 h-5 text-emerald-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-emerald-600">
+              <BadgeDollarSign className="h-5 w-5" />
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-4">Në të gjitha porositë</p>
+          <p className="mt-4 text-sm text-ink-soft">Në të gjitha porositë</p>
         </div>
 
         {/* Pending Orders */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="rounded-2xl border border-sand bg-paper p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Në Pritje</p>
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="mb-1 text-sm text-ink-soft">Në Pritje</p>
+              <p className="text-3xl font-semibold text-ink">
                 {pendingOrders}
               </p>
             </div>
-            <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-              <Clock className="w-5 h-5 text-amber-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 text-amber-600">
+              <Clock className="h-5 w-5" />
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="mt-4 text-sm text-ink-soft">
             Porosi që pritet të dërgohen
           </p>
         </div>
 
         {/* Wishlist Items */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="rounded-2xl border border-sand bg-paper p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Wishlist</p>
-              <p className="text-3xl font-bold text-gray-900">
+              <p className="mb-1 text-sm text-ink-soft">Wishlist</p>
+              <p className="text-3xl font-semibold text-ink">
                 {user?.wishlist?.length || 0}
               </p>
             </div>
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-              <Heart className="w-5 h-5 text-red-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+              <Heart className="h-5 w-5" />
             </div>
           </div>
           <Link
             href="/dashboard/wishlist"
-            className="text-sm text-purple-600 hover:text-purple-700 mt-4 inline-block"
+            className="mt-4 inline-block text-sm text-wood hover:text-wood-dark"
           >
             Shiko wishlist →
           </Link>
@@ -116,12 +118,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* Recent Orders */}
-      <div className="bg-white rounded-xl shadow-sm border mb-8">
-        <div className="p-6 border-b flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Porositë e Fundit</h2>
+      <div className="mb-8 rounded-2xl border border-sand bg-paper">
+        <div className="flex items-center justify-between border-b border-sand p-6">
+          <h2 className="font-display text-xl font-semibold text-ink">
+            Porositë e Fundit
+          </h2>
           <Link
             href="/dashboard/orders"
-            className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+            className="text-sm font-medium text-wood hover:text-wood-dark"
           >
             Shiko të gjitha
           </Link>
@@ -130,32 +134,32 @@ export default async function DashboardPage() {
         {orders && orders.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-sand/40">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     ID Porosisë
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Data
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Statusi
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Totali
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Veprime
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-sand">
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm font-medium text-purple-600">
+                  <tr key={order._id} className="hover:bg-sand/20">
+                    <td className="px-6 py-4 text-sm font-medium text-wood">
                       #{order._id.slice(-8).toUpperCase()}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-ink-soft">
                       {new Date(order.createdAt).toLocaleDateString("sq-AL", {
                         day: "numeric",
                         month: "long",
@@ -164,7 +168,7 @@ export default async function DashboardPage() {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${
                           order.status === "delivered"
                             ? "bg-green-100 text-green-800"
                             : order.status === "cancelled"
@@ -184,13 +188,13 @@ export default async function DashboardPage() {
                         {order.status === "refunded" && "Rimbursuar"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-sm font-semibold text-ink">
                       ${(order.totalPrice ?? 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <Link
                         href={`/dashboard/orders/${order._id}`}
-                        className="text-purple-600 hover:text-purple-700 font-medium"
+                        className="font-medium text-wood hover:text-wood-dark"
                       >
                         Detajet
                       </Link>
@@ -201,18 +205,18 @@ export default async function DashboardPage() {
             </table>
           </div>
         ) : (
-          <div className="p-12 text-center ">
-            <CircleX className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
+          <div className="p-12 text-center">
+            <CircleX className="mx-auto h-12 w-12 text-ink-soft/50" />
+            <h3 className="mt-2 text-sm font-medium text-ink">
               Nuk ka porosi
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-ink-soft">
               Fillo shopping-un për të bërë porosi të para.
             </p>
             <div className="mt-6">
               <Link
                 href="/shop"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
+                className="inline-flex items-center rounded-full bg-wood px-5 py-2.5 text-sm font-medium text-white transition hover:bg-wood-dark"
               >
                 Shiko produktet
               </Link>
@@ -222,31 +226,42 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Link
           href="/shop"
-          className="bg-linear-to-r from-purple-500 to-pink-500 p-6 rounded-xl text-white hover:shadow-lg transition"
+          className="rounded-2xl bg-wood p-6 text-white transition hover:shadow-lg"
         >
-          <h3 className="text-lg font-bold mb-2">Bëj Shopping 🛍️</h3>
-          <p className="text-purple-100 text-sm">
+          <ShoppingBag className="mb-3 h-6 w-6" strokeWidth={1.75} />
+          <h3 className="mb-2 font-display text-lg font-semibold">
+            Bëj Shopping
+          </h3>
+          <p className="text-sm text-white/80">
             Zbuloni koleksionin tonë të ri
           </p>
         </Link>
 
         <Link
           href="/dashboard/wishlist"
-          className="bg-linear-to-r from-red-500 to-pink-500 p-6 rounded-xl text-white hover:shadow-lg transition"
+          className="rounded-2xl bg-red-500 p-6 text-white transition hover:shadow-lg"
         >
-          <h3 className="text-lg font-bold mb-2">Wishlist ❤️</h3>
-          <p className="text-red-100 text-sm">Shiko produktet e preferuara</p>
+          <Heart className="mb-3 h-6 w-6" strokeWidth={1.75} />
+          <h3 className="mb-2 font-display text-lg font-semibold">
+            Wishlist
+          </h3>
+          <p className="text-sm text-white/80">
+            Shiko produktet e preferuara
+          </p>
         </Link>
 
         <Link
           href="/dashboard/profile"
-          className="bg-linear-to-r from-blue-500 to-purple-500 p-6 rounded-xl text-white hover:shadow-lg transition"
+          className="rounded-2xl bg-ink p-6 text-white transition hover:shadow-lg"
         >
-          <h3 className="text-lg font-bold mb-2">Përditëso Profilin 👤</h3>
-          <p className="text-blue-100 text-sm">Menaxho të dhënat e tua</p>
+          <User2 className="mb-3 h-6 w-6" strokeWidth={1.75} />
+          <h3 className="mb-2 font-display text-lg font-semibold">
+            Përditëso Profilin
+          </h3>
+          <p className="text-sm text-white/70">Menaxho të dhënat e tua</p>
         </Link>
       </div>
     </div>

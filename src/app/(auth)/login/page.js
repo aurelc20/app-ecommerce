@@ -6,6 +6,8 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { Loader2 } from "lucide-react";
+import Eyebrow from "@/components/Eyebrow";
 
 // NextAuth kthen kodin e vet te brendshem; pa kete harte perdoruesi lexon
 // literalisht "CredentialsSignin". Nje mesazh i vetem mbulon fjalekalimin e
@@ -96,23 +98,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
+      <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <Eyebrow className="mb-4">Hyrje</Eyebrow>
+          <h1 className="font-display text-3xl font-semibold text-ink">
             Mirësevini përsëri
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          </h1>
+          <p className="mt-2 text-ink-soft">
             Hyni në llogarinë tuaj për të vazhduar
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-white py-8 px-6 shadow rounded-lg">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="mt-8 rounded-2xl border border-sand bg-paper p-8 shadow-xl shadow-ink/10">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded text-sm">
+              <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600">
                 {error}
                 <Link
                   href="/resend-verification"
@@ -127,7 +130,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="mb-1.5 block text-sm font-medium text-ink"
               >
                 Email-i
               </label>
@@ -141,7 +144,7 @@ export default function LoginPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-800"
+                className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                 placeholder="email@example.com"
               />
             </div>
@@ -150,7 +153,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="mb-1.5 block text-sm font-medium text-ink"
               >
                 Fjalëkalimi
               </label>
@@ -164,14 +167,17 @@ export default function LoginPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
                 }
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-800 placeholder:text-gray-500"
+                className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                 placeholder="******"
               />
             </div>
 
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              <label
+                htmlFor="remember-me"
+                className="flex items-center gap-2 text-sm text-ink-soft"
+              >
                 <input
                   id="remember-me"
                   name="remember-me"
@@ -180,55 +186,52 @@ export default function LoginPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, remember: e.target.checked })
                   }
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 rounded border-sand accent-wood focus:ring-2 focus:ring-wood/20"
                 />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Më mbaj mend
-                </label>
-              </div>
+                Më mbaj mend
+              </label>
 
-              <div className="text-sm">
-                <Link
-                  href="/forgot-password"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Harrove fjalëkalimin?
-                </Link>
-              </div>
+              <Link
+                href="/forgot-password"
+                className="text-sm font-medium text-wood hover:text-wood-dark"
+              >
+                Harrove fjalëkalimin?
+              </Link>
             </div>
 
             {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-semibold text-white transition hover:bg-wood-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? "Duke u kyçur..." : "Hyni"}
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Duke u kyçur...
+                </>
+              ) : (
+                "Hyni"
+              )}
             </button>
           </form>
 
           {/* Divider */}
           <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  Ose vazhdo me
-                </span>
-              </div>
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-sand" />
+              <span className="text-xs font-medium tracking-wide text-ink-soft uppercase">
+                Ose vazhdo me
+              </span>
+              <div className="h-px flex-1 bg-sand" />
             </div>
 
             {/* Google Sign In */}
             <button
               onClick={handleGoogleSignIn}
-              className="mt-4 w-full flex justify-center items-center gap-3 py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+              className="mt-4 flex w-full items-center justify-center gap-3 rounded-full border border-sand bg-paper py-2.5 text-sm font-medium text-ink transition hover:bg-sand/50"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -251,11 +254,11 @@ export default function LoginPage() {
           </div>
 
           {/* Register Link */}
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-ink-soft">
             Nuk ke llogari?{" "}
             <Link
               href="/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-wood hover:text-wood-dark"
             >
               Regjistrohu tani
             </Link>

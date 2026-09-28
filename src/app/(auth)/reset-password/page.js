@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { resetPassword } from "@/actions/authActions";
-import { CircleCheckBig, TriangleAlert } from "lucide-react";
+import { CircleCheckBig, Loader2, TriangleAlert } from "lucide-react";
+import Eyebrow from "@/components/Eyebrow";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
@@ -56,47 +57,52 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
+      <div className="w-full max-w-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <Eyebrow className="mb-4">Rivendos</Eyebrow>
+          <h1 className="font-display text-3xl font-semibold text-ink">
             Vendos një fjalëkalim të ri
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          </h1>
+          <p className="mt-2 text-ink-soft">
             Zgjidh një fjalëkalim me së paku 6 karaktere
           </p>
         </div>
 
-        <div className="bg-white py-8 px-6 shadow rounded-lg">
+        <div className="mt-8 rounded-2xl border border-sand bg-paper p-8 shadow-xl shadow-ink/10">
           {!token ? (
             <div className="text-center">
-              <TriangleAlert className="mx-auto h-12 w-12 text-amber-500" />
-              <p className="mt-4 text-sm text-gray-700">
-                Ky link nuk përmban token. Sigurohu që e ke hapur linkun e plotë
-                nga email-i.
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-50 text-amber-500">
+                <TriangleAlert className="h-8 w-8" strokeWidth={1.75} />
+              </div>
+              <p className="mt-4 text-sm text-ink">
+                Ky link nuk përmban token. Sigurohu që e ke hapur linkun e
+                plotë nga email-i.
               </p>
               <Link
                 href="/forgot-password"
-                className="mt-6 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                className="mt-6 inline-block text-sm font-medium text-wood hover:text-wood-dark"
               >
                 Kërko një link të ri
               </Link>
             </div>
           ) : done ? (
             <div className="text-center">
-              <CircleCheckBig className="mx-auto h-12 w-12 text-green-600" />
-              <p className="mt-4 text-sm text-gray-700">{done}</p>
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-50 text-green-600">
+                <CircleCheckBig className="h-8 w-8" strokeWidth={1.75} />
+              </div>
+              <p className="mt-4 text-sm text-ink">{done}</p>
               <Link
                 href="/login"
-                className="mt-6 inline-block w-full py-2 px-4 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                className="mt-6 flex w-full items-center justify-center rounded-full bg-wood py-3 font-semibold text-white transition hover:bg-wood-dark"
               >
                 Kyçu
               </Link>
             </div>
           ) : (
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
               {error && (
-                <div className="bg-red-50 text-red-600 p-3 rounded text-sm">
+                <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600">
                   {error}
                 </div>
               )}
@@ -104,7 +110,7 @@ export default function ResetPasswordPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mb-1.5 block text-sm font-medium text-ink"
                 >
                   Fjalëkalimi i ri
                 </label>
@@ -118,7 +124,7 @@ export default function ResetPasswordPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                   placeholder="••••••"
                 />
               </div>
@@ -126,7 +132,7 @@ export default function ResetPasswordPage() {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700"
+                  className="mb-1.5 block text-sm font-medium text-ink"
                 >
                   Konfirmo fjalëkalimin
                 </label>
@@ -143,7 +149,7 @@ export default function ResetPasswordPage() {
                       confirmPassword: e.target.value,
                     })
                   }
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                   placeholder="••••••"
                 />
               </div>
@@ -151,9 +157,16 @@ export default function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-semibold text-white transition hover:bg-wood-dark disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {loading ? "Duke ruajtur..." : "Rivendos fjalëkalimin"}
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Duke ruajtur...
+                  </>
+                ) : (
+                  "Rivendos fjalëkalimin"
+                )}
               </button>
             </form>
           )}

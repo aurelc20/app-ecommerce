@@ -7,6 +7,7 @@ import ShopPagination from "@/components/ShopPagination";
 import ShopSkeleton from "@/components/ShopSkeleton";
 import ShopSortDropdown from "@/components/ShopSortDropdown";
 import { categoryLabel } from "@/lib/categories";
+import Eyebrow from "@/components/Eyebrow";
 
 export const metadata = {
   title: "Dyqani | Furniture Shop",
@@ -55,12 +56,10 @@ export default async function ShopPage({ searchParams }) {
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
-      <div className="border-b border-sand bg-paper/60 py-14">
+      <div className="border-b border-sand bg-cream py-14">
         <div className="container mx-auto px-4">
-          <p className="text-center text-sm font-semibold tracking-[0.2em] text-wood uppercase">
-            Koleksioni
-          </p>
-          <h1 className="mt-2 text-center font-display text-4xl font-semibold text-ink sm:text-5xl">
+          <Eyebrow>Koleksioni</Eyebrow>
+          <h1 className="mt-4 text-center font-display text-4xl font-semibold text-ink sm:text-5xl">
             Produktet
           </h1>
           <p className="mt-3 text-center text-ink-soft">
@@ -90,7 +89,7 @@ export default async function ShopPage({ searchParams }) {
           {/* Main Content */}
           <main className="flex-1">
             {/* Results Info */}
-            <div className="mb-6 flex items-center justify-between rounded-2xl border border-sand bg-paper p-4">
+            <div className="mb-6 flex items-center justify-between rounded-2xl border border-sand bg-cream p-4">
               <p className="text-ink-soft">
                 <span className="font-bold text-ink">{total}</span> produkte
                 {filters.search && (

@@ -6,6 +6,7 @@ import RevenueChart from "@/components/admin/analytics/RevenueChart";
 import OrdersByStatusChart from "@/components/admin/analytics/OrdersByStatusChart";
 import PaymentMethodsChart from "@/components/admin/analytics/PaymentMethodsChart";
 import TopProducts from "@/components/admin/analytics/TopProducts";
+import { DollarSign, Package, ShoppingCart, Users } from "lucide-react";
 
 export default async function AnalyticsPage() {
   const session = await auth();
@@ -18,7 +19,7 @@ export default async function AnalyticsPage() {
 
   if (!stats) {
     return (
-      <div className="p-8">
+      <div className="rounded-xl border border-sand bg-paper p-8">
         <p className="text-red-600">
           Ndodhi një gabim gjatë marrjes së statistikave
         </p>
@@ -49,22 +50,22 @@ export default async function AnalyticsPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="font-display text-3xl font-semibold text-ink">
           Analytics Dashboard
         </h1>
-        <p className="text-gray-600 mt-2">
+        <p className="mt-2 text-ink-soft">
           Përmbledhja e performancës së dyqanit
         </p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
           title="Total Revenue"
           value={`$${stats.totalRevenue.toLocaleString()}`}
           change={`+${revenueChange}% (30d)`}
           trend="up"
-          icon="💰"
+          icon={<DollarSign className="h-6 w-6" />}
           color="green"
         />
         <KpiCard
@@ -72,15 +73,15 @@ export default async function AnalyticsPage() {
           value={stats.totalOrders.toLocaleString()}
           change={`+${ordersChange}% (30d)`}
           trend="up"
-          icon="🛒"
-          color="purple"
+          icon={<ShoppingCart className="h-6 w-6" />}
+          color="wood"
         />
         <KpiCard
           title="Klientë"
           value={stats.totalCustomers.toLocaleString()}
           change={`+${stats.customersLast30Days} (30d)`}
           trend="up"
-          icon="👥"
+          icon={<Users className="h-6 w-6" />}
           color="blue"
         />
         <KpiCard
@@ -88,39 +89,45 @@ export default async function AnalyticsPage() {
           value={stats.totalProducts.toLocaleString()}
           change="Në stock"
           trend="neutral"
-          icon="📦"
+          icon={<Package className="h-6 w-6" />}
           color="orange"
         />
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Revenue Chart */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold mb-4">
+        <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm">
+          <h2 className="mb-4 font-display text-xl font-semibold text-ink">
             Revenue (30 Ditët e Fundit)
           </h2>
           <RevenueChart data={stats.dailyRevenue} />
         </div>
 
         {/* Orders by Status */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold mb-4">Porositë sipas Statusit</h2>
+        <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm">
+          <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            Porositë sipas Statusit
+          </h2>
           <OrdersByStatusChart data={stats.revenueByStatus} />
         </div>
       </div>
 
       {/* Second Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Payment Methods */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold mb-4">Metodat e Pagesës</h2>
+        <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm">
+          <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            Metodat e Pagesës
+          </h2>
           <PaymentMethodsChart data={stats.ordersByPayment} />
         </div>
 
         {/* Top Products */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 lg:col-span-2">
-          <h2 className="text-xl font-bold mb-4">Top 5 Produktet</h2>
+        <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm lg:col-span-2">
+          <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            Top 5 Produktet
+          </h2>
           <TopProducts data={stats.topProducts} />
         </div>
       </div>
@@ -131,28 +138,28 @@ export default async function AnalyticsPage() {
 function KpiCard({ title, value, change, trend, icon, color }) {
   const colors = {
     green: "bg-green-100 text-green-600",
-    purple: "bg-purple-100 text-purple-600",
+    wood: "bg-wood/10 text-wood",
     blue: "bg-blue-100 text-blue-600",
     orange: "bg-orange-100 text-orange-600",
     red: "bg-red-100 text-red-600",
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border">
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm">
+      <div className="mb-4 flex items-center justify-between">
         <div
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${colors[color]}`}
+          className={`flex h-12 w-12 items-center justify-center rounded-full ${colors[color]}`}
         >
           {icon}
         </div>
         <span
-          className={`text-sm font-medium ${trend === "up" ? "text-green-600" : trend === "down" ? "text-red-600" : "text-gray-600"}`}
+          className={`text-sm font-medium ${trend === "up" ? "text-green-600" : trend === "down" ? "text-red-600" : "text-ink-soft"}`}
         >
           {change}
         </span>
       </div>
-      <p className="text-sm text-gray-600 mb-1">{title}</p>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className="mb-1 text-sm text-ink-soft">{title}</p>
+      <p className="text-2xl font-bold text-ink">{value}</p>
     </div>
   );
 }

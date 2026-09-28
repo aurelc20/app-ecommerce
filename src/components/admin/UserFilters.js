@@ -29,20 +29,20 @@ export default function UserFilters({ search, role }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
+    <div className="mb-6 rounded-xl border border-sand bg-paper p-4 shadow-sm">
       <div className="flex flex-wrap gap-4">
         <input
           type="text"
           placeholder="Kërko me emër ose email..."
           defaultValue={search}
           onKeyDown={handleSearchKeyDown}
-          className="flex-1 min-w-50 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="min-w-50 flex-1 rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         />
 
         <select
           defaultValue={role}
           onChange={(e) => updateParam("role", e.target.value)}
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         >
           <option value="">Të gjithë rolet</option>
           <option value="customer">Klient</option>

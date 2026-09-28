@@ -17,8 +17,10 @@ export default async function SettingsPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-2">Menaxho konfigurimet e dyqanit</p>
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Settings
+        </h1>
+        <p className="mt-2 text-ink-soft">Menaxho konfigurimet e dyqanit</p>
       </div>
 
       <SettingsTabs settings={settings} />

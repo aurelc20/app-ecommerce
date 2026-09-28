@@ -64,6 +64,15 @@ export default async function ProductPage({ params }) {
       hasPurchasedProduct(product._id),
     ]);
 
+  // `discountPercentage` është një Mongoose virtual — nuk mbijeton `.lean()`,
+  // prandaj e llogarisim vetë këtu nga price/salePrice.
+  const discountPercentage =
+    product.salePrice && product.price
+      ? Math.round(
+          ((product.price - product.salePrice) / product.price) * 100,
+        )
+      : null;
+
   return (
     <div className="min-h-screen bg-cream">
       {/* Breadcrumb */}
@@ -136,15 +145,17 @@ export default async function ProductPage({ params }) {
             <div className="mb-6">
               {product.salePrice ? (
                 <div className="flex items-center gap-3">
-                  <span className="text-4xl font-semibold text-red-600">
+                  <span className="text-4xl font-semibold text-ink">
                     ${product.salePrice}
                   </span>
                   <span className="text-xl text-ink-soft/70 line-through">
                     ${product.price}
                   </span>
-                  <span className="rounded-full bg-red-500 px-2.5 py-1 text-sm font-medium text-white">
-                    -{product.discountPercentage}%
-                  </span>
+                  {discountPercentage !== null && (
+                    <span className="rounded-full bg-ink px-2.5 py-1 text-sm font-medium text-white">
+                      -{discountPercentage}%
+                    </span>
+                  )}
                 </div>
               ) : (
                 <span className="text-4xl font-semibold text-ink">

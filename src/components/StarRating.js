@@ -25,7 +25,7 @@ export default function StarRating({
         >
           <Star
             className={`h-5 w-5 fill-current ${
-              star <= (hoverRating || rating) ? "text-yellow-400" : "text-sand"
+              star <= (hoverRating || rating) ? "text-amber-400" : "text-sand"
             }`}
           />
         </button>

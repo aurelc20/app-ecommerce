@@ -9,6 +9,7 @@ import {
   Leaf,
 } from "lucide-react";
 import { getProducts } from "@/actions/productActions";
+import Eyebrow from "@/components/Eyebrow";
 
 export const metadata = {
   title: "Rreth Nesh | Furniture Shop",
@@ -56,10 +57,10 @@ export default async function AboutPage() {
       <section className="relative overflow-hidden">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 py-16 lg:grid-cols-2 lg:py-24">
           <div>
-            <p className="mb-4 text-sm font-semibold tracking-[0.2em] text-wood uppercase">
+            <Eyebrow align="left" className="mb-4">
               Rreth Nesh
-            </p>
-            <h1 className="font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+            </Eyebrow>
+            <h1 className="mt-4 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
               Mobilje të krijuara për t&apos;i dhënë jetë shtëpisë suaj
             </h1>
             <p className="mt-6 max-w-lg text-lg text-ink-soft">
@@ -192,11 +193,11 @@ export default async function AboutPage() {
       </section>
 
       {/* CTA band */}
-      <section className="mx-4 my-16 overflow-hidden rounded-3xl bg-[#231a13] px-8 py-16 text-center sm:mx-auto sm:max-w-5xl">
+      <section className="mx-4 my-16 overflow-hidden rounded-3xl bg-ink px-8 py-16 text-center sm:mx-auto sm:max-w-5xl">
         <h2 className="font-display text-3xl font-semibold text-white sm:text-4xl">
           Gati të rinovoni hapësirën tuaj?
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-[#b3a695]">
+        <p className="mx-auto mt-4 max-w-xl text-white/70">
           Zbuloni koleksionin e plotë ose na shkruani për këshillim personal
           nga ekipi ynë.
         </p>

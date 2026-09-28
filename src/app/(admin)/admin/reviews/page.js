@@ -5,6 +5,7 @@ import dbConnect from "@/lib/db";
 import Review from "@/models/Review";
 import DeleteReviewButton from "@/components/admin/DeleteReviewButton";
 import Image from "next/image";
+import { CheckCircle2, Star, ThumbsUp } from "lucide-react";
 
 export default async function AdminReviewsPage({ searchParams }) {
   const session = await auth();
@@ -57,33 +58,36 @@ export default async function AdminReviewsPage({ searchParams }) {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Reviews</h1>
-        <p className="text-gray-600 mt-2">Moderato reviews e klientëve</p>
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Reviews
+        </h1>
+        <p className="mt-2 text-ink-soft">Moderato reviews e klientëve</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-600 mb-2">Total Reviews</p>
-          <p className="text-3xl font-bold text-gray-900">{total}</p>
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm">
+          <p className="mb-2 text-sm text-ink-soft">Total Reviews</p>
+          <p className="text-3xl font-bold text-ink">{total}</p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-600 mb-2">Rating Mesatar</p>
-          <p className="text-3xl font-bold text-yellow-600">
-            {avgRating[0]?.avg.toFixed(1) || "0.0"} ⭐
+        <div className="rounded-xl border border-sand bg-paper p-6 shadow-sm">
+          <p className="mb-2 text-sm text-ink-soft">Rating Mesatar</p>
+          <p className="flex items-center gap-2 text-3xl font-bold text-yellow-600">
+            {avgRating[0]?.avg.toFixed(1) || "0.0"}
+            <Star className="h-6 w-6 fill-current" />
           </p>
         </div>
       </div>
 
       {/* Rating Filter */}
-      <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
+      <div className="mb-6 rounded-xl border border-sand bg-paper p-4 shadow-sm">
         <div className="flex flex-wrap gap-2">
           <a
             href="/admin/reviews"
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
               !rating
-                ? "bg-purple-600 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                ? "bg-wood text-white"
+                : "bg-sand text-ink-soft hover:bg-sand/70"
             }`}
           >
             Të gjitha ({total})
@@ -92,13 +96,15 @@ export default async function AdminReviewsPage({ searchParams }) {
             <a
               key={star}
               href={`/admin/reviews?rating=${star}`}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+              className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition ${
                 rating === star.toString()
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-wood text-white"
+                  : "bg-sand text-ink-soft hover:bg-sand/70"
               }`}
             >
-              {star} ⭐ ({ratingDistribution[index]})
+              <span>{star}</span>
+              <Star className="h-3.5 w-3.5 fill-current" />
+              <span>({ratingDistribution[index]})</span>
             </a>
           ))}
         </div>
@@ -109,9 +115,9 @@ export default async function AdminReviewsPage({ searchParams }) {
         {reviews.map((review) => (
           <div
             key={review._id}
-            className="bg-white rounded-xl shadow-sm border p-6"
+            className="rounded-xl border border-sand bg-paper p-6 shadow-sm"
           >
-            <div className="flex items-start justify-between mb-4">
+            <div className="mb-4 flex items-start justify-between">
               <div className="flex items-center gap-3">
                 {review.user?.avatar ? (
                   <Image
@@ -119,57 +125,65 @@ export default async function AdminReviewsPage({ searchParams }) {
                     alt={review.user.name}
                     width={40}
                     height={40}
-                    className="w-10 h-10 rounded-full"
+                    className="h-10 w-10 rounded-full"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-wood text-white font-bold">
                     {review.user?.name?.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div>
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-ink">
                     {review.user?.name || "Anonim"}
                   </p>
-                  <p className="text-xs text-gray-500">{review.user?.email}</p>
+                  <p className="text-xs text-ink-soft">
+                    {review.user?.email}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-yellow-400">
-                  {"⭐".repeat(review.rating)}
+                <span className="flex text-yellow-400">
+                  {Array.from({ length: review.rating }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
                 </span>
                 <DeleteReviewButton reviewId={review._id.toString()} />
               </div>
             </div>
 
             <div className="mb-3">
-              <p className="text-sm text-gray-500 mb-1">
+              <p className="mb-1 text-sm text-ink-soft">
                 Produkti:{" "}
-                <span className="text-purple-600 font-medium">
+                <span className="font-medium text-wood">
                   {review.product?.name}
                 </span>
               </p>
-              <h3 className="font-semibold text-gray-900">{review.title}</h3>
-              <p className="text-gray-700 mt-1">{review.comment}</p>
+              <h3 className="font-semibold text-ink">{review.title}</h3>
+              <p className="mt-1 text-ink-soft">{review.comment}</p>
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-gray-500">
+            <div className="flex items-center gap-4 text-xs text-ink-soft">
               <span>
                 {new Date(review.createdAt).toLocaleDateString("sq-AL")}
               </span>
               {review.isVerifiedPurchase && (
-                <span className="text-green-600 font-medium">
-                  ✓ Blerje e verifikuar
+                <span className="flex items-center gap-1 font-medium text-green-600">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Blerje e verifikuar
                 </span>
               )}
-              <span>👍 {review.helpful || 0} helpful</span>
+              <span className="flex items-center gap-1">
+                <ThumbsUp className="h-3.5 w-3.5" />
+                {review.helpful || 0} helpful
+              </span>
             </div>
           </div>
         ))}
 
         {reviews.length === 0 && (
-          <div className="bg-white rounded-xl shadow-sm border p-12 text-center">
-            <p className="text-gray-600">Nuk ka reviews për këtë filtër</p>
+          <div className="rounded-xl border border-sand bg-paper p-12 text-center shadow-sm">
+            <p className="text-ink-soft">Nuk ka reviews për këtë filtër</p>
           </div>
         )}
       </div>
@@ -180,7 +194,7 @@ export default async function AdminReviewsPage({ searchParams }) {
           {parseInt(page) > 1 && (
             <a
               href={`/admin/reviews?page=${parseInt(page) - 1}${rating ? `&rating=${rating}` : ""}`}
-              className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 bg-white"
+              className="rounded-lg border border-sand bg-paper px-4 py-2 text-sm hover:bg-sand/40"
             >
               ← Prapa
             </a>
@@ -188,7 +202,7 @@ export default async function AdminReviewsPage({ searchParams }) {
           {skip + limit < total && (
             <a
               href={`/admin/reviews?page=${parseInt(page) + 1}${rating ? `&rating=${rating}` : ""}`}
-              className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 bg-white"
+              className="rounded-lg border border-sand bg-paper px-4 py-2 text-sm hover:bg-sand/40"
             >
               Para →
             </a>

@@ -1,9 +1,18 @@
 // src/components/Footer.jsx
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
-    <footer className="mt-16 bg-[#231a13] py-12 text-[#e8ddd0]">
+    <footer className="mt-16 bg-ink py-12 text-white/80">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
@@ -11,7 +20,7 @@ export default function Footer() {
               Furniture Shop
             </h3>
 
-            <p className="text-[#b3a695]">
+            <p className="text-white/60">
               Mobilje dhe pajisje shtëpie ekskluzive dhe elegante.
             </p>
           </div>
@@ -19,7 +28,7 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 font-semibold text-white">Links</h4>
 
-            <ul className="space-y-2 text-[#b3a695]">
+            <ul className="space-y-2 text-white/60">
               <li>
                 <Link href="/shop" className="transition hover:text-wood">
                   Produktet
@@ -43,7 +52,7 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 font-semibold text-white">Ndihmë</h4>
 
-            <ul className="space-y-2 text-[#b3a695]">
+            <ul className="space-y-2 text-white/60">
               <li>
                 <Link href="/faq" className="transition hover:text-wood">
                   FAQ
@@ -67,7 +76,7 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 font-semibold text-white">Na Kontaktoni</h4>
 
-            <ul className="space-y-2 text-[#b3a695]">
+            <ul className="space-y-2 text-white/60">
               <li>Email: info@furnitureshop.com</li>
               <li>Tel: +355 69 XXX XXXX</li>
               <li>Tiranë, Shqipëri</li>
@@ -75,7 +84,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-white/10 pt-8 text-center text-[#b3a695]">
+        <div className="mt-8 border-t border-white/10 pt-8 text-center text-white/60">
           <p>&copy; 2026 Codeentech. Të gjitha të drejtat e rezervuara.</p>
         </div>
       </div>

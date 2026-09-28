@@ -14,10 +14,10 @@ export default async function NewProductPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="font-display text-3xl font-semibold text-ink">
           Krijo Produkt të Ri
         </h1>
-        <p className="text-gray-600 mt-2">Shto produkt të ri në dyqan</p>
+        <p className="mt-2 text-ink-soft">Shto produkt të ri në dyqan</p>
       </div>
 
       {/* Form */}

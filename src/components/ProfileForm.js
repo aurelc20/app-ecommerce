@@ -143,11 +143,14 @@ export default function ProfileForm({ user }) {
     setLoading(false);
   };
 
+  const inputClass =
+    "w-full rounded-lg border border-sand bg-cream px-4 py-2 text-ink outline-none transition focus:border-wood focus:ring-2 focus:ring-wood/20";
+
   return (
     <div className="p-6">
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-lg ${
+          className={`mb-6 rounded-lg p-4 ${
             message.type === "success"
               ? "bg-green-50 text-green-800"
               : "bg-red-50 text-red-800"
@@ -158,8 +161,10 @@ export default function ProfileForm({ user }) {
       )}
 
       {/* Avatar */}
-      <div className="mb-8 pb-8 border-b">
-        <h2 className="text-xl font-bold mb-4">Fotoja e Profilit</h2>
+      <div className="mb-8 border-b border-sand pb-8">
+        <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+          Fotoja e Profilit
+        </h2>
 
         <div className="flex items-center gap-6">
           <div className="relative">
@@ -170,17 +175,17 @@ export default function ProfileForm({ user }) {
               <img
                 src={avatarPreview}
                 alt={user?.name || "Avatar"}
-                className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                className="h-24 w-24 rounded-full border-2 border-sand object-cover"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-purple-600 text-white flex items-center justify-center text-3xl font-bold">
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-wood text-3xl font-bold text-white">
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
             )}
 
             {avatarUploading && (
-              <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center">
-                <LoaderCircle className="w-6 h-6 text-white animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50">
+                <LoaderCircle className="h-6 w-6 animate-spin text-white" />
               </div>
             )}
           </div>
@@ -198,12 +203,12 @@ export default function ProfileForm({ user }) {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={avatarUploading}
-              className="px-4 py-2 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition disabled:opacity-50"
+              className="rounded-full border border-wood px-4 py-2 text-wood transition hover:bg-wood/10 disabled:opacity-50"
             >
               {avatarUploading ? "Duke ngarkuar..." : "Ndrysho foton"}
             </button>
 
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="mt-2 text-xs text-ink-soft">
               JPG, PNG ose WEBP. Maksimumi 5MB.
             </p>
           </div>
@@ -211,12 +216,17 @@ export default function ProfileForm({ user }) {
       </div>
 
       {/* Update Profile */}
-      <form onSubmit={handleUpdateProfile} className="mb-8 pb-8 border-b">
-        <h2 className="text-xl font-bold mb-4">Të Dhënat Personale</h2>
+      <form
+        onSubmit={handleUpdateProfile}
+        className="mb-8 border-b border-sand pb-8"
+      >
+        <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+          Të Dhënat Personale
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Emri i plotë
             </label>
             <input
@@ -225,21 +235,21 @@ export default function ProfileForm({ user }) {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Email-i
             </label>
             <input
               type="email"
               value={formData.email}
               disabled
-              className="w-full px-4 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+              className="w-full cursor-not-allowed rounded-lg border border-sand bg-sand/40 px-4 py-2 text-ink-soft"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="mt-1 text-xs text-ink-soft">
               Email-i nuk mund të ndryshohet
             </p>
           </div>
@@ -248,7 +258,7 @@ export default function ProfileForm({ user }) {
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
+          className="rounded-full bg-wood px-6 py-2 text-white transition hover:bg-wood-dark disabled:opacity-50"
         >
           {loading ? "Duke ruajtur..." : "Ruaj ndryshimet"}
         </button>
@@ -256,11 +266,13 @@ export default function ProfileForm({ user }) {
 
       {/* Change Password */}
       <form onSubmit={handleChangePassword}>
-        <h2 className="text-xl font-bold mb-4">Ndrysho Fjalëkalimin</h2>
+        <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+          Ndrysho Fjalëkalimin
+        </h2>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Fjalëkalimi aktual
             </label>
             <input
@@ -269,13 +281,13 @@ export default function ProfileForm({ user }) {
               onChange={(e) =>
                 setFormData({ ...formData, currentPassword: e.target.value })
               }
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={inputClass}
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Fjalëkalimi i ri
               </label>
               <input
@@ -284,12 +296,12 @@ export default function ProfileForm({ user }) {
                 onChange={(e) =>
                   setFormData({ ...formData, newPassword: e.target.value })
                 }
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Konfirmo fjalëkalimin
               </label>
               <input
@@ -298,7 +310,7 @@ export default function ProfileForm({ user }) {
                 onChange={(e) =>
                   setFormData({ ...formData, confirmPassword: e.target.value })
                 }
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className={inputClass}
               />
             </div>
           </div>
@@ -307,7 +319,7 @@ export default function ProfileForm({ user }) {
         <button
           type="submit"
           disabled={loading}
-          className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
+          className="mt-4 rounded-full bg-wood px-6 py-2 text-white transition hover:bg-wood-dark disabled:opacity-50"
         >
           {loading ? "Duke ndryshuar..." : "Ndrysho fjalëkalimin"}
         </button>

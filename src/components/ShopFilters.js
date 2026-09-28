@@ -14,7 +14,7 @@ function FilterCheckbox({ checked, onChange, label }) {
           type="checkbox"
           checked={checked}
           onChange={onChange}
-          className="peer h-4 w-4 shrink-0 appearance-none rounded border border-sand bg-cream transition checked:border-wood checked:bg-wood focus:outline-none focus:ring-2 focus:ring-wood/30 focus:ring-offset-1"
+          className="peer h-4 w-4 shrink-0 appearance-none rounded border border-ink bg-cream transition checked:border-wood checked:bg-wood focus:outline-none focus:ring-2 focus:ring-wood/30 focus:ring-offset-1"
         />
         <Check
           className="pointer-events-none absolute h-3 w-3 text-white opacity-0 peer-checked:opacity-100"
@@ -95,7 +95,7 @@ export default function ShopFilters({
               handleFilterChange("search", e.target.value);
             }
           }}
-          className="w-full rounded-lg border border-sand bg-cream px-3 py-2 text-ink outline-none transition focus:border-wood focus:ring-2 focus:ring-wood/20"
+          className="w-full rounded-lg border border-wood bg-cream px-3 py-2 text-ink outline-none transition focus:border-wood focus:ring-2 focus:ring-wood/20"
         />
       </div>
 
@@ -153,7 +153,7 @@ export default function ShopFilters({
               onChange={(e) =>
                 setPriceRange({ ...priceRange, min: e.target.value })
               }
-              className="w-full rounded-lg border border-sand bg-cream px-3 py-2 text-sm text-ink outline-none focus:border-wood focus:ring-2 focus:ring-wood/20"
+              className="w-full rounded-lg border border-wood bg-cream px-3 py-2 text-sm text-ink outline-none focus:border-wood focus:ring-2 focus:ring-wood/20"
             />
             <span className="text-ink-soft">-</span>
             <input
@@ -163,7 +163,7 @@ export default function ShopFilters({
               onChange={(e) =>
                 setPriceRange({ ...priceRange, max: e.target.value })
               }
-              className="w-full rounded-lg border border-sand bg-cream px-3 py-2 text-sm text-ink outline-none focus:border-wood focus:ring-2 focus:ring-wood/20"
+              className="w-full rounded-lg border border-wood bg-cream px-3 py-2 text-sm text-ink outline-none focus:border-wood focus:ring-2 focus:ring-wood/20"
             />
           </div>
           <button
@@ -197,7 +197,7 @@ export default function ShopFilters({
       <button
         type="button"
         onClick={() => setIsMobileOpen(true)}
-        className="mb-6 flex w-full items-center justify-between rounded-full border border-sand bg-paper px-5 py-3 text-sm font-medium text-ink lg:hidden"
+        className="mb-6 flex w-full items-center justify-between rounded-full border border-sand bg-cream px-5 py-3 text-sm font-medium text-ink lg:hidden"
       >
         <span className="flex items-center gap-2">
           <SlidersHorizontal className="h-4 w-4 text-wood" />
@@ -211,7 +211,7 @@ export default function ShopFilters({
       </button>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:block sticky top-24 rounded-2xl border border-sand bg-paper p-6">
+      <div className="hidden lg:block sticky top-24 rounded-2xl border border-sand bg-cream p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-display text-lg font-medium text-ink">Filtera</h2>
           <button

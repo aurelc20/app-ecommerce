@@ -25,8 +25,8 @@ export default function DashboardNav({ items, variant = "sidebar" }) {
                 aria-current={active ? "page" : undefined}
                 className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
                   active
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-950 hover:bg-indigo-50 hover:text-indigo-700"
+                    ? "bg-wood text-white shadow-sm"
+                    : "text-ink hover:bg-sand/60 hover:text-wood"
                 }`}
               >
                 <span>{item.icon}</span>
@@ -51,15 +51,15 @@ export default function DashboardNav({ items, variant = "sidebar" }) {
               aria-current={active ? "page" : undefined}
               className={`group flex items-center gap-3 rounded-xl px-3 py-3 text-base font-medium transition duration-200 ${
                 active
-                  ? "bg-indigo-500 text-white shadow-sm"
-                  : "text-slate-950 hover:bg-indigo-50 hover:text-indigo-600"
+                  ? "bg-wood text-white shadow-sm"
+                  : "text-ink hover:bg-sand/60 hover:text-wood"
               }`}
             >
               <span
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition  ${
                   active
                     ? "bg-white/20 text-white"
-                    : "text-slate-900 group-hover:bg-white group-hover:text-indigo-600"
+                    : "text-ink-soft group-hover:bg-paper group-hover:text-wood"
                 }`}
               >
                 {item.icon}

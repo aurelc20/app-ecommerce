@@ -1,4 +1,4 @@
-// src/app/auth/error/page.js
+// src/app/(auth)/error/page.js
 import Link from "next/link";
 import { AlertTriangle, XCircle, AlertCircle, ServerCrash } from "lucide-react";
 
@@ -43,36 +43,47 @@ const ERROR_MESSAGES = {
 const ERROR_ICONS = {
   "missing-token": {
     icon: AlertTriangle,
-    color: "text-orange-600",
+    bg: "bg-amber-50",
+    color: "text-amber-500",
   },
   "invalid-token": {
     icon: XCircle,
+    bg: "bg-red-50",
     color: "text-red-600",
   },
   timeout: {
     icon: AlertTriangle,
-    color: "text-orange-500",
+    bg: "bg-amber-50",
+    color: "text-amber-500",
   },
   "connection-refused": {
     icon: ServerCrash,
-    color: "text-red-700",
+    bg: "bg-red-50",
+    color: "text-red-600",
   },
   "server-error": {
     icon: AlertCircle,
+    bg: "bg-red-50",
     color: "text-red-600",
   },
   default: {
     icon: AlertCircle,
-    color: "text-gray-500",
+    bg: "bg-sand/70",
+    color: "text-wood",
   },
 };
 
-///krijo componentin
 function ErrorIcon({ reason }) {
-  const { icon: Icon, color } = ERROR_ICONS[reason] || ERROR_ICONS.default;
+  const {
+    icon: Icon,
+    bg,
+    color,
+  } = ERROR_ICONS[reason] || ERROR_ICONS.default;
   return (
-    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-      <Icon className={`w-8 h-8 ${color}`} />
+    <div
+      className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full ${bg} ${color}`}
+    >
+      <Icon className="h-8 w-8" strokeWidth={1.75} />
     </div>
   );
 }
@@ -82,17 +93,17 @@ export default async function AuthErrorPage({ searchParams }) {
   const errorInfo = ERROR_MESSAGES[reason] || ERROR_MESSAGES.default;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-sm border p-8 text-center">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4">
+      <div className="w-full max-w-md">
+        <div className="rounded-2xl border border-sand bg-paper p-8 text-center shadow-xl shadow-ink/10">
           {/* Icon */}
           <ErrorIcon reason={reason} />
 
           {/* Title & Description */}
-          <h1 className="text-2xl font-bold text-gray-900 mb-3">
+          <h1 className="mb-3 font-display text-2xl font-semibold text-ink">
             {errorInfo.title}
           </h1>
-          <p className="text-gray-600 mb-8">{errorInfo.description}</p>
+          <p className="mb-8 text-ink-soft">{errorInfo.description}</p>
 
           {/* Actions */}
           <div className="flex flex-col gap-3">
@@ -101,7 +112,7 @@ export default async function AuthErrorPage({ searchParams }) {
             {(reason === "invalid-token" || reason === "missing-token") && (
               <Link
                 href="/resend-verification"
-                className="w-full inline-flex items-center justify-center px-4 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+                className="inline-flex w-full items-center justify-center rounded-full bg-wood px-4 py-3 font-semibold text-white transition hover:bg-wood-dark"
               >
                 Kërko një link të ri
               </Link>
@@ -109,21 +120,21 @@ export default async function AuthErrorPage({ searchParams }) {
 
             <Link
               href="/login"
-              className="w-full inline-flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition"
+              className="inline-flex w-full items-center justify-center rounded-full border border-sand px-4 py-3 font-medium text-ink transition hover:bg-sand/50"
             >
               Shko te Login
             </Link>
 
             <Link
               href="/"
-              className="w-full inline-flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition"
+              className="text-center text-sm font-medium text-wood hover:text-wood-dark"
             >
               Kthehu në Home
             </Link>
           </div>
 
           {/* Support note */}
-          <p className="text-xs text-gray-400 mt-6">
+          <p className="mt-6 text-xs text-ink-soft/70">
             Nëse problemi vazhdon, kontakto mbështetjen tonë.
           </p>
         </div>

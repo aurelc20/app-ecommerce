@@ -79,6 +79,7 @@ export async function getOrderById(orderId) {
 
     const order = await Order.findById(orderId)
       .populate("user", "name email")
+      .populate("items.product", "name images")
       .lean();
 
     if (!order) {

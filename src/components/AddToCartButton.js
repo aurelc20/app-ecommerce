@@ -54,7 +54,11 @@ export default function AddToCartButton({
       {message && (
         <p
           className={`mt-2 flex items-center justify-center gap-1.5 text-sm ${
-            message === "success" ? "text-green-700" : "text-red-600"
+            message === "success"
+              ? "text-green-700"
+              : message === "max-stock"
+                ? "text-wood-dark"
+                : "text-ink-soft"
           }`}
         >
           {message === "success" && (

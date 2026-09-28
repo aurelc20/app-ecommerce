@@ -68,7 +68,7 @@ export default function Navbar() {
           >
             <ShoppingBasket className="h-5 w-5" />
             {displayCartCount > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-wood text-[10px] font-medium text-white">
+              <span className="absolute -right-2 -top-2 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-wood text-[10px] font-medium text-white">
                 {displayCartCount > 9 ? "9+" : displayCartCount}
               </span>
             )}

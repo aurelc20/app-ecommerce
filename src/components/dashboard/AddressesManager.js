@@ -132,14 +132,14 @@ export default function AddressesManager({ addresses: initialAddresses }) {
     value: form[key] ?? "",
     onChange: (e) => setForm({ ...form, [key]: e.target.value }),
     className:
-      "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent",
+      "w-full rounded-lg border border-sand bg-cream px-4 py-2 text-ink outline-none transition focus:border-wood focus:ring-2 focus:ring-wood/20",
   });
 
   return (
     <div>
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-lg ${
+          className={`mb-6 rounded-lg p-4 ${
             message.type === "success"
               ? "bg-green-50 text-green-800"
               : "bg-red-50 text-red-800"
@@ -151,7 +151,7 @@ export default function AddressesManager({ addresses: initialAddresses }) {
 
       {/* Lista e adresave */}
       {addresses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {addresses.map((address, index) => {
             const meta = typeMeta(address.type);
             const Icon = meta.icon;
@@ -159,18 +159,18 @@ export default function AddressesManager({ addresses: initialAddresses }) {
             return (
               <div
                 key={address._id || index}
-                className="bg-white p-6 rounded-xl shadow-sm border"
+                className="rounded-2xl border border-sand bg-paper p-6"
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="mb-4 flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-9 h-9 bg-purple-100 rounded-full flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-purple-600" />
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sand/70">
+                      <Icon className="h-4 w-4 text-wood" />
                     </span>
-                    <span className="text-sm font-semibold text-gray-900">
+                    <span className="text-sm font-semibold text-ink">
                       {meta.label}
                     </span>
                     {address.isDefault && (
-                      <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-800 text-xs font-medium">
+                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
                         Kryesore
                       </span>
                     )}
@@ -182,31 +182,31 @@ export default function AddressesManager({ addresses: initialAddresses }) {
                       onClick={() => openEdit(index)}
                       disabled={loading}
                       aria-label="Ndrysho adresën"
-                      className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-purple-600 transition disabled:opacity-50"
+                      className="rounded-lg p-2 text-ink-soft transition hover:bg-sand/60 hover:text-wood disabled:opacity-50"
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Pencil className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDelete(index)}
                       disabled={loading}
                       aria-label="Fshi adresën"
-                      className="p-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition disabled:opacity-50"
+                      className="rounded-lg p-2 text-ink-soft transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-900">{address.street}</p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-ink">{address.street}</p>
+                <p className="text-sm text-ink-soft">
                   {[address.postalCode, address.city, address.state]
                     .filter(Boolean)
                     .join(", ")}
                 </p>
-                <p className="text-sm text-gray-600">{address.country}</p>
+                <p className="text-sm text-ink-soft">{address.country}</p>
                 {address.phone && (
-                  <p className="text-sm text-gray-600 mt-1">{address.phone}</p>
+                  <p className="mt-1 text-sm text-ink-soft">{address.phone}</p>
                 )}
 
                 {!address.isDefault && (
@@ -214,9 +214,9 @@ export default function AddressesManager({ addresses: initialAddresses }) {
                     type="button"
                     onClick={() => handleSetDefault(index)}
                     disabled={loading}
-                    className="mt-4 inline-flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-700 disabled:opacity-50"
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm text-wood hover:text-wood-dark disabled:opacity-50"
                   >
-                    <Star className="w-4 h-4" />
+                    <Star className="h-4 w-4" />
                     Vendos si kryesore
                   </button>
                 )}
@@ -225,12 +225,12 @@ export default function AddressesManager({ addresses: initialAddresses }) {
           })}
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border p-12 text-center mb-8">
-          <MapPin className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">
+        <div className="mb-8 rounded-2xl border border-sand bg-paper p-12 text-center">
+          <MapPin className="mx-auto h-12 w-12 text-ink-soft/50" />
+          <h3 className="mt-2 text-sm font-medium text-ink">
             Nuk ke asnjë adresë
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-ink-soft">
             Shto një adresë për ta përdorur gjatë checkout-it.
           </p>
         </div>
@@ -241,28 +241,28 @@ export default function AddressesManager({ addresses: initialAddresses }) {
         <button
           type="button"
           onClick={openNew}
-          className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+          className="rounded-full bg-wood px-6 py-2 text-white transition hover:bg-wood-dark"
         >
           Shto adresë të re
         </button>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-sm border p-6"
+          className="rounded-2xl border border-sand bg-paper p-6"
         >
-          <h2 className="text-xl font-bold mb-4">
+          <h2 className="mb-4 font-display text-xl font-semibold text-ink">
             {editingIndex === -1 ? "Adresë e Re" : "Ndrysho Adresën"}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Lloji
               </label>
               <select
                 value={form.type}
                 onChange={(e) => setForm({ ...form, type: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full rounded-lg border border-sand bg-cream px-4 py-2 text-ink outline-none transition focus:border-wood focus:ring-2 focus:ring-wood/20"
               >
                 {TYPE_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -273,54 +273,54 @@ export default function AddressesManager({ addresses: initialAddresses }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Telefoni
               </label>
               <input type="tel" {...field("phone")} />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Rruga *
               </label>
               <input type="text" required {...field("street")} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Qyteti *
               </label>
               <input type="text" required {...field("city")} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Rrethi / Shteti
               </label>
               <input type="text" {...field("state")} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Kodi postar
               </label>
               <input type="text" {...field("postalCode")} />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Shteti
               </label>
               <input type="text" {...field("country")} />
             </div>
           </div>
 
-          <label className="flex items-center gap-2 mb-6 text-sm text-gray-700">
+          <label className="mb-6 flex items-center gap-2 text-sm text-ink">
             <input
               type="checkbox"
               checked={Boolean(form.isDefault)}
               onChange={(e) => setForm({ ...form, isDefault: e.target.checked })}
-              className="h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="h-4 w-4 rounded border-sand text-wood focus:ring-wood/40"
             />
             Vendose si adresë kryesore
           </label>
@@ -329,7 +329,7 @@ export default function AddressesManager({ addresses: initialAddresses }) {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
+              className="rounded-full bg-wood px-6 py-2 text-white transition hover:bg-wood-dark disabled:opacity-50"
             >
               {loading ? "Duke ruajtur..." : "Ruaj adresën"}
             </button>
@@ -338,7 +338,7 @@ export default function AddressesManager({ addresses: initialAddresses }) {
               type="button"
               onClick={closeForm}
               disabled={loading}
-              className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+              className="rounded-full border border-sand px-6 py-2 text-ink transition hover:bg-sand/60 disabled:opacity-50"
             >
               Anulo
             </button>

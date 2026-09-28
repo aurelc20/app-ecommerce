@@ -14,6 +14,7 @@ import {
 import { getProducts } from "@/actions/productActions";
 import { PRODUCT_CATEGORIES, categoryLabel } from "@/lib/categories";
 import ProductGrid from "@/components/ProductGrid";
+import Eyebrow from "@/components/Eyebrow";
 
 const CATEGORY_ICONS = {
   Chairs: Armchair,
@@ -44,14 +45,14 @@ const VALUE_PROPS = [
 export default async function Home() {
   const { products } = await getProducts({
     isFeatured: true,
-    limit: 8,
+    limit: 4,
     sortBy: "newest",
   });
 
   const featuredProducts =
     products?.length > 0
       ? products
-      : (await getProducts({ limit: 8, sortBy: "newest" })).products;
+      : (await getProducts({ limit: 4, sortBy: "newest" })).products;
 
   const heroProduct = featuredProducts?.[0];
   const heroImage =
@@ -70,10 +71,13 @@ export default async function Home() {
       <section className="relative overflow-hidden">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 py-16 lg:grid-cols-2 lg:py-24">
           <div>
-            <p className="mb-4 text-sm font-semibold tracking-[0.2em] text-wood uppercase">
+            <Eyebrow align="left" className="mb-4">
               Koleksioni 2026
+            </Eyebrow>
+            <p className="mt-3 font-script text-4xl text-wood">
+              Elegancë e Përjetshme
             </p>
-            <h1 className="font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl lg:text-6xl">
+            <h1 className="mt-3 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl lg:text-6xl">
               Mobilje që kthejnë çdo shtëpi në një hapësirë premium
             </h1>
             <p className="mt-6 max-w-lg text-lg text-ink-soft">
@@ -144,7 +148,7 @@ export default async function Home() {
               Kategoritë
             </p>
             <h2 className="mt-2 font-display text-3xl font-semibold text-ink">
-              Gjej pjesën e duhur
+              Gjej produktin e duhur
             </h2>
           </div>
           <Link
@@ -162,10 +166,10 @@ export default async function Home() {
               <Link
                 key={cat.value}
                 href={`/shop?category=${encodeURIComponent(cat.value)}`}
-                className="group relative overflow-hidden rounded-2xl border border-sand bg-paper p-6 text-center transition hover:-translate-y-1 hover:shadow-lg hover:shadow-ink/10"
+                className="group relative overflow-hidden rounded-2xl border border-ink/30 bg-cream p-6 text-center shadow-sm shadow-ink transition hover:-translate-y-1 hover:shadow-lg hover:shadow-ink/10"
               >
                 {cat.thumbnail ? (
-                  <div className="absolute inset-0 opacity-0 transition group-hover:opacity-10">
+                  <div className="absolute inset-0 opacity-0 transition group-hover:opacity-40">
                     <Image
                       src={cat.thumbnail.url}
                       alt=""
@@ -187,7 +191,7 @@ export default async function Home() {
 
       {/* Featured products */}
       {featuredProducts?.length > 0 && (
-        <section className="border-y border-sand bg-paper/60 py-16">
+        <section className="border-y border-sand bg-cream py-16">
           <div className="container mx-auto px-4">
             <div className="mb-10 flex items-end justify-between">
               <div>
@@ -229,11 +233,11 @@ export default async function Home() {
       </section>
 
       {/* CTA band */}
-      <section className="mx-4 mb-16 overflow-hidden rounded-3xl bg-[#231a13] px-8 py-16 text-center sm:mx-auto sm:max-w-5xl">
+      <section className="mx-4 mb-16 overflow-hidden rounded-3xl bg-ink px-8 py-16 text-center sm:mx-auto sm:max-w-5xl">
         <h2 className="font-display text-3xl font-semibold text-white sm:text-4xl">
           Krijo hapësirën që gjithmonë ke ëndërruar
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-[#b3a695]">
+        <p className="mx-auto mt-4 max-w-xl text-white/70">
           Shfleto koleksionin e plotë ose na kontakto për këshillim personal nga
           ekipi ynë i dizajnit.
         </p>

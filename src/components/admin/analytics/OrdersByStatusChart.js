@@ -69,7 +69,7 @@ export default function OrdersByStatusChart({ data }) {
               <Cell
                 key={`cell-${index}`}
                 fill={
-                  statusColors[Object.keys(statusLabels)[index]] || "#9333ea"
+                  statusColors[Object.keys(statusLabels)[index]] || "#b5965b"
                 }
               />
             ))}

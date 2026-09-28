@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function TopProducts({ data }) {
   if (!data || data.length === 0) {
-    return <p className="text-gray-500 text-center py-8">Nuk ka të dhëna</p>;
+    return <p className="py-8 text-center text-ink-soft">Nuk ka të dhëna</p>;
   }
 
   return (
@@ -11,9 +11,9 @@ export default function TopProducts({ data }) {
       {data.map((product, index) => (
         <div
           key={product.productId}
-          className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg"
+          className="flex items-center gap-4 rounded-lg bg-sand/40 p-4"
         >
-          <div className="shrink-0 w-12 h-12 bg-white rounded-lg overflow-hidden">
+          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-paper">
             {product.image?.[0] && (
               <Image
                 src={product.image[0].url}
@@ -24,17 +24,17 @@ export default function TopProducts({ data }) {
               />
             )}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-medium text-gray-900 truncate">{product.name}</p>
-            <p className="text-sm text-gray-600">
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-medium text-ink">{product.name}</p>
+            <p className="text-sm text-ink-soft">
               {product.totalSold} të shitura
             </p>
           </div>
           <div className="text-right">
-            <p className="font-bold text-gray-900">
+            <p className="font-bold text-ink">
               ${product.totalRevenue.toFixed(2)}
             </p>
-            <p className="text-xs text-gray-500">Revenue</p>
+            <p className="text-xs text-ink-soft">Revenue</p>
           </div>
         </div>
       ))}

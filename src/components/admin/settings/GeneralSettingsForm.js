@@ -4,6 +4,9 @@
 import { useState } from "react";
 import { updateGeneralSettings } from "@/actions/admin/settingsActions";
 
+const inputClass =
+  "w-full px-4 py-2 border border-sand rounded-lg focus:ring-2 focus:ring-wood/20 focus:border-wood focus:outline-none text-ink";
+
 export default function GeneralSettingsForm({ settings }) {
   const [formData, setFormData] = useState({
     storeName: settings?.storeName || "",
@@ -35,9 +38,11 @@ export default function GeneralSettingsForm({ settings }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-sm border p-6"
+      className="rounded-xl border border-sand bg-paper p-6 shadow-sm"
     >
-      <h2 className="text-xl font-bold mb-6">Informacionet e Dyqanit</h2>
+      <h2 className="mb-6 font-display text-xl font-semibold text-ink">
+        Informacionet e Dyqanit
+      </h2>
 
       {message.text && (
         <div
@@ -53,7 +58,7 @@ export default function GeneralSettingsForm({ settings }) {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Emri i Dyqanit
           </label>
           <input
@@ -62,13 +67,13 @@ export default function GeneralSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, storeName: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Email
             </label>
             <input
@@ -77,12 +82,12 @@ export default function GeneralSettingsForm({ settings }) {
               onChange={(e) =>
                 setFormData({ ...formData, storeEmail: e.target.value })
               }
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-ink">
               Telefoni
             </label>
             <input
@@ -91,13 +96,13 @@ export default function GeneralSettingsForm({ settings }) {
               onChange={(e) =>
                 setFormData({ ...formData, storePhone: e.target.value })
               }
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Adresa
           </label>
           <input
@@ -106,12 +111,12 @@ export default function GeneralSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, storeAddress: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Përshkrimi
           </label>
           <textarea
@@ -120,7 +125,7 @@ export default function GeneralSettingsForm({ settings }) {
               setFormData({ ...formData, storeDescription: e.target.value })
             }
             rows={3}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
           />
         </div>
       </div>
@@ -128,7 +133,7 @@ export default function GeneralSettingsForm({ settings }) {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+        className="mt-6 rounded-full bg-wood px-6 py-3 font-semibold text-white transition hover:bg-wood-dark disabled:opacity-50"
       >
         {loading ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
       </button>

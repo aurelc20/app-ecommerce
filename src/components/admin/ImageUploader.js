@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Lightbulb } from "lucide-react";
 
 export default function ImageUploader({ images = [], onChange }) {
   const [uploading, setUploading] = useState(false);
@@ -109,7 +110,7 @@ export default function ImageUploader({ images = [], onChange }) {
       )}
 
       {/* Upload Area */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-500 transition">
+      <div className="border-2 border-dashed border-sand rounded-lg p-6 text-center hover:border-wood transition">
         <input
           type="file"
           id="image-upload"
@@ -122,7 +123,7 @@ export default function ImageUploader({ images = [], onChange }) {
 
         <label htmlFor="image-upload" className="cursor-pointer">
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="mx-auto h-12 w-12 text-ink-soft/50"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -134,10 +135,10 @@ export default function ImageUploader({ images = [], onChange }) {
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-ink-soft">
             {uploading ? "Duke uploaduar..." : "Click për të uploaduar imazhe"}
           </p>
-          <p className="text-xs text-gray-500">PNG, JPG, GIF deri në 5MB</p>
+          <p className="text-xs text-ink-soft/70">PNG, JPG, GIF deri në 5MB</p>
         </label>
       </div>
 
@@ -148,7 +149,7 @@ export default function ImageUploader({ images = [], onChange }) {
             <div
               key={image.publicId || image.url || index}
               className={`group relative aspect-square rounded-lg overflow-hidden border-2 ${
-                image.isPrimary ? "border-purple-600" : "border-gray-200"
+                image.isPrimary ? "border-wood" : "border-sand"
               }`}
             >
               <Image
@@ -161,7 +162,7 @@ export default function ImageUploader({ images = [], onChange }) {
 
               {/* Badges */}
               {image.isPrimary && (
-                <span className="absolute top-1 left-1 bg-purple-600 text-white px-2 py-1 rounded text-xs font-medium">
+                <span className="absolute top-1 left-1 bg-wood text-white px-2 py-1 rounded text-xs font-medium">
                   Primary
                 </span>
               )}
@@ -172,7 +173,7 @@ export default function ImageUploader({ images = [], onChange }) {
                   type="button"
                   onClick={() => handleSetPrimary(index)}
                   disabled={image.isPrimary}
-                  className="p-2 bg-white rounded-full hover:bg-gray-100 disabled:opacity-50"
+                  className="p-2 bg-paper rounded-full hover:bg-sand disabled:opacity-50"
                   title="Set si primary"
                 >
                   <svg
@@ -212,7 +213,7 @@ export default function ImageUploader({ images = [], onChange }) {
                   <button
                     type="button"
                     onClick={() => handleReorder(index, index - 1)}
-                    className="p-1 bg-white rounded shadow hover:bg-gray-100"
+                    className="p-1 bg-paper rounded shadow hover:bg-sand"
                   >
                     <svg
                       className="w-3 h-3"
@@ -233,7 +234,7 @@ export default function ImageUploader({ images = [], onChange }) {
                   <button
                     type="button"
                     onClick={() => handleReorder(index, index + 1)}
-                    className="p-1 bg-white rounded shadow hover:bg-gray-100"
+                    className="p-1 bg-paper rounded shadow hover:bg-sand"
                   >
                     <svg
                       className="w-3 h-3"
@@ -257,8 +258,9 @@ export default function ImageUploader({ images = [], onChange }) {
       )}
 
       {/* Helper Text */}
-      <p className="text-xs text-gray-500">
-        💡 Këshillë: Imazhi i parë do të jetë imazhi kryesor. Uploado së pari
+      <p className="flex items-start gap-1.5 text-xs text-ink-soft">
+        <Lightbulb className="h-3.5 w-3.5 shrink-0 translate-y-0.5" />
+        Këshillë: Imazhi i parë do të jetë imazhi kryesor. Uploado së pari
         imazhin që dëshiron të jetë primary.
       </p>
     </div>

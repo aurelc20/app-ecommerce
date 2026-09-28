@@ -8,6 +8,9 @@ import ImageUploader from "@/components/admin/ImageUploader";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { PRODUCT_CATEGORIES } from "@/lib/categories";
 
+const inputClass =
+  "w-full px-4 py-2 border border-sand rounded-lg focus:ring-2 focus:ring-wood/20 focus:border-wood focus:outline-none text-ink placeholder:text-ink-soft/60";
+
 export default function ProductForm({ mode = "create", product = null }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -40,7 +43,6 @@ export default function ProductForm({ mode = "create", product = null }) {
     tags: product?.tags?.join(", ") || "",
     images: product?.images || [],
   });
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,70 +146,70 @@ export default function ProductForm({ mode = "create", product = null }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-sm border p-6"
+      className="rounded-xl border border-sand bg-paper p-6 shadow-sm"
     >
       {error && (
         <div
           ref={errorRef}
-          className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg"
+          className="mb-6 rounded-lg bg-red-50 p-4 text-red-600"
         >
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mb-6 p-4 bg-green-50 text-green-600 rounded-lg">
+        <div className="mb-6 rounded-lg bg-green-50 p-4 text-green-600">
           {success}
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Basic Info */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">
+            <h3 className="mb-4 font-display text-lg font-semibold text-ink">
               Informacionet Bazë
             </h3>
 
             <div className="space-y-4">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Emri i Produktit *
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={handleNameChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                   placeholder="P.sh: Karrige druri Oslo"
                 />
               </div>
 
               {/* Slug */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Slug (URL) *
                 </label>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 text-sm">/product/</span>
+                  <span className="text-sm text-ink-soft">/product/</span>
                   <input
                     type="text"
                     value={formData.slug}
                     onChange={handleSlugChange}
-                    className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 font-mono text-sm placeholder:text-black/50 text-black/70"
+                    className={`flex-1 font-mono text-sm ${inputClass}`}
                     placeholder="karrige-druri-oslo"
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="mt-1 text-xs text-ink-soft">
                   URL unike për produktin. Gjenerohet automatikisht nga emri.
                 </p>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Përshkrimi *
                 </label>
                 <RichTextEditor
@@ -220,7 +222,7 @@ export default function ProductForm({ mode = "create", product = null }) {
 
               {/* SKU */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   SKU (Stock Keeping Unit)
                 </label>
                 <input
@@ -229,10 +231,10 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, sku: e.target.value })
                   }
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                   placeholder="P.sh: KRR-001"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="mt-1 text-xs text-ink-soft">
                   Kodi unik për identifikimin e produktit
                 </p>
               </div>
@@ -241,12 +243,14 @@ export default function ProductForm({ mode = "create", product = null }) {
 
           {/* Pricing */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Çmimi</h3>
+            <h3 className="mb-4 font-display text-lg font-semibold text-ink">
+              Çmimi
+            </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {/* Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Çmimi Bazë ($) *
                 </label>
                 <input
@@ -257,14 +261,14 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, price: e.target.value })
                   }
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                   placeholder="249.99"
                 />
               </div>
 
               {/* Sale Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Çmimi me Zbritje ($)
                 </label>
                 <input
@@ -275,7 +279,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, salePrice: e.target.value })
                   }
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                   placeholder="199.99"
                 />
               </div>
@@ -290,12 +294,9 @@ export default function ProductForm({ mode = "create", product = null }) {
                 onChange={(e) =>
                   setFormData({ ...formData, isOnSale: e.target.checked })
                 }
-                className="rounded text-purple-600 focus:ring-purple-500 placeholder:text-black/50 "
+                className="rounded border-sand accent-wood focus:ring-2 focus:ring-wood/20"
               />
-              <label
-                htmlFor="isOnSale"
-                className="text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="isOnSale" className="text-sm font-medium text-ink">
                 Aktivizo zbritjen (shfaq badge &quot;Sale&quot;)
               </label>
             </div>
@@ -303,7 +304,9 @@ export default function ProductForm({ mode = "create", product = null }) {
 
           {/* Images */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Imazhet</h3>
+            <h3 className="mb-4 font-display text-lg font-semibold text-ink">
+              Imazhet
+            </h3>
             <ImageUploader
               images={formData.images}
               onChange={handleImageUpload}
@@ -314,13 +317,15 @@ export default function ProductForm({ mode = "create", product = null }) {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Organization */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Organizimi</h3>
+          <div className="rounded-lg bg-sand/40 p-4">
+            <h3 className="mb-4 font-display text-lg font-semibold text-ink">
+              Organizimi
+            </h3>
 
             <div className="space-y-4">
               {/* Category */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Kategoria *
                 </label>
                 <select
@@ -328,7 +333,7 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value })
                   }
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                 >
                   <option value="">Zgjidh kategorinë</option>
                   {PRODUCT_CATEGORIES.map((cat) => (
@@ -341,7 +346,7 @@ export default function ProductForm({ mode = "create", product = null }) {
 
               {/* Brand */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Brand
                 </label>
                 <input
@@ -350,14 +355,14 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, brand: e.target.value })
                   }
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                   placeholder="Furniture Shop"
                 />
               </div>
 
               {/* Tags */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-ink">
                   Tags
                 </label>
                 <input
@@ -366,20 +371,22 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, tags: e.target.value })
                   }
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className={inputClass}
                   placeholder="dru, modern, shtëpi"
                 />
-                <p className="text-xs text-gray-500 mt-1">Ndaj me presje (,)</p>
+                <p className="mt-1 text-xs text-ink-soft">Ndaj me presje (,)</p>
               </div>
             </div>
           </div>
 
           {/* Inventory */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Inventari</h3>
+          <div className="rounded-lg bg-sand/40 p-4">
+            <h3 className="mb-4 font-display text-lg font-semibold text-ink">
+              Inventari
+            </h3>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 Stock *
               </label>
               <input
@@ -389,15 +396,17 @@ export default function ProductForm({ mode = "create", product = null }) {
                 onChange={(e) =>
                   setFormData({ ...formData, stock: e.target.value })
                 }
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                className={inputClass}
                 placeholder="0"
               />
             </div>
           </div>
 
           {/* Visibility */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Shfaqja</h3>
+          <div className="rounded-lg bg-sand/40 p-4">
+            <h3 className="mb-4 font-display text-lg font-semibold text-ink">
+              Shfaqja
+            </h3>
 
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -408,11 +417,11 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, isActive: e.target.checked })
                   }
-                  className="rounded focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className="rounded border-sand accent-wood focus:ring-2 focus:ring-wood/20"
                 />
                 <label
                   htmlFor="isActive"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-sm font-medium text-ink"
                 >
                   Aktive (shfaqet në shop)
                 </label>
@@ -426,11 +435,11 @@ export default function ProductForm({ mode = "create", product = null }) {
                   onChange={(e) =>
                     setFormData({ ...formData, isFeatured: e.target.checked })
                   }
-                  className="rounded focus:ring-purple-500 placeholder:text-black/50 text-black/70"
+                  className="rounded border-sand accent-wood focus:ring-2 focus:ring-wood/20"
                 />
                 <label
                   htmlFor="isFeatured"
-                  className="text-sm font-medium text-gray-700"
+                  className="text-sm font-medium text-ink"
                 >
                   Featured (shfaqet në homepage)
                 </label>
@@ -443,7 +452,7 @@ export default function ProductForm({ mode = "create", product = null }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+              className="w-full rounded-full bg-wood py-3 font-semibold text-white transition hover:bg-wood-dark disabled:opacity-50"
             >
               {loading
                 ? "Duke ruajtur..."
@@ -455,7 +464,7 @@ export default function ProductForm({ mode = "create", product = null }) {
             <button
               type="button"
               onClick={() => router.back()}
-              className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+              className="w-full rounded-full bg-sand py-3 font-semibold text-ink-soft transition hover:bg-sand/70"
             >
               Anulo
             </button>
@@ -478,7 +487,7 @@ function generateSlug(text) {
       .replace(/ç/g, "c")
       // Ndan diakritiket e tjere (é, ü, ñ) nga shkronja baze dhe i heq
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[̀-ͯ]/g, "")
       .replace(/[^\w\s-]/g, "") // Hiq karakteret speciale
       .replace(/[\s_-]+/g, "-") // Zëvendëso hapësirat me -
       .replace(/^-+|-+$/g, "") // Hiq - nga fillimi dhe fundi

@@ -63,7 +63,7 @@ export default function CartItem({ item }) {
 
         {/* Stock Warning */}
         {item.quantity >= item.stock && (
-          <p className="mt-1 text-xs text-red-600">
+          <p className="mt-1 text-xs text-wood-dark">
             Maksimumi i arritur ({item.stock} në stock)
           </p>
         )}
@@ -72,7 +72,7 @@ export default function CartItem({ item }) {
       {/* Remove Button */}
       <button
         onClick={() => setIsRemoveModalOpen(true)}
-        className="h-fit rounded-lg p-2 text-red-600 transition hover:bg-red-50 hover:text-red-700"
+        className="h-fit rounded-lg p-2 text-ink-soft transition hover:bg-sand/60 hover:text-wood-dark"
         title="Hiq nga shporta"
       >
         <Trash2 className="h-5 w-5" />

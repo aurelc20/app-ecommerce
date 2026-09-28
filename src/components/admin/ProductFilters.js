@@ -28,10 +28,10 @@ export default function ProductFilters({ categories, currentFilters }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
+    <div className="mb-6 rounded-xl border border-sand bg-paper p-4 shadow-sm">
       <div className="flex flex-wrap gap-4">
         {/* Search */}
-        <div className="flex-1 min-w-50">
+        <div className="min-w-50 flex-1">
           <input
             type="text"
             placeholder="Kërko produkte..."
@@ -42,7 +42,7 @@ export default function ProductFilters({ categories, currentFilters }) {
                 handleFilterChange("search", e.target.value);
               }
             }}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
           />
         </div>
 
@@ -50,7 +50,7 @@ export default function ProductFilters({ categories, currentFilters }) {
         <select
           value={currentFilters.category || ""}
           onChange={(e) => handleFilterChange("category", e.target.value)}
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         >
           <option value="">Të gjitha kategoritë</option>
           {categories.map((cat) => (
@@ -64,7 +64,7 @@ export default function ProductFilters({ categories, currentFilters }) {
         <select
           value={currentFilters.stock || ""}
           onChange={(e) => handleFilterChange("stock", e.target.value)}
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         >
           <option value="">Të gjitha stock</option>
           <option value="low">Stock i ulët (≤5)</option>
@@ -75,7 +75,7 @@ export default function ProductFilters({ categories, currentFilters }) {
         <select
           value={currentFilters.status || ""}
           onChange={(e) => handleFilterChange("status", e.target.value)}
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         >
           <option value="">Të gjitha statuset</option>
           <option value="featured">Të preferuarat ⭐</option>
@@ -85,7 +85,7 @@ export default function ProductFilters({ categories, currentFilters }) {
         {/* Clear Filters */}
         <button
           onClick={handleClearFilters}
-          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+          className="rounded-lg bg-sand px-4 py-2 text-ink-soft transition hover:bg-sand/70"
         >
           Clear
         </button>

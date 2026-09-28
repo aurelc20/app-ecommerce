@@ -48,7 +48,7 @@ export default function PaymentMethodsChart({ data }) {
                 key={`cell-${index}`}
                 fill={
                   paymentColors[entry.name.split(" ")[0].toLowerCase()] ||
-                  "#9333ea"
+                  "#b5965b"
                 }
               />
             ))}

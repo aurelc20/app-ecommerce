@@ -4,7 +4,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 import { registerUser } from "@/actions/authActions";
+import Eyebrow from "@/components/Eyebrow";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -56,21 +58,20 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
+      <div className="w-full max-w-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <Eyebrow className="mb-4">Regjistrim</Eyebrow>
+          <h1 className="font-display text-3xl font-semibold text-ink">
             Krijo llogari të re
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Fillo shopping-un tënd sot
-          </p>
+          </h1>
+          <p className="mt-2 text-ink-soft">Fillo shopping-un tënd sot</p>
         </div>
 
-        <div className="bg-white py-8 px-6 shadow rounded-lg">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="mt-8 rounded-2xl border border-sand bg-paper p-8 shadow-xl shadow-ink/10">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded text-sm">
+              <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600">
                 {error}
               </div>
             )}
@@ -79,7 +80,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
+                className="mb-1.5 block text-sm font-medium text-ink"
               >
                 Emri i plotë
               </label>
@@ -92,7 +93,7 @@ export default function RegisterPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                 placeholder="Emri Mbiemri"
               />
             </div>
@@ -101,7 +102,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="mb-1.5 block text-sm font-medium text-ink"
               >
                 Email-i
               </label>
@@ -115,7 +116,7 @@ export default function RegisterPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                 placeholder="email@example.com"
               />
             </div>
@@ -124,7 +125,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="mb-1.5 block text-sm font-medium text-ink"
               >
                 Fjalëkalimi
               </label>
@@ -137,7 +138,7 @@ export default function RegisterPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
                 }
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                 placeholder="******"
               />
             </div>
@@ -146,7 +147,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
+                className="mb-1.5 block text-sm font-medium text-ink"
               >
                 Konfirmo fjalëkalimin
               </label>
@@ -159,56 +160,63 @@ export default function RegisterPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, confirmPassword: e.target.value })
                 }
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full rounded-xl border border-sand bg-cream/40 px-4 py-2.5 text-ink placeholder:text-ink-soft/60 transition focus:border-wood focus:outline-none focus:ring-2 focus:ring-wood/20"
                 placeholder="******"
               />
             </div>
 
             {/* Terms */}
-            <div className="flex items-center">
+            <label
+              htmlFor="terms"
+              className="flex items-start gap-2 text-sm text-ink-soft"
+            >
               <input
                 id="terms"
                 name="terms"
                 type="checkbox"
                 required
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="mt-0.5 h-4 w-4 rounded border-sand accent-wood focus:ring-2 focus:ring-wood/20"
               />
-              <label
-                htmlFor="terms"
-                className="ml-2 block text-sm text-gray-900"
-              >
+              <span>
                 Pranoj{" "}
                 <Link
                   href="/terms"
-                  className="text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-wood hover:text-wood-dark"
                 >
                   Termat dhe Kushtet
                 </Link>{" "}
                 dhe{" "}
                 <Link
                   href="/privacy"
-                  className="text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-wood hover:text-wood-dark"
                 >
                   Politikën e Privatësisë
                 </Link>
-              </label>
-            </div>
+              </span>
+            </label>
 
             {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-semibold text-white transition hover:bg-wood-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? "Duke u regjistruar..." : "Regjistrohu"}
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Duke u regjistruar...
+                </>
+              ) : (
+                "Regjistrohu"
+              )}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-ink-soft">
             Ke tashmë llogari?{" "}
             <Link
               href="/login"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-wood hover:text-wood-dark"
             >
               Hynu këtu
             </Link>

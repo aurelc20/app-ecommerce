@@ -6,12 +6,14 @@ import Link from "next/link";
 import CartItem from "@/components/CartItem";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { getPublicSettings } from "@/actions/settingsActions";
-import { ArrowRight, Loader2, ShoppingCart, Trash2 } from "lucide-react";
+import { ArrowRight, Loader2, LogIn, ShoppingCart, Trash2 } from "lucide-react";
 import ConfirmModal from "@/components/ConfirmModal";
 
 export default function CartPage() {
-  const { items, getTotalPrice, clearCart } = useCartStore();
+  const { items, getTotalPrice, clearCart, getCartCount } = useCartStore();
+  const { status: sessionStatus } = useSession();
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
 
   // ✅ Settings dinamike nga DB
@@ -73,7 +75,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-cream py-12">
       <div className="container mx-auto px-4">
         <h1 className="mb-8 font-display text-3xl font-semibold text-ink">
-          Shporta Ime
+          Shporta Ime ({getCartCount()} artikuj)
         </h1>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -86,7 +88,7 @@ export default function CartPage() {
             {/* Clear Cart */}
             <button
               onClick={() => setIsClearModalOpen(true)}
-              className="flex cursor-pointer items-center gap-1.5 text-sm font-medium text-red-600 hover:text-red-700"
+              className="flex cursor-pointer items-center gap-1.5 text-sm font-medium text-ink-soft hover:text-wood-dark"
             >
               <Trash2 className="h-4 w-4" />
               Zbraz shportën
@@ -183,13 +185,23 @@ export default function CartPage() {
               )}
 
               {/* Checkout Button */}
-              <Link
-                href="/checkout"
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-medium text-white transition hover:bg-wood-dark"
-              >
-                Procedo në Checkout
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              {sessionStatus === "authenticated" ? (
+                <Link
+                  href="/checkout"
+                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-medium text-white transition hover:bg-wood-dark"
+                >
+                  Procedo në Checkout
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              ) : (
+                <Link
+                  href="/login?callbackUrl=/checkout"
+                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-wood py-3 font-medium text-white transition hover:bg-wood-dark"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Hyr ose Regjistrohu
+                </Link>
+              )}
 
               {/* Continue Shopping */}
               <Link

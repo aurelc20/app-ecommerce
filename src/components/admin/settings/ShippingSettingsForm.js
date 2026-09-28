@@ -4,6 +4,9 @@
 import { useState } from "react";
 import { updateShippingSettings } from "@/actions/admin/settingsActions";
 
+const inputClass =
+  "w-full px-4 py-2 border border-sand rounded-lg focus:ring-2 focus:ring-wood/20 focus:border-wood focus:outline-none text-ink";
+
 export default function ShippingSettingsForm({ settings }) {
   const [formData, setFormData] = useState({
     freeShippingThreshold: settings?.freeShippingThreshold || 100,
@@ -33,9 +36,11 @@ export default function ShippingSettingsForm({ settings }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-sm border p-6"
+      className="rounded-xl border border-sand bg-paper p-6 shadow-sm"
     >
-      <h2 className="text-xl font-bold mb-6">Shipping & Tatimi</h2>
+      <h2 className="mb-6 font-display text-xl font-semibold text-ink">
+        Shipping & Tatimi
+      </h2>
 
       {message.text && (
         <div
@@ -51,7 +56,7 @@ export default function ShippingSettingsForm({ settings }) {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Pragu për Transport Falas ($)
           </label>
           <input
@@ -64,15 +69,15 @@ export default function ShippingSettingsForm({ settings }) {
                 freeShippingThreshold: e.target.value,
               })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="mt-1 text-xs text-ink-soft">
             Porositë mbi këtë shumë marrin transport falas
           </p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Tarifa Standarde e Transportit ($)
           </label>
           <input
@@ -82,12 +87,12 @@ export default function ShippingSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, standardShippingFee: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-ink">
             Norma e TVSH (%)
           </label>
           <input
@@ -97,9 +102,9 @@ export default function ShippingSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, taxRate: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="mt-1 text-xs text-ink-soft">
             Aktualisht: {formData.taxRate}% TVSH e aplikuar në çdo porosi
           </p>
         </div>
@@ -108,7 +113,7 @@ export default function ShippingSettingsForm({ settings }) {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+        className="mt-6 rounded-full bg-wood px-6 py-3 font-semibold text-white transition hover:bg-wood-dark disabled:opacity-50"
       >
         {loading ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
       </button>

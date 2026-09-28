@@ -33,7 +33,7 @@ export default function ShopPagination({
   }
 
   return (
-    <div className="mt-6 flex items-center justify-between rounded-2xl border border-sand bg-paper p-4">
+    <div className="mt-6 flex items-center justify-between rounded-2xl border border-sand bg-cream p-4">
       <p className="text-sm text-ink-soft">
         Faqja <span className="font-medium text-ink">{currentPage}</span> nga{" "}
         <span className="font-medium text-ink">{totalPages}</span>

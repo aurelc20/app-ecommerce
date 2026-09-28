@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getUserOrders } from "@/actions/orderActions";
 import Link from "next/link";
+import { Package } from "lucide-react";
 
 export default async function OrdersPage({ searchParams }) {
   const session = await auth();
@@ -33,23 +34,25 @@ export default async function OrdersPage({ searchParams }) {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Porositë e Mia</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Porositë e Mia
+        </h1>
+        <p className="mt-2 text-ink-soft">
           Historiku i porosive dhe statusi i tyre
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border mb-6">
+      <div className="mb-6 rounded-2xl border border-sand bg-paper p-4">
         <div className="flex flex-wrap gap-2">
           {statusFilters.map((filter) => (
             <Link
               key={filter.value}
               href={`/dashboard/orders${filter.value ? `?status=${filter.value}` : ""}`}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 status === filter.value
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-wood text-white"
+                  : "bg-sand/60 text-ink hover:bg-sand"
               }`}
             >
               {filter.label}
@@ -60,38 +63,38 @@ export default async function OrdersPage({ searchParams }) {
 
       {/* Orders List */}
       {orders && orders.length > 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border">
+        <div className="rounded-2xl border border-sand bg-paper">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-sand/40">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Data
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Statusi
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Artikuj
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Totali
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-ink-soft uppercase">
                     Veprime
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-sand">
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm font-medium text-purple-600">
+                  <tr key={order._id} className="hover:bg-sand/20">
+                    <td className="px-6 py-4 text-sm font-medium text-wood">
                       #{order._id.slice(-8).toUpperCase()}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-ink-soft">
                       {new Date(order.createdAt).toLocaleDateString("sq-AL", {
                         day: "numeric",
                         month: "long",
@@ -100,7 +103,7 @@ export default async function OrdersPage({ searchParams }) {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${
                           order.status === "delivered"
                             ? "bg-green-100 text-green-800"
                             : order.status === "cancelled"
@@ -117,16 +120,16 @@ export default async function OrdersPage({ searchParams }) {
                         {order.status === "cancelled" && "Anuluar"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-ink-soft">
                       {order.items.length} artikuj
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-sm font-semibold text-ink">
                       ${order.totalPrice.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <Link
                         href={`/dashboard/orders/${order._id}`}
-                        className="text-purple-600 hover:text-purple-700 font-medium"
+                        className="font-medium text-wood hover:text-wood-dark"
                       >
                         Detajet
                       </Link>
@@ -139,15 +142,15 @@ export default async function OrdersPage({ searchParams }) {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="px-6 py-4 border-t flex items-center justify-between">
-              <p className="text-sm text-gray-600">
+            <div className="flex items-center justify-between border-t border-sand px-6 py-4">
+              <p className="text-sm text-ink-soft">
                 Faqja {page} nga {totalPages}
               </p>
               <div className="flex gap-2">
                 {page > 1 && (
                   <Link
                     href={`/dashboard/orders?page=${page - 1}${status ? `&status=${status}` : ""}`}
-                    className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+                    className="rounded-lg border border-sand px-4 py-2 text-sm text-ink hover:bg-sand/60"
                   >
                     Prapa
                   </Link>
@@ -155,7 +158,7 @@ export default async function OrdersPage({ searchParams }) {
                 {page < totalPages && (
                   <Link
                     href={`/dashboard/orders?page=${page + 1}${status ? `&status=${status}` : ""}`}
-                    className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+                    className="rounded-lg border border-sand px-4 py-2 text-sm text-ink hover:bg-sand/60"
                   >
                     Para
                   </Link>
@@ -165,24 +168,10 @@ export default async function OrdersPage({ searchParams }) {
           )}
         </div>
       ) : (
-        <div className="bg-white p-12 rounded-xl shadow-sm border text-center">
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-            />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">
-            Nuk ka porosi
-          </h3>
-          <p className="mt-1 text-sm text-gray-500">
+        <div className="rounded-2xl border border-sand bg-paper p-12 text-center">
+          <Package className="mx-auto h-12 w-12 text-ink-soft/50" strokeWidth={1.5} />
+          <h3 className="mt-2 text-sm font-medium text-ink">Nuk ka porosi</h3>
+          <p className="mt-1 text-sm text-ink-soft">
             {status
               ? `Nuk ka porosi me status "${status}"`
               : "Nuk ke bërë ende asnjë porosi"}
@@ -191,7 +180,7 @@ export default async function OrdersPage({ searchParams }) {
             <div className="mt-6">
               <Link
                 href="/shop"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
+                className="inline-flex items-center rounded-full bg-wood px-5 py-2.5 text-sm font-medium text-white transition hover:bg-wood-dark"
               >
                 Fillo shopping-un
               </Link>

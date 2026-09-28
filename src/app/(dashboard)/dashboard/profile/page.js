@@ -17,12 +17,14 @@ export default async function ProfilePage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Profili Im</h1>
-        <p className="text-gray-600 mt-2">Menaxho të dhënat e tua personale</p>
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Profili Im
+        </h1>
+        <p className="mt-2 text-ink-soft">Menaxho të dhënat e tua personale</p>
       </div>
 
       {/* Profile Form */}
-      <div className="bg-white rounded-xl shadow-sm border">
+      <div className="rounded-2xl border border-sand bg-paper">
         <ProfileForm user={user} />
       </div>
     </div>

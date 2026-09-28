@@ -35,7 +35,7 @@ export default function DeleteReviewButton({ reviewId }) {
         </button>
         <button
           onClick={() => setShowConfirm(false)}
-          className="text-gray-600 text-xs"
+          className="text-xs text-ink-soft hover:text-ink"
         >
           Anulo
         </button>

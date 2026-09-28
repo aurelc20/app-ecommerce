@@ -31,13 +31,13 @@ export default function CancelOrderButton({ orderId }) {
         <button
           onClick={handleCancel}
           disabled={loading}
-          className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition disabled:opacity-50"
+          className="rounded-full bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 disabled:opacity-50"
         >
           {loading ? "Duke anuluar..." : "Po, anulo porosinë"}
         </button>
         <button
           onClick={() => setShowConfirm(false)}
-          className="px-4 py-2 border rounded-lg font-medium hover:bg-gray-50 transition"
+          className="rounded-full border border-sand px-4 py-2 font-medium text-ink transition hover:bg-sand/60"
         >
           Jo, mbaje
         </button>
@@ -48,7 +48,7 @@ export default function CancelOrderButton({ orderId }) {
   return (
     <button
       onClick={() => setShowConfirm(true)}
-      className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition"
+      className="rounded-full bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700"
     >
       Anulo Porosinë
     </button>

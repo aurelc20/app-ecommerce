@@ -4,17 +4,18 @@
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cartStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createOrder } from "@/actions/orderActions";
 import { getPublicSettings } from "@/actions/settingsActions";
 import { useSession } from "next-auth/react";
-import { AlertTriangle, Loader2, ShoppingBag } from "lucide-react";
+import { AlertTriangle, Loader2, LogIn, ShoppingBag } from "lucide-react";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
 import OrderSummary from "@/components/checkout/OrderSummary";
 import PaymentMethod from "@/components/checkout/PaymentMethod";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const { items, getTotalPrice, clearCart } = useCartStore();
 
   const [loading, setLoading] = useState(false);
@@ -132,6 +133,14 @@ export default function CheckoutPage() {
     }
   };
 
+  if (sessionStatus === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-cream">
+        <Loader2 className="h-8 w-8 animate-spin text-wood" />
+      </div>
+    );
+  }
+
   if (settingsLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
@@ -198,31 +207,49 @@ export default function CheckoutPage() {
             />
 
             <div className="rounded-2xl border border-sand bg-paper p-6">
-              <button
-                onClick={handlePlaceOrder}
-                disabled={loading || settings.maintenanceMode}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-4 text-lg font-semibold text-white transition hover:bg-wood-dark disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    Duke procesuar...
-                  </>
-                ) : (
-                  <>
-                    {paymentMethod === "cod"
-                      ? "Konfirmo Porosinë (COD)"
-                      : "Konfirmo Porosinë"}
-                  </>
-                )}
-              </button>
+              {sessionStatus === "authenticated" ? (
+                <>
+                  <button
+                    onClick={handlePlaceOrder}
+                    disabled={loading || settings.maintenanceMode}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-4 text-lg font-semibold text-white transition hover:bg-wood-dark disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        Duke procesuar...
+                      </>
+                    ) : (
+                      <>
+                        {paymentMethod === "cod"
+                          ? "Konfirmo Porosinë (COD)"
+                          : "Konfirmo Porosinë"}
+                      </>
+                    )}
+                  </button>
 
-              <p className="mt-3 text-center text-xs text-ink-soft">
-                Duke klikuar &quot;Konfirmo Porosinë&quot;, pranon{" "}
-                <a href="/terms" className="text-wood hover:underline">
-                  Termat dhe Kushtet
-                </a>
-              </p>
+                  <p className="mt-3 text-center text-xs text-ink-soft">
+                    Duke klikuar &quot;Konfirmo Porosinë&quot;, pranon{" "}
+                    <a href="/terms" className="text-wood hover:underline">
+                      Termat dhe Kushtet
+                    </a>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login?callbackUrl=/checkout"
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-wood py-4 text-lg font-semibold text-white transition hover:bg-wood-dark"
+                  >
+                    <LogIn className="h-5 w-5" />
+                    Hyr ose Regjistrohu
+                  </Link>
+
+                  <p className="mt-3 text-center text-xs text-ink-soft">
+                    Duhet të kyçesh për të përfunduar porosinë
+                  </p>
+                </>
+              )}
             </div>
           </div>
 

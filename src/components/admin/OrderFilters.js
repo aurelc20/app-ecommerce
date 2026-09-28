@@ -33,7 +33,7 @@ export default function OrderFilters({ search, status, paymentMethod }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
+    <div className="mb-6 rounded-xl border border-sand bg-paper p-4 shadow-sm">
       <div className="flex flex-wrap gap-4">
         <input
           type="text"
@@ -41,13 +41,13 @@ export default function OrderFilters({ search, status, paymentMethod }) {
           defaultValue={search}
           onBlur={handleSearchBlur}
           onKeyDown={handleSearchKeyDown}
-          className="flex-1 min-w-50 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="min-w-50 flex-1 rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         />
 
         <select
           defaultValue={status}
           onChange={(e) => updateParam("status", e.target.value)}
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         >
           <option value="">Të gjitha statuset</option>
           <option value="pending">Në pritje</option>
@@ -61,7 +61,7 @@ export default function OrderFilters({ search, status, paymentMethod }) {
         <select
           defaultValue={paymentMethod}
           onChange={(e) => updateParam("paymentMethod", e.target.value)}
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className="rounded-lg border border-sand px-4 py-2 text-ink transition focus:border-wood focus:ring-2 focus:ring-wood/20 focus:outline-none"
         >
           <option value="">Të gjitha pagesat</option>
           <option value="cod">Cash on Delivery</option>

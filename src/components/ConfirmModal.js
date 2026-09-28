@@ -16,7 +16,7 @@ export default function ConfirmModal({
   return (
     <Modal isOpen={isOpen} onClose={onCancel}>
       <div className="flex items-start justify-between gap-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sand text-wood">
           <TriangleAlert className="h-5 w-5" />
         </div>
         <button
@@ -43,7 +43,7 @@ export default function ConfirmModal({
         </button>
         <button
           onClick={onConfirm}
-          className="flex-1 rounded-full bg-red-600 py-2.5 text-sm font-medium text-white transition hover:bg-red-700"
+          className="flex-1 rounded-full bg-ink py-2.5 text-sm font-medium text-white transition hover:bg-ink/90"
         >
           {confirmLabel}
         </button>

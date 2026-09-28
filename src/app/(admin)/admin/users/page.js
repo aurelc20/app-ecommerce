@@ -8,6 +8,7 @@ import UserRoleSelect from "@/components/admin/UserRoleSelect";
 import ToggleUserStatusButton from "@/components/admin/ToggleUserStatusButton";
 import UserFilters from "@/components/admin/UserFilters";
 import Image from "next/image";
+import { CheckCircle2 } from "lucide-react";
 
 export default async function UsersPage({ searchParams }) {
   const session = await auth();
@@ -76,99 +77,63 @@ export default async function UsersPage({ searchParams }) {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Përdoruesit</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Përdoruesit
+        </h1>
+        <p className="mt-2 text-ink-soft">
           Menaxho llogaritë e klientëve dhe adminëve
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-600 mb-1">Total Përdorues</p>
-          <p className="text-2xl font-bold text-gray-900">{total}</p>
+      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="rounded-xl border border-sand bg-paper p-4 shadow-sm">
+          <p className="mb-1 text-sm text-ink-soft">Total Përdorues</p>
+          <p className="text-2xl font-bold text-ink">{total}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-600 mb-1">Klientë</p>
+        <div className="rounded-xl border border-sand bg-paper p-4 shadow-sm">
+          <p className="mb-1 text-sm text-ink-soft">Klientë</p>
           <p className="text-2xl font-bold text-blue-600">{totalCustomers}</p>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-600 mb-1">Adminë</p>
-          <p className="text-2xl font-bold text-purple-600">{totalAdmins}</p>
+        <div className="rounded-xl border border-sand bg-paper p-4 shadow-sm">
+          <p className="mb-1 text-sm text-ink-soft">Adminë</p>
+          <p className="text-2xl font-bold text-wood">{totalAdmins}</p>
         </div>
       </div>
 
       {/* Filters */}
       <UserFilters search={search} role={role} />
-      {/* <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
-        <div className="flex flex-wrap gap-4">
-          <input
-            type="text"
-            placeholder="Kërko me emër ose email..."
-            defaultValue={search}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                const url = new URL(window.location);
-                url.searchParams.set("search", e.target.value);
-                url.searchParams.delete("page");
-                window.location.href = url.toString();
-              }
-            }}
-            className="flex-1 min-w-[200px] px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
-          />
-
-          <select
-            defaultValue={role}
-            onChange={(e) => {
-              const url = new URL(window.location);
-              if (e.target.value) {
-                url.searchParams.set("role", e.target.value);
-              } else {
-                url.searchParams.delete("role");
-              }
-              url.searchParams.delete("page");
-              window.location.href = url.toString();
-            }}
-            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
-          >
-            <option value="">Të gjithë rolet</option>
-            <option value="customer">Klient</option>
-            <option value="admin">Admin</option>
-            <option value="seller">Seller</option>
-          </select>
-        </div>
-      </div> */}
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-sand bg-paper shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-sand/40">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Përdoruesi
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Roli
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Porosi
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Shpenzuar
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Regjistruar
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Veprime
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-sand">
               {users.map((user) => {
                 const stats = orderCountMap[user._id.toString()] || {
                   count: 0,
@@ -177,7 +142,7 @@ export default async function UsersPage({ searchParams }) {
                 const isCurrentUser = user._id.toString() === session.user.id;
 
                 return (
-                  <tr key={user._id} className="hover:bg-gray-50">
+                  <tr key={user._id} className="hover:bg-sand/20">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {user.avatar ? (
@@ -186,31 +151,30 @@ export default async function UsersPage({ searchParams }) {
                             alt={user.name}
                             width={40}
                             height={40}
-                            className="w-10 h-10 rounded-full"
+                            className="h-10 w-10 rounded-full"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-wood text-white font-bold">
                             {user.name?.charAt(0).toUpperCase()}
                           </div>
                         )}
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-ink">
                             {user.name}{" "}
                             {isCurrentUser && (
-                              <span className="text-xs text-purple-600">
-                                (Ti)
-                              </span>
+                              <span className="text-xs text-wood">(Ti)</span>
                             )}
                           </p>
                           {user.emailVerified && (
-                            <p className="text-xs text-green-600">
-                              ✓ Email i verifikuar
+                            <p className="flex items-center gap-1 text-xs text-green-600">
+                              <CheckCircle2 className="h-3.5 w-3.5" />
+                              Email i verifikuar
                             </p>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-ink-soft">
                       {user.email}
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -220,13 +184,13 @@ export default async function UsersPage({ searchParams }) {
                         disabled={isCurrentUser}
                       />
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-ink-soft">
                       {stats.count}
                     </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 text-sm font-medium text-ink">
                       ${stats.totalSpent.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-ink-soft">
                       {new Date(user.createdAt).toLocaleDateString("sq-AL")}
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -243,8 +207,8 @@ export default async function UsersPage({ searchParams }) {
 
         {/* Pagination */}
         {total > limit && (
-          <div className="px-6 py-4 border-t flex items-center justify-between">
-            <p className="text-sm text-gray-600">
+          <div className="flex items-center justify-between border-t border-sand px-6 py-4">
+            <p className="text-sm text-ink-soft">
               Shfaqur {skip + 1}-{Math.min(skip + limit, total)} nga {total}
             </p>
           </div>

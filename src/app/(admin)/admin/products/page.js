@@ -8,6 +8,7 @@ import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import ProductFilters from "@/components/admin/ProductFilters";
 import { categoryLabel } from "@/lib/categories";
 import Image from "next/image";
+import { Star } from "lucide-react";
 
 export default async function ProductsPage({ searchParams }) {
   const session = await auth();
@@ -65,14 +66,16 @@ export default async function ProductsPage({ searchParams }) {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Produktet</h1>
-          <p className="text-gray-600 mt-2">Menaxho produktet e dyqanit</p>
+          <h1 className="font-display text-3xl font-semibold text-ink">
+            Produktet
+          </h1>
+          <p className="mt-2 text-ink-soft">Menaxho produktet e dyqanit</p>
         </div>
         <Link
           href="/admin/products/new"
-          className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+          className="rounded-full bg-wood px-6 py-3 font-semibold text-white transition hover:bg-wood-dark"
         >
           + Krijo Produkt
         </Link>
@@ -85,42 +88,42 @@ export default async function ProductsPage({ searchParams }) {
       />
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-sand bg-paper shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-sand/40">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  <input type="checkbox" className="rounded" />
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
+                  <input type="checkbox" className="rounded accent-wood" />
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Produkti
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   SKU
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Kategoria
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Çmimi
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Stock
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Statusi
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-6 py-3 text-left text-xs font-medium text-ink-soft uppercase">
                   Veprime
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-sand">
               {products.map((product) => (
-                <tr key={product._id.toString()} className="hover:bg-gray-50">
+                <tr key={product._id.toString()} className="hover:bg-sand/20">
                   <td className="px-6 py-4">
-                    <input type="checkbox" className="rounded" />
+                    <input type="checkbox" className="rounded accent-wood" />
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -130,36 +133,32 @@ export default async function ProductsPage({ searchParams }) {
                           alt={product.name}
                           width={48}
                           height={48}
-                          className="w-12 h-12 rounded-lg object-cover"
+                          className="h-12 w-12 rounded-lg object-cover"
                         />
                       )}
                       <div>
-                        <p className="font-medium text-gray-900">
-                          {product.name}
-                        </p>
+                        <p className="font-medium text-ink">{product.name}</p>
                         {product.isOnSale && (
-                          <span className="text-xs text-red-600 font-medium">
+                          <span className="text-xs font-medium text-wood">
                             Në zbritje
                           </span>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 font-mono">
+                  <td className="px-6 py-4 font-mono text-sm text-ink-soft">
                     {product.sku || "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm">
-                    <span className="px-2 py-1 bg-gray-100 rounded text-gray-700">
+                    <span className="rounded bg-sand px-2 py-1 text-ink-soft">
                       {categoryLabel(product.category)}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm font-medium">
                     {product.salePrice ? (
                       <div>
-                        <span className="text-red-600">
-                          ${product.salePrice}
-                        </span>
-                        <span className="text-gray-400 line-through text-xs ml-2">
+                        <span className="text-ink">${product.salePrice}</span>
+                        <span className="ml-2 text-xs text-ink-soft/70 line-through">
                           ${product.price}
                         </span>
                       </div>
@@ -171,8 +170,8 @@ export default async function ProductsPage({ searchParams }) {
                     <span
                       className={
                         product.stock <= 5
-                          ? "text-red-600 font-medium"
-                          : "text-gray-700"
+                          ? "font-medium text-red-600"
+                          : "text-ink-soft"
                       }
                     >
                       {product.stock}
@@ -181,16 +180,17 @@ export default async function ProductsPage({ searchParams }) {
                   <td className="px-6 py-4 text-sm">
                     <div className="flex gap-1">
                       {product.isFeatured && (
-                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs">
-                          ⭐ Featured
+                        <span className="flex items-center gap-1 rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-800">
+                          <Star className="h-3 w-3 fill-current" />
+                          Featured
                         </span>
                       )}
                       {product.isActive ? (
-                        <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                        <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
                           Active
                         </span>
                       ) : (
-                        <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">
+                        <span className="rounded bg-sand px-2 py-1 text-xs text-ink-soft">
                           Inactive
                         </span>
                       )}
@@ -200,7 +200,7 @@ export default async function ProductsPage({ searchParams }) {
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/admin/products/${product._id.toString()}/edit`}
-                        className="text-purple-600 hover:text-purple-700 font-medium"
+                        className="font-medium text-wood hover:text-wood-dark"
                       >
                         Edit
                       </Link>
@@ -218,15 +218,15 @@ export default async function ProductsPage({ searchParams }) {
 
         {/* Pagination */}
         {total > limit && (
-          <div className="px-6 py-4 border-t flex items-center justify-between">
-            <p className="text-sm text-gray-600">
+          <div className="flex items-center justify-between border-t border-sand px-6 py-4">
+            <p className="text-sm text-ink-soft">
               Shfaqur {skip + 1}-{Math.min(skip + limit, total)} nga {total}
             </p>
             <div className="flex gap-2">
               {parseInt(page) > 1 && (
                 <Link
                   href={`/admin/products?page=${parseInt(page) - 1}${search ? `&search=${search}` : ""}${category ? `&category=${category}` : ""}`}
-                  className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+                  className="rounded-lg border border-sand px-4 py-2 text-sm hover:bg-sand/40"
                 >
                   ← Prapa
                 </Link>
@@ -234,7 +234,7 @@ export default async function ProductsPage({ searchParams }) {
               {skip + limit < total && (
                 <Link
                   href={`/admin/products?page=${parseInt(page) + 1}${search ? `&search=${search}` : ""}${category ? `&category=${category}` : ""}`}
-                  className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+                  className="rounded-lg border border-sand px-4 py-2 text-sm hover:bg-sand/40"
                 >
                   Para →
                 </Link>

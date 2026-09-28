@@ -59,7 +59,7 @@ export default function ShopSortDropdown({ defaultValue }) {
         onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className="flex cursor-pointer items-center gap-2 rounded-lg border border-sand bg-paper py-2 pl-3 pr-2.5 text-sm text-ink outline-none transition hover:border-wood/50 focus:border-wood focus:ring-2 focus:ring-wood/20"
+        className="flex cursor-pointer items-center gap-2 rounded-lg border border-sand bg-cream py-2 pl-3 pr-2.5 text-sm text-ink outline-none transition hover:border-wood/50 focus:border-wood focus:ring-2 focus:ring-wood/20"
       >
         {selected.label}
         <ChevronDown

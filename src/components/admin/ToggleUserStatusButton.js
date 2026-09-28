@@ -37,7 +37,7 @@ export default function ToggleUserStatusButton({ userId }) {
         </button>
         <button
           onClick={() => setShowConfirm(false)}
-          className="text-gray-600 hover:text-gray-700 text-sm"
+          className="text-sm text-ink-soft hover:text-ink"
         >
           Anulo
         </button>

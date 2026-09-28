@@ -3,6 +3,10 @@
 
 import { useState } from "react";
 import { updateSocialSettings } from "@/actions/admin/settingsActions";
+import { Camera, MessageCircle, Music2, ThumbsUp } from "lucide-react";
+
+const inputClass =
+  "w-full px-4 py-2 border border-sand rounded-lg focus:ring-2 focus:ring-wood/20 focus:border-wood focus:outline-none text-ink";
 
 export default function SocialSettingsForm({ settings }) {
   const [formData, setFormData] = useState({
@@ -34,9 +38,11 @@ export default function SocialSettingsForm({ settings }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-sm border p-6"
+      className="rounded-xl border border-sand bg-paper p-6 shadow-sm"
     >
-      <h2 className="text-xl font-bold mb-6">Social Media</h2>
+      <h2 className="mb-6 font-display text-xl font-semibold text-ink">
+        Social Media
+      </h2>
 
       {message.text && (
         <div
@@ -52,8 +58,9 @@ export default function SocialSettingsForm({ settings }) {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            📘 Facebook
+          <label className="mb-2 flex items-center gap-1.5 text-sm font-medium text-ink">
+            <ThumbsUp className="h-4 w-4 text-wood" />
+            Facebook
           </label>
           <input
             type="url"
@@ -61,14 +68,15 @@ export default function SocialSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, facebook: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="https://facebook.com/perle"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            📷 Instagram
+          <label className="mb-2 flex items-center gap-1.5 text-sm font-medium text-ink">
+            <Camera className="h-4 w-4 text-wood" />
+            Instagram
           </label>
           <input
             type="url"
@@ -76,14 +84,15 @@ export default function SocialSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, instagram: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="https://instagram.com/perle"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            🎵 TikTok
+          <label className="mb-2 flex items-center gap-1.5 text-sm font-medium text-ink">
+            <Music2 className="h-4 w-4 text-wood" />
+            TikTok
           </label>
           <input
             type="url"
@@ -91,14 +100,15 @@ export default function SocialSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, tiktok: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="https://tiktok.com/@perle"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            💬 WhatsApp
+          <label className="mb-2 flex items-center gap-1.5 text-sm font-medium text-ink">
+            <MessageCircle className="h-4 w-4 text-wood" />
+            WhatsApp
           </label>
           <input
             type="text"
@@ -106,7 +116,7 @@ export default function SocialSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, whatsapp: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="+355691234567"
           />
         </div>
@@ -115,7 +125,7 @@ export default function SocialSettingsForm({ settings }) {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+        className="mt-6 rounded-full bg-wood px-6 py-3 font-semibold text-white transition hover:bg-wood-dark disabled:opacity-50"
       >
         {loading ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
       </button>

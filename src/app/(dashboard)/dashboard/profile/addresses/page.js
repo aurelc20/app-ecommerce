@@ -17,8 +17,10 @@ export default async function AddressesPage() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Adresat e Mia</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="font-display text-3xl font-semibold text-ink">
+          Adresat e Mia
+        </h1>
+        <p className="mt-2 text-ink-soft">
           Menaxho adresat e dërgesës për porositë e tua
         </p>
       </div>

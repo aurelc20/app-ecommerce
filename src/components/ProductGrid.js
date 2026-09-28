@@ -1,7 +1,7 @@
 // src/components/ProductGrid.js
 import Link from "next/link";
 import Image from "next/image";
-import { Check, PackageSearch, Sparkles, Star, X } from "lucide-react";
+import { PackageSearch, Sparkles, Star } from "lucide-react";
 import AddToWishlistButton from "@/components/AddToWishlistButton";
 import { categoryLabel } from "@/lib/categories";
 
@@ -30,7 +30,7 @@ export default function ProductGrid({ products }) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
       {products.map((product) => (
         <ProductCard key={product._id} product={product} />
       ))}
@@ -42,8 +42,15 @@ function ProductCard({ product }) {
   const primaryImage =
     product.images?.find((img) => img.isPrimary) || product.images?.[0];
 
+  // `discountPercentage` është një Mongoose virtual — nuk mbijeton `.lean()`,
+  // prandaj e llogarisim vetë këtu nga price/salePrice.
+  const discountPercentage =
+    product.isOnSale && product.salePrice && product.price
+      ? Math.round(((product.price - product.salePrice) / product.price) * 100)
+      : null;
+
   return (
-    <div className="group overflow-hidden rounded-2xl border border-sand bg-paper transition hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/10">
+    <div className="group overflow-hidden rounded-2xl border border-wood/30 bg-cream transition hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/10">
       {/* Image */}
       <Link
         href={`/product/${product.slug || product._id}`}
@@ -66,9 +73,9 @@ function ProductCard({ product }) {
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">
-            {product.isOnSale && (
-              <span className="rounded-full bg-red-500 px-2.5 py-1 text-xs font-medium text-white">
-                -{product.discountPercentage}%
+            {discountPercentage !== null && (
+              <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-medium tracking-wide text-white">
+                -{discountPercentage}%
               </span>
             )}
             {product.isFeatured && (
@@ -87,9 +94,9 @@ function ProductCard({ product }) {
       </Link>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-5">
         {/* Category */}
-        <p className="mb-1 text-xs font-medium tracking-wide text-wood uppercase">
+        <p className="mb-1.5 text-xs font-medium tracking-[0.15em] text-wood uppercase">
           {categoryLabel(product.category)}
         </p>
 
@@ -102,15 +109,13 @@ function ProductCard({ product }) {
 
         {/* Rating */}
         {product.ratings?.count > 0 && (
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex text-yellow-400">
+          <div className="mb-3 flex items-center gap-2">
+            <div className="flex text-amber-400">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`h-4 w-4 fill-current ${
-                    i < Math.floor(product.ratings.average)
-                      ? ""
-                      : "text-sand"
+                  className={`h-3.5 w-3.5 fill-current ${
+                    i < Math.floor(product.ratings.average) ? "" : "text-sand"
                   }`}
                 />
               ))}
@@ -122,10 +127,10 @@ function ProductCard({ product }) {
         )}
 
         {/* Price */}
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-baseline gap-2">
           {product.salePrice ? (
             <>
-              <span className="text-lg font-semibold text-red-600">
+              <span className="text-lg font-semibold tracking-wide text-ink">
                 ${product.salePrice}
               </span>
               <span className="text-sm text-ink-soft/70 line-through">
@@ -133,24 +138,11 @@ function ProductCard({ product }) {
               </span>
             </>
           ) : (
-            <span className="text-lg font-semibold text-ink">
+            <span className="text-lg font-semibold tracking-wide text-ink">
               ${product.price}
             </span>
           )}
         </div>
-
-        {/* Stock Status */}
-        {product.stock > 0 ? (
-          <p className="flex items-center gap-1 text-xs text-green-700">
-            <Check className="h-3.5 w-3.5" />
-            Në stock ({product.stock})
-          </p>
-        ) : (
-          <p className="flex items-center gap-1 text-xs text-red-600">
-            <X className="h-3.5 w-3.5" />
-            Nuk ka në stock
-          </p>
-        )}
       </div>
     </div>
   );

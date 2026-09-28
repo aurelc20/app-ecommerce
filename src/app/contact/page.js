@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { getPublicSettings } from "@/actions/settingsActions";
 import ContactForm from "@/components/ContactForm";
+import Eyebrow from "@/components/Eyebrow";
 
 export const metadata = {
   title: "Kontakt | Furniture Shop",
@@ -51,10 +52,8 @@ export default async function ContactPage() {
     <div className="bg-cream">
       {/* Hero */}
       <section className="container mx-auto px-4 py-16 text-center lg:py-20">
-        <p className="text-sm font-semibold tracking-[0.2em] text-wood uppercase">
-          Kontakt
-        </p>
-        <h1 className="mx-auto mt-2 max-w-2xl font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+        <Eyebrow>Kontakt</Eyebrow>
+        <h1 className="mx-auto mt-4 max-w-2xl font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
           Na shkruani, jemi këtu për t&apos;ju ndihmuar
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
@@ -120,11 +119,11 @@ export default async function ContactPage() {
             </div>
           )}
 
-          <div className="rounded-2xl border border-sand bg-[#231a13] p-6 text-white">
+          <div className="rounded-2xl border border-sand bg-ink p-6 text-white">
             <h2 className="font-display text-lg font-medium">
               Keni një porosi ekzistuese?
             </h2>
-            <p className="mt-2 text-sm text-[#b3a695]">
+            <p className="mt-2 text-sm text-white/70">
               Ndiqni statusin e porosisë suaj direkt nga dashboard-i juaj.
             </p>
             <Link

@@ -3,6 +3,10 @@
 
 import { useState } from "react";
 import { updatePaymentSettings } from "@/actions/admin/settingsActions";
+import { Banknote, Landmark } from "lucide-react";
+
+const inputClass =
+  "w-full px-4 py-2 border border-sand rounded-lg focus:ring-2 focus:ring-wood/20 focus:border-wood focus:outline-none text-ink";
 
 export default function PaymentSettingsForm({ settings }) {
   const [formData, setFormData] = useState({
@@ -38,9 +42,11 @@ export default function PaymentSettingsForm({ settings }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-xl shadow-sm border p-6"
+      className="rounded-xl border border-sand bg-paper p-6 shadow-sm"
     >
-      <h2 className="text-xl font-bold mb-6">Metodat e Pagesës</h2>
+      <h2 className="mb-6 font-display text-xl font-semibold text-ink">
+        Metodat e Pagesës
+      </h2>
 
       {message.text && (
         <div
@@ -55,19 +61,22 @@ export default function PaymentSettingsForm({ settings }) {
       )}
 
       {/* COD */}
-      <div className="mb-6 p-4 border rounded-lg">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">💵 Cash on Delivery</h3>
-          <label className="relative inline-flex items-center cursor-pointer">
+      <div className="mb-6 rounded-lg border border-sand p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="flex items-center gap-2 font-semibold text-ink">
+            <Banknote className="h-5 w-5 text-wood" />
+            Cash on Delivery
+          </h3>
+          <label className="relative inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
               checked={formData.codEnabled}
               onChange={(e) =>
                 setFormData({ ...formData, codEnabled: e.target.checked })
               }
-              className="sr-only peer"
+              className="peer sr-only"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-purple-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
+            <div className="peer h-6 w-11 rounded-full bg-sand peer-checked:bg-wood peer-focus:outline-none after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
           </label>
         </div>
         <input
@@ -76,25 +85,28 @@ export default function PaymentSettingsForm({ settings }) {
           onChange={(e) =>
             setFormData({ ...formData, codLabel: e.target.value })
           }
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          className={inputClass}
           placeholder="Etiketa e metodës"
         />
       </div>
 
       {/* Bank Transfer */}
-      <div className="p-4 border rounded-lg">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">🏦 Transfer Bankar</h3>
-          <label className="relative inline-flex items-center cursor-pointer">
+      <div className="rounded-lg border border-sand p-4">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="flex items-center gap-2 font-semibold text-ink">
+            <Landmark className="h-5 w-5 text-wood" />
+            Transfer Bankar
+          </h3>
+          <label className="relative inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
               checked={formData.bankEnabled}
               onChange={(e) =>
                 setFormData({ ...formData, bankEnabled: e.target.checked })
               }
-              className="sr-only peer"
+              className="peer sr-only"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-purple-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
+            <div className="peer h-6 w-11 rounded-full bg-sand peer-checked:bg-wood peer-focus:outline-none after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
           </label>
         </div>
 
@@ -105,7 +117,7 @@ export default function PaymentSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, bankName: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="Emri i Bankës (p.sh. Raiffeisen Bank)"
           />
           <input
@@ -114,7 +126,7 @@ export default function PaymentSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, accountNumber: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 font-mono"
+            className={`font-mono ${inputClass}`}
             placeholder="IBAN (p.sh. AL40 2011 1100 0000...)"
           />
           <input
@@ -123,7 +135,7 @@ export default function PaymentSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, swift: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="SWIFT/BIC Code"
           />
           <input
@@ -132,7 +144,7 @@ export default function PaymentSettingsForm({ settings }) {
             onChange={(e) =>
               setFormData({ ...formData, beneficiary: e.target.value })
             }
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            className={inputClass}
             placeholder="Përfituesi (Emri i biznesit)"
           />
         </div>
@@ -141,7 +153,7 @@ export default function PaymentSettingsForm({ settings }) {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+        className="mt-6 rounded-full bg-wood px-6 py-3 font-semibold text-white transition hover:bg-wood-dark disabled:opacity-50"
       >
         {loading ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
       </button>
